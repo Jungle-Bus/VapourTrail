@@ -1,0 +1,65 @@
+# t-rex configuration
+
+[service.mvt]
+viewer = true
+
+[datasource]
+type = "postgis"
+url = "postgresql://ubuntu:-ubuntu-@localhost/data"
+
+[grid]
+# Predefined grids: web_mercator, wgs84
+predefined = "web_mercator"
+
+[[tileset]]
+name = "transport_points"
+extent = [-5.05458, 41.90090, 9.45420, 51.08534]
+[[tileset.layer]]
+name = "transport_points"
+table_name = "osm_bus_points"
+geometry_field = "geom"
+geometry_type = "POINT"
+srid = 3857
+#fid_field = "id"
+buffer_size = 0
+simplify = true
+query_limit = 1000
+
+[[tileset]]
+name = "route_members"
+extent = [-5.05458, 41.90090, 9.45420, 51.08534]
+[[tileset.layer]]
+name = "route_members"
+table_name = "osm_bus_route_members"
+geometry_field = "geometry"
+geometry_type = "LINESTRING"
+srid = 3857
+#fid_field = "id"
+buffer_size = 0
+simplify = true
+query_limit = 1000
+
+[[tileset]]
+name = "route_stop_members"
+extent = [-5.05458, 41.90090, 9.45420, 51.08534]
+[[tileset.layer]]
+name = "route_stop_members"
+table_name = "osm_bus_route_members"
+geometry_field = "geometry"
+geometry_type = "POINT"
+srid = 3857
+#fid_field = "id"
+buffer_size = 0
+simplify = true
+query_limit = 1000
+
+#[cache.file]
+#base = "/srv/mvtcache"
+#baseurl = "http://example.com/tiles"
+
+[webserver]
+# Bind address. Use 0.0.0.0 to listen on all adresses.
+bind = "0.0.0.0"
+port = 6767
+threads = 4
+#cache_control_max_age = 43200

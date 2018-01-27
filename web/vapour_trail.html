@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'/>
+        <title></title>
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
+        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
+        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.css' rel='stylesheet'/>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            #map {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id='map'></div>
+        <script>
+
+            var map = new mapboxgl.Map({
+                container: 'map',
+                style: 'glstyle.json',
+                center: [
+                    -0.3355889364339646, 49.16051198915807
+                ],
+                zoom: 11.952145030855498
+            });
+            map.on('load', function () {
+                map.addLayer({
+                    "id": "transport_ways",
+                    "type": "line",
+                    "metadata": {},
+                    "source": {
+                        "type": 'vector',
+                        "url": "http://0.0.0.0:6767/route_members.json"
+                    },
+                    "source-layer": "route_members",
+                    "paint": {
+                        "line-color": "#4898ff",
+                        "line-width": 2
+                    }
+                });
+                map.addLayer({
+                    "id": "transport_points",
+                    "type": "symbol",
+                    "metadata": {},
+                    "source": {
+                        "type": 'vector',
+                        "url": "http://0.0.0.0:6767/transport_points.json"
+                    },
+                    "source-layer": "transport_points",
+                    "layout": {
+                        "icon-image": "bus_11",
+                        "text-anchor": "left",
+                        "text-field": "{name}",
+                        "text-font": ["Klokantech Noto Sans Italic"],
+                        "text-max-width": 9,
+                        "text-offset": [
+                            0.9, 0
+                        ],
+                        "text-padding": 2,
+                        "text-size": 12,
+                        "visibility": "visible"
+                    },
+                    "filter": [
+                        "all",
+                        [
+                            "has", "routes_at_stop"
+                        ]
+                    ],
+                    "paint": {
+                        "text-color": "#4898ff",
+                        "text-halo-blur": 0.5,
+                        "text-halo-color": "#ffffff",
+                        "text-halo-width": 1
+                    }
+                });
+
+                // Change the cursor to a pointer when the mouse is over the states layer.
+                map.on('mouseenter', 'transport_points', function () {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                // Change it back to a pointer when it leaves.
+                map.on('mouseleave', 'transport_points', function () {
+                    map.getCanvas().style.cursor = '';
+                });
+                map.on('click', 'transport_points', function (e) {
+                    var feature = e.features[0];
+                    console.log(feature)
+                    var popup_content = feature.properties.name || "pas de nom :(" //TODO (marche po)
+                    //TODO : afficher des pictos pour les autres tags (shelter, wheelchair, podotactile, etc)
+                    const tags = JSON.parse(feature.properties.routes_at_stop)
+                    let html = feature.properties.name;
+                    html += '<ul>'
+                    for (const route of tags) {
+                        //TODO : ajouter un lien OSM, un picto de bus et la couleur de la ligne
+                        html += `<li> [${route['rel_network'] || '??'}] ${route['rel_ref'] || '??'} > ${route['rel_destination'] || '??'} </li>`
+                    }
+                    html += '</ul>'
+                    var popup = new mapboxgl.Popup({closeButton: false}).setLngLat(e.lngLat).setHTML(html).addTo(map);
+                });
+
+            })
+
+            function display_ligne_62() {
+                route_id = -1995722
+                route_id = -2165111
+                map.addLayer({
+                    "id": "transport_ways_filtered_outline",
+                    "type": "line",
+                    "metadata": {},
+                    "source": {
+                        "type": 'vector',
+                        "url": "http://0.0.0.0:6767/route_members.json"
+                    },
+                    "source-layer": "route_members",
+                    "paint": {
+                        "line-color": "#000",
+                        "line-width": 5
+                    }
+                });
+                map.setFilter('transport_ways_filtered_outline', ["==", "rel_osm_id", route_id]);
+                map.addLayer({
+                    "id": "transport_ways_filtered",
+                    "type": "line",
+                    "metadata": {},
+                    "source": {
+                        "type": 'vector',
+                        "url": "http://0.0.0.0:6767/route_members.json"
+                    },
+                    "source-layer": "route_members",
+                    "paint": {
+                        "line-color": {
+                            "type": "identity",
+                            "property": "rel_colour"
+                        },
+                        "line-width": 4
+                    }
+                });
+                map.setFilter('transport_ways_filtered', ["==", "rel_osm_id", route_id]);
+                map.addLayer({
+                    "id": "transport_points_filtered",
+                    "type": "circle",
+                    "metadata": {},
+                    "source": {
+                        "type": 'vector',
+                        "url": "http://0.0.0.0:6767/route_stop_members.json"
+                    },
+                    "source-layer": "route_stop_members",
+                    "paint": {
+                        "circle-color": {
+                            "type": "identity",
+                            "property": "rel_colour"
+                        },
+                        "circle-opacity": 0.5,
+                        "circle-radius": {
+                            "base": 1,
+                            "stops": [
+                                [
+                                    12, 12
+                                ],
+                                [
+                                    18, 8
+                                ]
+                            ]
+                        }
+                    }
+                })
+                map.setFilter('transport_points_filtered', ["==", "rel_osm_id", route_id]);
+            };
+
+            function reset_filters_and_show_all_lines() {
+                map.removeLayer("transport_ways_filtered")
+                map.removeLayer("transport_ways_filtered_outline")
+                map.removeLayer("transport_points_filtered")
+            }
+        </script>
+    </body>
+</html>
