@@ -19,12 +19,15 @@ tables:
         - key: bench
           name: has_bench
           type: bool
+        - key: tactile_paving
+          name: has_tactile_paving
+          type: bool
         - key: departures_board
-          name: departures_board
-          type: string
+          name: has_departures_board
+          type: bool
         - key: wheelchair
-          name: wheelchair
-          type: string
+          name: is_wheelchair_ok
+          type: bool
         - key: local_ref
           name: local_ref
           type: string

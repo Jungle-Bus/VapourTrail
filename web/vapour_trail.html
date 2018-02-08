@@ -22,6 +22,13 @@
     <body>
         <div id='map'></div>
         <script>
+            var osm_img = "<img src='img/osm.svg' heigth='20px' width='20px' />"
+            var bus_img = "<img src='img/bus.svg' heigth='20px' width='20px' />"
+            var wheelchair_img = "<img src='img/wheelchair.svg' heigth='20px' width='20px' />"
+            var shelter_img = "<img src='img/shelter.svg' heigth='20px' width='20px' />"
+            var tactile_img = "<img src='img/tactile.svg' heigth='20px' width='20px' />"
+            var bench_img = "<img src='img/bench.svg' heigth='20px' width='20px' />"
+            var departures_img = "<img src='img/departures.svg' heigth='20px' width='20px' />"
 
             var map = new mapboxgl.Map({
                 container: 'map',
@@ -29,7 +36,8 @@
                 center: [
                     -0.3355889364339646, 49.16051198915807
                 ],
-                zoom: 11.952145030855498
+                zoom: 11.952145030855498,
+                hash: true
             });
             map.on('load', function () {
                 map.addLayer({
@@ -82,26 +90,43 @@
                     }
                 });
 
-                // Change the cursor to a pointer when the mouse is over the states layer.
                 map.on('mouseenter', 'transport_points', function () {
                     map.getCanvas().style.cursor = 'pointer';
                 });
 
-                // Change it back to a pointer when it leaves.
                 map.on('mouseleave', 'transport_points', function () {
                     map.getCanvas().style.cursor = '';
                 });
                 map.on('click', 'transport_points', function (e) {
                     var feature = e.features[0];
                     console.log(feature)
-                    var popup_content = feature.properties.name || "pas de nom :(" //TODO (marche po)
-                    //TODO : afficher des pictos pour les autres tags (shelter, wheelchair, podotactile, etc)
-                    const tags = JSON.parse(feature.properties.routes_at_stop)
-                    let html = feature.properties.name;
+                    const routes_at_stop = JSON.parse(feature.properties.routes_at_stop)
+                    let html = ""
+                    html += `<h2> <a target="_blank" href="http://osm.org/node/${feature.properties.osm_id}">${bus_img}</a> `
+                    html += ` ${feature.properties.name || "pas de nom :("}</h2>`;
+
+                    html += "<p>"
+                    html += `${ (feature.properties.has_bench)
+                        ? bench_img
+                        : ""} `;
+                    html += `${ (feature.properties.has_shelter)
+                        ? shelter_img
+                        : ""} `;
+                    html += `${ (feature.properties.has_departures_board)
+                        ? departures_img
+                        : ""} `;
+                    html += `${ (feature.properties.is_wheelchair_ok)
+                        ? wheelchair_img
+                        : ""} `;
+                    html += `${ (feature.properties.has_tactile_paving)
+                        ? tactile_img
+                        : ""} `;
+                    html += "</p>"
+
                     html += '<ul>'
-                    for (const route of tags) {
-                        //TODO : ajouter un lien OSM, un picto de bus et la couleur de la ligne
-                        html += `<li> [${route['rel_network'] || '??'}] ${route['rel_ref'] || '??'} > ${route['rel_destination'] || '??'} </li>`
+                    for (const route of routes_at_stop) {
+                        html += ` <div style="float: left;width:10px;height:20px;background:${route['rel_colour'] || "grey"};"></div> `
+                        html += ` [${route['rel_network'] || '??'}] ${route['rel_ref'] || '??'} > ${route['rel_destination'] || '??'} </br>`
                     }
                     html += '</ul>'
                     var popup = new mapboxgl.Popup({closeButton: false}).setLngLat(e.lngLat).setHTML(html).addTo(map);
@@ -183,4 +208,8 @@
             }
         </script>
     </body>
+</html>
+}
+</script>
+</body>
 </html>
