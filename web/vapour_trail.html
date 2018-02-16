@@ -34,7 +34,7 @@
                 container: 'map',
                 style: 'glstyle.json',
                 center: [
-                    -0.3355889364339646, 49.16051198915807
+                    1.8659, 46.1662
                 ],
                 zoom: 11.952145030855498,
                 hash: true
@@ -126,7 +126,7 @@
                     html += '<ul>'
                     for (const route of routes_at_stop) {
                         html += ` <div style="float: left;width:10px;height:20px;background:${route['rel_colour'] || "grey"};"></div> `
-                        html += ` [${route['rel_network'] || '??'}] ${route['rel_ref'] || '??'} > ${route['rel_destination'] || '??'} </br>`
+                        html += ` &nbsp; [${route['rel_network'] || '??'}] ${route['rel_ref'] || '??'} > ${route['rel_destination'] || '??'} </br>`
                     }
                     html += '</ul>'
                     var popup = new mapboxgl.Popup({closeButton: false}).setLngLat(e.lngLat).setHTML(html).addTo(map);
@@ -135,8 +135,8 @@
             })
 
             function display_ligne_62() {
-                route_id = -1995722
-                route_id = -2165111
+                //route_id = -1995722 route_id = -2165111
+                route_id = -7773405
                 map.addLayer({
                     "id": "transport_ways_filtered_outline",
                     "type": "line",
@@ -148,7 +148,7 @@
                     "source-layer": "route_members",
                     "paint": {
                         "line-color": "#000",
-                        "line-width": 5
+                        "line-width": 6
                     }
                 });
                 map.setFilter('transport_ways_filtered_outline', ["==", "rel_osm_id", route_id]);

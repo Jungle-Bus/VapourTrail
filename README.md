@@ -19,6 +19,14 @@ Show properties and list of stops for a selected bus route
 
 Show all routes for a bus line
 
+![where do the bus go](img/all_routes_and_stops.png)
+
+![where do the bus go](img/all_route_and_stop.png)
+
+![stop detail](img/stop_detail.png)
+
+![route detail](img/route_detail.png)
+
 ## Schema
     TODO
 
