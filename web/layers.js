@@ -1,8 +1,15 @@
-map.on('load', function () {
+map.on('load', function() {
 
     map.addSource('route_members', {
         "type": 'vector',
-        "url": "http://0.0.0.0:6767/route_members.json"
+        "id": "route_members",
+        "maxzoom": 22,
+        "minzoom": 0,
+        "name": "route_members",
+        "scheme": "xyz",
+        "tiles": ["http://0.0.0.0:6767/route_members/{z}/{x}/{y}.pbf"],
+        // that's a little hack to add the attribution, that is not set in the t-rex tilejson
+        "attribution":"Jungle Bus"
     });
     map.addSource('route_stop_members', {
         "type": 'vector',
