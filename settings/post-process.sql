@@ -15,11 +15,11 @@ select json_agg(routes_at_stop), osm_id into osm_stops from
 		)
 	as t)
 as routes_at_stop_result
-group by osm_id
+group by osm_id;
 
 -- on ajoute une colonne dans la table initiale
 alter table osm_bus_points add routes_at_stop character varying;
 
 -- et on la remplit
 update osm_bus_points set routes_at_stop =
-     (select json_agg from osm_stops where osm_stops.osm_id = osm_bus_points.osm_id)
+     (select json_agg from osm_stops where osm_stops.osm_id = osm_bus_points.osm_id);

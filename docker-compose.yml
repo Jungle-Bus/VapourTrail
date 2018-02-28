@@ -4,14 +4,15 @@ services:
   postgres:
     image: "openmaptiles/postgis:2.9"
     ports:
-      - 5432
+      - 54325:5432
     env_file: docker/.env
   importer:
-    image: "openmaptiles/import-osm"
+    image: openmaptiles/import-osm
     env_file: docker/.env
     volumes:
      - ./docker/imposm/import:/import
      - ./settings/imposm_import.yml:/mapping/mapping.yaml
+     - ./settings/post-process.sql:/mapping/post-process.sql
     depends_on:
       - postgres
   t-rex:

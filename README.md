@@ -34,6 +34,10 @@ Show all routes for a bus line
 ### Dependencies
 * imposm3
 * t-rex
+* docker / docker-compose
+
+### How to run
+run `make all` to import data and launch tile server (t-rex).
 
 ## License
 
