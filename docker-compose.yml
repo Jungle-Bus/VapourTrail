@@ -11,8 +11,7 @@ services:
     env_file: docker/.env
     volumes:
      - ./docker/imposm/import:/import
-     - ./docker/imposm/mapping:/mapping
-     - ./docker/imposm/cache:/cache
+     - ./settings/imposm_import.yml:/mapping/mapping.yaml
     depends_on:
       - postgres
   t-rex:
