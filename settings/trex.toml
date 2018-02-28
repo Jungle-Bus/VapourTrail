@@ -3,9 +3,9 @@
 [service.mvt]
 viewer = true
 
-[datasource]
-type = "postgis"
-url = "postgresql://ubuntu:-ubuntu-@localhost/data"
+[[datasource]]
+name = "vapour"
+dbconn = "postgresql://vapour:vapour@postgres/vapour"
 
 [grid]
 # Predefined grids: web_mercator, wgs84

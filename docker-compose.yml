@@ -1,0 +1,25 @@
+
+version: "3"
+services:
+  postgres:
+    image: "openmaptiles/postgis:2.9"
+    ports:
+      - 5432
+    env_file: docker/.env
+  importer:
+    image: "openmaptiles/import-osm"
+    env_file: docker/.env
+    volumes:
+     - ./docker/imposm/import:/import
+     - ./docker/imposm/mapping:/mapping
+     - ./docker/imposm/cache:/cache
+    depends_on:
+      - postgres
+  t-rex:
+    build: ./docker/t-rex
+    volumes:
+      - ./settings/trex.toml:/config/config.toml
+    depends_on:
+      - postgres
+    ports:
+      - 6767:6767

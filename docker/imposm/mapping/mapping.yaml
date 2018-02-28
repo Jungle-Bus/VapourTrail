@@ -1,0 +1,111 @@
+tags:
+  load_all: true
+  exclude:
+  - created_by
+  - source
+tables:
+    bus_points:
+        fields:
+        - name: osm_id
+          type: id
+        - name: geom
+          type: geometry
+        - key: name
+          name: name
+          type: string
+        - key: shelter
+          name: has_shelter
+          type: bool
+        - key: bench
+          name: has_bench
+          type: bool
+        - key: tactile_paving
+          name: has_tactile_paving
+          type: bool
+        - key: departures_board
+          name: has_departures_board
+          type: bool
+        - key: wheelchair
+          name: is_wheelchair_ok
+          type: bool
+        - key: local_ref
+          name: local_ref
+          type: string
+        - key: highway
+          name: highway
+          type: string
+        - key: public_transport
+          name: public_transport
+          type: string
+        mapping:
+          highway:
+          - bus_stop
+        type: point
+    bus_route_members:
+      type: relation_member
+      columns:
+      - name: member_osm_id
+        type: member_id
+      - name: member_index
+        type: member_index
+      - name: member_role
+        type: member_role
+      - name: member_type
+        type: member_type
+      - name: geometry
+        type: geometry
+      - name: rel_osm_id
+        type: id
+      - name: rel_ref
+        key: ref
+        type: string
+      - name: rel_network
+        key: network
+        type: string
+      - name: rel_destination
+        key: to
+        type: string
+      - name: rel_colour
+        key: colour
+        type: string
+      - name: transport_mode
+        key: route
+        type: string
+      relation_type: [route]
+      mapping:
+        route: [bus]
+    bus_routes:
+      type: relation
+      columns:
+      - name: osm_id
+        type: id
+      - name: name
+        key: name
+        type: string
+      - name: ref
+        key: ref
+        type: string
+      - name: network
+        key: network
+        type: string
+      - name: origin
+        key: from
+        type: string
+      - name: destination
+        key: to
+        type: string
+      - name: colour
+        key: colour
+        type: string
+      - name: operator
+        key: operator
+        type: string
+      - name: public_transport_version
+        key: public_transport:version
+        type: string
+      - name: transport_mode
+        key: route
+        type: string
+      relation_type: [route]
+      mapping:
+        route: [bus]
