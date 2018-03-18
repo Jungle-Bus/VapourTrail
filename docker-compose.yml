@@ -13,8 +13,11 @@ services:
      - ./docker/imposm/import:/import
      - ./settings/imposm_import.yml:/mapping/mapping.yaml
      - ./settings/post-process.sql:/mapping/post-process.sql
+     - ./settings/run_importer.sh:/mapping/run_importer.sh
     depends_on:
       - postgres
+    entrypoint: /bin/bash
+    command: "/mapping/run_importer.sh"
   t-rex:
     build: ./docker/t-rex
     volumes:
