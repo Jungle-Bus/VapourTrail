@@ -1,4 +1,6 @@
 -- requête pour construire la liste des parcours de chaque arrêt :
+drop table if exists osm_stops;
+
 select json_agg(routes_at_stop), osm_id into osm_stops from
 	(select row_to_json(t) as routes_at_stop, osm_id from
 		(select

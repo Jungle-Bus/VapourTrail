@@ -13,5 +13,5 @@ done
 
 ./import_osm.sh
 
-echo "Executing prost-process script"
+echo "Executing post-process script"
 /usr/src/app/psql.sh -f /mapping/post-process.sql
