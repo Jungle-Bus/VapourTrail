@@ -37,7 +37,16 @@ Show all routes for a bus line
 * docker / docker-compose
 
 ### How to run
-run `make all` to import data and launch tile server (t-rex).
+Run `docker-compose up -d` to run the services in detached mode.   
+
+The first run will perform several actions : * download all the required base images, 
+* build and run the containers
+* create the database 
+* import the osm.pbf file in the `docker/imposm/import/` directory
+* execute the post_process SQL file
+
+The tiles rendered by t-rex are available at `http://localhost:6767/`.
+The web front-end is available at `http://localhost:82/vapour_trail.html`.
 
 ## License
 
