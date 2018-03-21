@@ -12,3 +12,6 @@ until psql -h $POSTGRES_HOST -U $POSTGRES_USER -d $POSTGRES_DB -c "select 1" > /
 done
 
 ./import_osm.sh
+
+echo "Executing prost-process script"
+/usr/src/app/psql.sh -f /mapping/post-process.sql
