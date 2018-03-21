@@ -3,6 +3,8 @@ VapourTrail is a vector tile schema for OpenStreetMap bus data.
 
 It allows to create interactive map with buses without using Overpass API (because Overpass is great but we need to learn to stop relying on it).
 
+![demo](img/demo.gif)
+
 ## Use cases
 
 Show bus stops

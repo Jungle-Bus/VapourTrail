@@ -26,7 +26,11 @@ map.on('load', function () {
     });
     map.on('click', 'transport_points', function (e) {
         var feature = e.features[0];
-        const routes_at_stop = JSON.parse(feature.properties.routes_at_stop)
+        if (!feature.properties.routes_at_stop) {
+            var routes_at_stop = []
+        } else {
+            var routes_at_stop = JSON.parse(feature.properties.routes_at_stop);
+        }
         let html = ""
         html += `<h2> <a target="_blank" href="http://osm.org/node/${feature.properties.osm_id}">${bus_img}</a> `
         html += ` ${feature.properties.name || "pas de nom :("}</h2>`;
@@ -50,6 +54,7 @@ map.on('load', function () {
         html += "</p>"
 
         html += '<ul>'
+        console.log(routes_at_stop)
         for (const route of routes_at_stop) {
             html += ` <div style="float: left;width:10px;height:20px;background:${route['rel_colour'] || "grey"};"></div> `
             html += ` &nbsp; [${route['rel_network'] || '??'}] ${route['rel_ref'] || '??'} > ${route['rel_destination'] || '??'} `
