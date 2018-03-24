@@ -17,14 +17,14 @@ var map = new mapboxgl.Map({
 });
 map.on('load', function () {
 
-    map.on('mouseenter', 'transport_points', function () {
+    map.on('mouseenter', 'stop-label', function () {
         map.getCanvas().style.cursor = 'pointer';
     });
 
-    map.on('mouseleave', 'transport_points', function () {
+    map.on('mouseleave', 'stop-label', function () {
         map.getCanvas().style.cursor = '';
     });
-    map.on('click', 'transport_points', function (e) {
+    map.on('click', 'stop-label', function (e) {
         var feature = e.features[0];
         if (!feature.properties.routes_at_stop) {
             var routes_at_stop = []

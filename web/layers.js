@@ -9,7 +9,7 @@ map.on('load', function() {
         "scheme": "xyz",
         "tiles": ["http://0.0.0.0:6767/route_members/{z}/{x}/{y}.pbf"],
         // that's a little hack to add the attribution, that is not set in the t-rex tilejson
-        "attribution":"Jungle Bus"
+        "attribution": "Jungle Bus"
     });
     map.addSource('route_stop_members', {
         "type": 'vector',
@@ -32,30 +32,57 @@ map.on('load', function() {
         }
     });
     map.addLayer({
-        "id": "transport_points",
+        "id": "stop-label",
         "type": "symbol",
-        "metadata": {},
         "source": "transport_points",
         "source-layer": "transport_points",
         "layout": {
             "icon-image": "bus_11",
             "text-anchor": "left",
             "text-field": "{name}",
-            "text-font": ["Klokantech Noto Sans Italic"],
-            "text-max-width": 9,
+            "text-font": [
+                "Klokantech Noto Sans Italic"
+            ],
+            "text-max-width": 5,
             "text-offset": [
-                0.9, 0
+                1,
+                0
             ],
             "text-padding": 2,
-            "text-size": 12,
-            "visibility": "visible"
+            "text-size": {
+                "stops": [
+                    [
+                        12.99,
+                        0
+                    ],
+                    [
+                        13,
+                        12
+                    ],
+                    [
+                        24,
+                        16
+                    ]
+                ]
+            },
+            "visibility": "visible",
+            "text-allow-overlap": false,
+            "text-ignore-placement": false,
+            "text-optional": true,
+            "text-justify": "left",
+            "icon-allow-overlap": false,
+            "icon-ignore-placement": false,
+            "icon-optional": false
         },
         "paint": {
             "text-color": "#4898ff",
             "text-halo-blur": 0.5,
             "text-halo-color": "#ffffff",
-            "text-halo-width": 1
-        }
+            "text-halo-width": 1.5,
+            "icon-color": "rgba(27, 65, 189, 1)"
+        },
+        "maxzoom": 24,
+        "minzoom": 0
     });
 
     //pre-add layers with a dumb filter
