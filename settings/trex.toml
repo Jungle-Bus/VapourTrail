@@ -13,7 +13,6 @@ predefined = "web_mercator"
 
 [[tileset]]
 name = "transport_points"
-extent = [-5.05458, 41.90090, 9.45420, 51.08534]
 [[tileset.layer]]
 name = "transport_points"
 table_name = "osm_bus_points"
@@ -27,7 +26,6 @@ query_limit = 1000
 
 [[tileset]]
 name = "route_members"
-extent = [-5.05458, 41.90090, 9.45420, 51.08534]
 [[tileset.layer]]
 name = "route_members"
 table_name = "osm_bus_route_members"
@@ -41,7 +39,6 @@ query_limit = 1000
 
 [[tileset]]
 name = "route_stop_members"
-extent = [-5.05458, 41.90090, 9.45420, 51.08534]
 [[tileset.layer]]
 name = "route_stop_members"
 table_name = "osm_bus_route_members"

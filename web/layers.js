@@ -21,7 +21,7 @@ map.on('load', function() {
     });
 
     map.addLayer({
-        "id": "transport_ways",
+        "id": "line-intercity",
         "type": "line",
         "metadata": {},
         "source": "route_members",
@@ -29,10 +29,36 @@ map.on('load', function() {
         "paint": {
             "line-color": "#4898ff",
             "line-width": 2
-        }
+        },
+        "filter": [
+            "all", [
+                ">",
+                "area_cirlce_size",
+                10000000
+            ]
+        ]
     });
     map.addLayer({
-        "id": "stop-label",
+        "id": "line-urban",
+        "type": "line",
+        "metadata": {},
+        "source": "route_members",
+        "source-layer": "route_members",
+        "paint": {
+            "line-color": "#4898ff",
+            "line-width": 2
+        },
+        "filter": [
+            "all", [
+                "<=",
+                "area_cirlce_size",
+                10000000
+            ]
+        ],
+        "minzoom": 12
+    });
+    map.addLayer({
+        "id": "stop-label-intercity",
         "type": "symbol",
         "source": "transport_points",
         "source-layer": "transport_points",
@@ -82,9 +108,75 @@ map.on('load', function() {
             "icon-color": "rgba(27, 65, 189, 1)"
         },
         "maxzoom": 24,
-        "minzoom": 0
+        "minzoom": 0,
+        "filter": [
+            "all", [
+                ">",
+                "area_cirlce_size",
+                10000000
+            ]
+        ]
     });
-
+    map.addLayer({
+        "id": "stop-label-urban",
+        "type": "symbol",
+        "source": "transport_points",
+        "source-layer": "transport_points",
+        "layout": {
+            "icon-image": "bus_11",
+            "text-anchor": "left",
+            "text-field": "{name}",
+            "text-font": [
+                "Klokantech Noto Sans Italic"
+            ],
+            "text-max-width": 5,
+            "text-offset": [
+                1,
+                0
+            ],
+            "text-padding": 2,
+            "text-size": {
+                "stops": [
+                    [
+                        12.99,
+                        0
+                    ],
+                    [
+                        13,
+                        12
+                    ],
+                    [
+                        24,
+                        16
+                    ]
+                ]
+            },
+            "visibility": "visible",
+            "text-allow-overlap": false,
+            "text-ignore-placement": false,
+            "text-optional": true,
+            "text-justify": "left",
+            "icon-allow-overlap": false,
+            "icon-ignore-placement": false,
+            "icon-optional": false
+        },
+        "paint": {
+            "text-color": "#4898ff",
+            "text-halo-blur": 0.5,
+            "text-halo-color": "#ffffff",
+            "text-halo-width": 1.5,
+            "icon-color": "rgba(27, 65, 189, 1)"
+        },
+        "maxzoom": 24,
+        "minzoom": 12,
+        "filter": [
+            "all", [
+                "<=",
+                "area_cirlce_size",
+                10000000
+            ]
+        ]
+    });
     //pre-add layers with a dumb filter
     map.addLayer({
         "id": "transport_ways_filtered_outline",

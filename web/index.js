@@ -15,16 +15,24 @@ var map = new mapboxgl.Map({
     zoom: 11.952145030855498,
     hash: true
 });
-map.on('load', function () {
+map.on('load', function() {
 
-    map.on('mouseenter', 'stop-label', function () {
+    map.on('mouseenter', 'stop-label-intercity', function() {
         map.getCanvas().style.cursor = 'pointer';
     });
 
-    map.on('mouseleave', 'stop-label', function () {
+    map.on('mouseleave', 'stop-label-intercity', function() {
         map.getCanvas().style.cursor = '';
     });
-    map.on('click', 'stop-label', function (e) {
+    map.on('mouseenter', 'stop-label-urban', function() {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'stop-label-urban', function() {
+        map.getCanvas().style.cursor = '';
+    });
+
+    function on_stop(e) {
         var feature = e.features[0];
         if (!feature.properties.routes_at_stop) {
             var routes_at_stop = []
@@ -63,9 +71,14 @@ map.on('load', function () {
             html += `<a href='#' onclick='filter_on_one_route(${route_in_json})'>Voir la ligne</a> </br>`
         }
         html += '</ul>'
-        var popup = new mapboxgl.Popup({closeButton: false}).setLngLat(e.lngLat).setHTML(html).addTo(map);
-    });
-})
+        var popup = new mapboxgl.Popup({
+            closeButton: false
+        }).setLngLat(e.lngLat).setHTML(html).addTo(map);
+    };
+
+    map.on('click', 'stop-label-intercity', on_stop);
+    map.on('click', 'stop-label-urban', on_stop);
+});
 
 
 function filter_on_one_route(route) {
