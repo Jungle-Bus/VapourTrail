@@ -30,47 +30,68 @@ update osm_bus_points set routes_at_stop =
      (select json_agg from osm_stops where osm_stops.osm_id = osm_bus_points.osm_id);
 
 
----
-CREATE TEMP TABLE tt_osm_bus_route_members_area_cirlce_size AS
+--- Add route "diameter" to osm_bus_route_members
+CREATE TEMP TABLE tt_osm_bus_route_members_diameter AS
 SELECT
   rel_osm_id,
-  st_area(st_transform(ST_MinimumBoundingCircle(st_union(geometry)), 4326)::geography) AS area_cirlce_size
+  2 * sqrt(st_area(st_transform(ST_MinimumBoundingCircle(st_union(geometry)), 4326)::geography) / (3.14 )) AS diameter
 FROM
   public.osm_bus_route_members
 GROUP BY
   rel_osm_id
 ;
 
-ALTER TABLE osm_bus_route_members ADD COLUMN area_cirlce_size INTEGER;
+ALTER TABLE osm_bus_route_members ADD COLUMN diameter INTEGER;
 
 UPDATE
-  osm_bus_route_members SET area_cirlce_size = tt_osm_bus_route_members_area_cirlce_size.area_cirlce_size
+  osm_bus_route_members
+SET
+  diameter = tt_osm_bus_route_members_diameter.diameter
 FROM
-  tt_osm_bus_route_members_area_cirlce_size
+  tt_osm_bus_route_members_diameter
 WHERE
-  tt_osm_bus_route_members_area_cirlce_size.rel_osm_id = osm_bus_route_members.rel_osm_id
+  tt_osm_bus_route_members_diameter.rel_osm_id = osm_bus_route_members.rel_osm_id
 ;
 
----
-CREATE TEMP TABLE tt_osm_bus_points_area_cirlce_size AS
+--- Add average stop distance on osm_bus_route_members and osm_bus_points
+CREATE TEMP TABLE tt_osm_bus_route_members_avg_distance AS
 SELECT
-   osm_bus_points.osm_id,
-   max(osm_bus_route_members.area_cirlce_size) AS area_cirlce_size
+  rel_osm_id,
+  avg(distance) AS avg_distance
 FROM
-   osm_bus_points
-   JOIN osm_bus_route_members ON osm_bus_points.osm_id = osm_bus_route_members.member_osm_id
- GROUP BY
-   osm_bus_points.osm_id
+(
+SELECT
+  rel_osm_id,
+  ST_DistanceSphere(geometry, lag(geometry, 1, geometry) OVER (PARTITION BY rel_osm_id ORDER BY rel_osm_id, member_index)) AS distance
+FROM
+  (SELECT rel_osm_id, member_index, ST_Transform(geometry, 4326) AS geometry FROM public.osm_bus_route_members) AS t
+) AS t
+WHERE
+  distance > 10
+GROUP BY
+  rel_osm_id
 ;
 
-ALTER TABLE osm_bus_points ADD COLUMN area_cirlce_size INTEGER;
+ALTER TABLE osm_bus_route_members ADD COLUMN avg_distance INTEGER;
+
+UPDATE
+  osm_bus_route_members
+SET
+  avg_distance = tt_osm_bus_route_members_avg_distance.avg_distance
+FROM
+  tt_osm_bus_route_members_avg_distance
+WHERE
+  tt_osm_bus_route_members_avg_distance.rel_osm_id = osm_bus_route_members.rel_osm_id
+;
+
+ALTER TABLE osm_bus_points ADD COLUMN avg_distance INTEGER;
 
 UPDATE
    osm_bus_points
 SET
-   area_cirlce_size = tt_osm_bus_points_area_cirlce_size.area_cirlce_size
+   avg_distance = osm_bus_route_members.avg_distance
 FROM
-   tt_osm_bus_points_area_cirlce_size
+  osm_bus_route_members
 WHERE
-   tt_osm_bus_points_area_cirlce_size.osm_id = osm_bus_points.osm_id
+  osm_bus_points.osm_id = osm_bus_route_members.member_osm_id
 ;

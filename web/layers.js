@@ -33,8 +33,8 @@ map.on('load', function() {
         "filter": [
             "all", [
                 ">",
-                "area_cirlce_size",
-                10000000
+                "diameter",
+                3000
             ]
         ]
     });
@@ -51,8 +51,8 @@ map.on('load', function() {
         "filter": [
             "all", [
                 "<=",
-                "area_cirlce_size",
-                10000000
+                "diameter",
+                3000
             ]
         ],
         "minzoom": 12
@@ -112,8 +112,8 @@ map.on('load', function() {
         "filter": [
             "all", [
                 ">",
-                "area_cirlce_size",
-                10000000
+                "avg_distance",
+                2000
             ]
         ]
     });
@@ -172,8 +172,8 @@ map.on('load', function() {
         "filter": [
             "all", [
                 "<=",
-                "area_cirlce_size",
-                10000000
+                "avg_distance",
+                2000
             ]
         ]
     });
