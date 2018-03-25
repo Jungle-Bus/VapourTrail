@@ -56,22 +56,32 @@ map.on('load', function () {
         html += '<ul>'
         console.log(routes_at_stop)
         for (const route of routes_at_stop) {
+	    var route_in_json = JSON.stringify(route);
+	    var quote_escape_in_regexp = new RegExp("'", 'gi');
+	    var route_in_json = route_in_json.replace(quote_escape_in_regexp, '’');
+	    console.log(route_in_json);
             html += ` <div style="float: left;width:10px;height:20px;background:${route['rel_colour'] || "grey"};"></div> `
-            html += ` &nbsp; [${route['rel_network'] || '??'}] ${route['rel_ref'] || '??'} > ${route['rel_destination'] || '??'} `
-            html += `<a href='#' onclick='filter_on_one_route(${route['rel_osm_id']})'>Voir la ligne</a> </br>`
+            html += ` &nbsp; [${route['rel_network'] || '??'}] ${route['rel_ref'] || '??'} '${route['rel_origin'] || '??'}' > '${route['rel_destination'] || '??'}' `
+            html += `<a href='#' onclick='filter_on_one_route(${route_in_json})'>Voir la ligne</a> </br>`
         }
         html += '</ul>'
         var popup = new mapboxgl.Popup({closeButton: false}).setLngLat(e.lngLat).setHTML(html).addTo(map);
     });
 })
 
-function filter_on_one_route(route_id) {
+
+function filter_on_one_route(route) {
     //route_id = -7773405
+    var route_id = route['rel_osm_id'];
     map.setFilter('transport_ways_filtered_outline', ["==", "rel_osm_id", route_id]);
     map.setFilter('transport_ways_filtered', ["==", "rel_osm_id", route_id]);
     map.setFilter('transport_points_filtered', ["==", "rel_osm_id", route_id]);
-    caisson.add_content(`todo - ajouter des détails sur la ligne <br>
-        <a href='#' onclick='reset_filters_and_show_all_lines()'>Supprimer la ligne</a> </br>`)
+    caisson.add_content(`[operator] '${route['rel_operator'] || '??'}' <br/>
+        [network] '${route['rel_network'] || '??'}' <br/>
+        [ref] '${route['rel_ref'] || '??'}' <br/>
+        [from > to] '${route['rel_origin'] || '??'}' > '${route['rel_destination'] || '??'}' <br/>
+        [name] '${route['rel_name']}' <br/>
+        <a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a> <br/>`)
 };
 
 
