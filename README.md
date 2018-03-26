@@ -30,7 +30,8 @@ Show all routes for a bus line
 ![route detail](img/route_detail.png)
 
 ## Schema
-    TODO
+
+:construction::warning: This is a work in progress, the schema is not stable yet :warning::construction:
 
 ## Contribute
 ### Dependencies
@@ -39,16 +40,21 @@ Show all routes for a bus line
 * docker / docker-compose
 
 ### How to run
-Run `docker-compose up -d` to run the services in detached mode.   
+Run `docker-compose up -d` to run the services in detached mode.
 
-The first run will perform several actions : * download all the required base images, 
+The first run will perform several actions :
+
+* download all the required base images,
 * build and run the containers
-* create the database 
+* create the database
 * import the osm.pbf file in the `docker/imposm/import/` directory
 * execute the post_process SQL file
 
 The tiles rendered by t-rex are available at `http://localhost:6767/`.
+
 The web front-end is available at `http://localhost:82/vapour_trail.html`.
+
+**Troubleshooting** : If you don't see the name of the bus stops on the map or if the bus stop popups are empty, try to restart t-rex service: `docker-compose restart t-rex`
 
 ## License
 

@@ -54,12 +54,10 @@ map.on('load', function () {
         html += "</p>"
 
         html += '<ul>'
-        console.log(routes_at_stop)
         for (const route of routes_at_stop) {
 	    var route_in_json = JSON.stringify(route);
 	    var quote_escape_in_regexp = new RegExp("'", 'gi');
 	    var route_in_json = route_in_json.replace(quote_escape_in_regexp, '’');
-	    console.log(route_in_json);
             html += ` <div style="float: left;width:10px;height:20px;background:${route['rel_colour'] || "grey"};"></div> `
             html += ` &nbsp; [${route['rel_network'] || '??'}] ${route['rel_ref'] || '??'} '${route['rel_origin'] || '??'}' > '${route['rel_destination'] || '??'}' `
             html += `<a href='#' onclick='filter_on_one_route(${route_in_json})'>Voir la ligne</a> </br>`
