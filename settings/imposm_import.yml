@@ -62,6 +62,12 @@ tables:
       - name: rel_network
         key: network
         type: string
+      - name: rel_operator
+        key: operator
+        type: string
+      - name: rel_origin
+        key: from
+        type: string
       - name: rel_destination
         key: to
         type: string
@@ -70,6 +76,9 @@ tables:
         type: string
       - name: transport_mode
         key: route
+        type: string
+      - name: rel_name
+        key: name
         type: string
       relation_type: [route]
       mapping:

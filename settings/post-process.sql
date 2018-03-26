@@ -8,9 +8,12 @@ select json_agg(routes_at_stop), osm_id into osm_stops from
 			osm_bus_route_members.rel_osm_id,
 			osm_bus_route_members.transport_mode,
 			osm_bus_route_members.rel_network ,
+			osm_bus_route_members.rel_operator,
 			osm_bus_route_members.rel_ref,
+			osm_bus_route_members.rel_origin,
 			osm_bus_route_members.rel_destination,
-			osm_bus_route_members.rel_colour
+			osm_bus_route_members.rel_colour,
+			osm_bus_route_members.rel_name
 		from osm_bus_points
 		join osm_bus_route_members on osm_bus_points.osm_id = osm_bus_route_members.member_osm_id
 		--where osm_bus_points.osm_id = 25975014
