@@ -98,7 +98,27 @@ map.on('load', function() {
             "text-justify": "left",
             "icon-allow-overlap": false,
             "icon-ignore-placement": false,
-            "icon-optional": false
+            "icon-optional": false,
+            "icon-size": {
+                "stops": [
+                    [
+                        6,
+                        0.2
+                    ],
+                    [
+                        12,
+                        0.5
+                    ],
+                    [
+                        16,
+                        1
+                    ],
+                    [
+                        22,
+                        1.5
+                    ]
+                ]
+            }
         },
         "paint": {
             "text-color": "#4898ff",
@@ -158,7 +178,27 @@ map.on('load', function() {
             "text-justify": "left",
             "icon-allow-overlap": false,
             "icon-ignore-placement": false,
-            "icon-optional": false
+            "icon-optional": false,
+            "icon-size": {
+                "stops": [
+                    [
+                        6,
+                        0.2
+                    ],
+                    [
+                        12,
+                        0.5
+                    ],
+                    [
+                        16,
+                        1
+                    ],
+                    [
+                        22,
+                        1.5
+                    ]
+                ]
+            }
         },
         "paint": {
             "text-color": "#4898ff",
