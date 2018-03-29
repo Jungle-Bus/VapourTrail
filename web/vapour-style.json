@@ -58,6 +58,10 @@
           3000
         ]
       ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
       "paint": {
         "line-color": "#4898ff",
         "line-width": 2
@@ -78,6 +82,10 @@
           3000
         ]
       ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
       "paint": {
         "line-color": "#4898ff",
         "line-width": 2
@@ -256,6 +264,10 @@
         "rel_osm_id",
         "dumb_filter"
       ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "miter"
+      },
       "paint": {
         "line-color": "#000",
         "line-width": 6
@@ -272,6 +284,11 @@
         "rel_osm_id",
         "dumb_filter"
       ],
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "miter"
+      },
       "paint": {
         "line-color": {
           "type": "identity",
