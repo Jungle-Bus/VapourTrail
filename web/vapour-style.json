@@ -29,17 +29,9 @@
   "bearing": 0,
   "pitch": 0,
   "sources": {
-    "route_members": {
+    "vapour_trail": {
       "type": "vector",
-      "url": "http://0.0.0.0:6767/route_members.json"
-    },
-    "route_stop_members": {
-      "type": "vector",
-      "url": "http://0.0.0.0:6767/route_stop_members.json"
-    },
-    "transport_points": {
-      "type": "vector",
-      "url": "http://0.0.0.0:6767/transport_points.json"
+      "url": "http://0.0.0.0:6767/vapour_trail.json"
     }
   },
   "sprite": "https://rawgit.com/lukasmartinelli/osm-liberty/gh-pages/sprites/osm-liberty",
@@ -56,8 +48,8 @@
       "id": "line-intercity",
       "type": "line",
       "metadata": {},
-      "source": "route_members",
-      "source-layer": "route_members",
+      "source": "vapour_trail",
+      "source-layer": "route_way_members",
       "filter": [
         "all",
         [
@@ -75,8 +67,8 @@
       "id": "line-urban",
       "type": "line",
       "metadata": {},
-      "source": "route_members",
-      "source-layer": "route_members",
+      "source": "vapour_trail",
+      "source-layer": "route_way_members",
       "minzoom": 12,
       "filter": [
         "all",
@@ -94,7 +86,7 @@
     {
       "id": "stop-label-intercity",
       "type": "symbol",
-      "source": "transport_points",
+      "source": "vapour_trail",
       "source-layer": "transport_points",
       "minzoom": 0,
       "maxzoom": 24,
@@ -175,7 +167,7 @@
     {
       "id": "stop-label-urban",
       "type": "symbol",
-      "source": "transport_points",
+      "source": "vapour_trail",
       "source-layer": "transport_points",
       "minzoom": 12,
       "maxzoom": 24,
@@ -257,8 +249,8 @@
       "id": "transport_ways_filtered_outline",
       "type": "line",
       "metadata": {},
-      "source": "route_members",
-      "source-layer": "route_members",
+      "source": "vapour_trail",
+      "source-layer": "route_way_members",
       "filter": [
         "==",
         "rel_osm_id",
@@ -273,8 +265,8 @@
       "id": "transport_ways_filtered",
       "type": "line",
       "metadata": {},
-      "source": "route_members",
-      "source-layer": "route_members",
+      "source": "vapour_trail",
+      "source-layer": "route_way_members",
       "filter": [
         "==",
         "rel_osm_id",
@@ -292,7 +284,7 @@
       "id": "transport_points_filtered",
       "type": "circle",
       "metadata": {},
-      "source": "route_stop_members",
+      "source": "vapour_trail",
       "source-layer": "route_stop_members",
       "filter": [
         "==",
