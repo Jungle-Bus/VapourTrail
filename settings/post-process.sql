@@ -95,3 +95,36 @@ FROM
 WHERE
   osm_bus_points.osm_id = osm_bus_route_members.member_osm_id
 ;
+
+-- Deduplicate linstring
+DROP TABLE IF EXISTS osm_bus_ways;
+CREATE TABLE osm_bus_ways AS
+SELECT
+  rel_ref,
+  diameter,
+  (ST_Dump(geometry)).geom AS geometry
+FROM
+(
+  SELECT
+    rel_ref,
+    max(diameter) AS diameter,
+    ST_LineMerge(ST_Union(geometry)) AS geometry
+  FROM
+  (
+    SELECT
+      member_osm_id,
+      string_agg(DISTINCT rel_ref, '  ') AS rel_ref,
+      max(diameter) AS diameter,
+      max(geometry) AS geometry
+    FROM
+      osm_bus_route_members
+    WHERE
+      member_type = 1 AND -- Way
+      member_role NOT LIKE '%stop%'
+    GROUP BY
+      member_osm_id
+  ) AS t
+  GROUP BY
+    rel_ref
+) AS t
+;
