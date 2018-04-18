@@ -332,7 +332,7 @@
       "type": "line",
       "metadata": {},
       "source": "vapour_trail",
-      "source-layer": "route_way_members",
+      "source-layer": "transport_ways",
       "filter": [
         "==",
         "rel_osm_id",
@@ -352,7 +352,7 @@
       "type": "line",
       "metadata": {},
       "source": "vapour_trail",
-      "source-layer": "route_way_members",
+      "source-layer": "transport_ways",
       "filter": [
         "==",
         "rel_osm_id",
