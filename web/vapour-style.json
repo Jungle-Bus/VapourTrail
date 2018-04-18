@@ -348,6 +348,39 @@
       }
     },
     {
+      "id": "transport_points_filtered",
+      "type": "circle",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "route_stop_members",
+      "filter": [
+        "==",
+        "rel_osm_id",
+        "dumb_filter"
+      ],
+      "paint": {
+        "circle-color": {
+          "type": "identity",
+          "property": "rel_colour"
+        },
+        "circle-opacity": 1,
+        "circle-radius": {
+          "base": 1,
+          "stops": [
+            [
+              12,
+              3
+            ],
+            [
+              18,
+              10
+            ]
+          ]
+        },
+        "circle-stroke-width": 1
+      }
+    },
+    {
       "id": "transport_ways_filtered",
       "type": "line",
       "metadata": {},
@@ -369,38 +402,6 @@
           "property": "rel_colour"
         },
         "line-width": 4
-      }
-    },
-    {
-      "id": "transport_points_filtered",
-      "type": "circle",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "route_stop_members",
-      "filter": [
-        "==",
-        "rel_osm_id",
-        "dumb_filter"
-      ],
-      "paint": {
-        "circle-color": {
-          "type": "identity",
-          "property": "rel_colour"
-        },
-        "circle-opacity": 0.5,
-        "circle-radius": {
-          "base": 1,
-          "stops": [
-            [
-              12,
-              12
-            ],
-            [
-              18,
-              8
-            ]
-          ]
-        }
       }
     }
   ],
