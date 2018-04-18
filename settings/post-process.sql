@@ -128,3 +128,47 @@ FROM
     rel_ref
 ) AS t
 ;
+
+-- Deduplicate linstring
+DROP TABLE IF EXISTS transport_bus_ways;
+CREATE TABLE transport_bus_ways AS
+SELECT
+  rel_colour,
+  rel_destination,
+  rel_name,
+  rel_network,
+  rel_operator,
+  rel_origin,
+  rel_osm_id,
+  rel_ref,
+  transport_mode,
+  (ST_Dump(geometry)).geom AS geometry
+FROM
+(
+  SELECT
+    rel_colour,
+    rel_destination,
+    rel_name,
+    rel_network,
+    rel_operator,
+    rel_origin,
+    rel_osm_id,
+    rel_ref,
+    transport_mode,
+    ST_LineMerge(ST_Union(geometry)) AS geometry
+  FROM
+    osm_bus_route_members
+  WHERE
+    ST_GeometryType(geometry) = 'ST_LineString'
+  GROUP BY
+    rel_colour,
+    rel_destination,
+    rel_name,
+    rel_network,
+    rel_operator,
+    rel_origin,
+    rel_osm_id,
+    rel_ref,
+    transport_mode
+) AS t
+;
