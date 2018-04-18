@@ -254,6 +254,80 @@
       }
     },
     {
+      "id": "line-intercity-copy",
+      "type": "symbol",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "ways",
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [
+          ">",
+          "diameter",
+          3000
+        ]
+      ],
+      "layout": {
+        "text-field": "{rel_ref}",
+        "text-size": {
+          "stops": [
+            [
+              12,
+              6
+            ],
+            [
+              18,
+              12
+            ]
+          ]
+        },
+        "text-max-width": 2
+      },
+      "paint": {
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-color": "#4898ff",
+        "text-halo-width": 5
+      }
+    },
+    {
+      "id": "line-urban-copy",
+      "type": "symbol",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "ways",
+      "minzoom": 14,
+      "filter": [
+        "all",
+        [
+          "<=",
+          "diameter",
+          3000
+        ]
+      ],
+      "layout": {
+        "text-field": "{rel_ref}",
+        "text-size": {
+          "stops": [
+            [
+              12,
+              6
+            ],
+            [
+              18,
+              12
+            ]
+          ]
+        },
+        "text-max-width": 2
+      },
+      "paint": {
+        "text-halo-color": "#4898ff",
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 5
+      }
+    },
+    {
       "id": "transport_ways_filtered_outline",
       "type": "line",
       "metadata": {},
