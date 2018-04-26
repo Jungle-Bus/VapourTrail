@@ -120,7 +120,9 @@ FROM
       osm_bus_route_members
     WHERE
       member_type = 1 AND -- Way
-      member_role NOT LIKE '%stop%'
+      member_role NOT LIKE '%stop%' AND
+      member_role NOT LIKE '%platform%' AND
+      ST_GeometryType(geometry) = 'ST_LineString'
     GROUP BY
       member_osm_id
   ) AS t
@@ -159,6 +161,9 @@ FROM
   FROM
     osm_bus_route_members
   WHERE
+    member_type = 1 AND -- Way
+    member_role NOT LIKE '%stop%' AND
+    member_role NOT LIKE '%platform%' AND
     ST_GeometryType(geometry) = 'ST_LineString'
   GROUP BY
     rel_colour,
