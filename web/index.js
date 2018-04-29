@@ -65,7 +65,7 @@ map.on('load', function() {
                         </span>
                       : ${route['rel_destination'] || '??'}
                       <a href='#' onclick='filter_on_one_route(${route_in_json})'>Voir la ligne</a> </br>
-                    </div>`
+                    </div>`;
         }
 
         var popup = new mapboxgl.Popup({
@@ -81,12 +81,22 @@ function filter_on_one_route(route) {
     map.setFilter('transport_ways_filtered_outline', ["==", "rel_osm_id", route_id]);
     map.setFilter('transport_ways_filtered', ["==", "rel_osm_id", route_id]);
     map.setFilter('transport_points_filtered', ["==", "rel_osm_id", route_id]);
-    caisson.add_content(`[operator] '${route['rel_operator'] || '??'}' <br/>
-        [network] '${route['rel_network'] || '??'}' <br/>
-        [ref] '${route['rel_ref'] || '??'}' <br/>
-        [from > to] '${route['rel_origin'] || '??'}' > '${route['rel_destination'] || '??'}' <br/>
-        [name] '${route['rel_name']}' <br/>
-        <a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a> <br/>`)
+    html = `<div class='bus_box_div'>
+                <span class='bus_box' style='border-bottom-color: ${route['rel_colour'] || "grey"};' >
+                    <span>🚍</span>
+                    <span>${route['rel_ref'] || '??'}</span>
+                </span>
+                &nbsp; ${route['rel_name']}
+            </div>`
+    html += `De <b>${route['rel_origin'] || '??'}</b> vers <b>${route['rel_destination'] || '??'}</b>`;
+    if (route.hasOwnProperty('rel_via')){
+        html += `via <b>${route['rel_via'] || '??'}</b>`;
+    }
+    html += `<br>Réseau ${route['rel_network'] || '??'}`;
+    html += `<br>Transporteur : ${route['rel_operator'] || '??'}`
+    html += `<br><a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a> <br/>`
+
+    caisson.add_content(html);
 };
 
 
