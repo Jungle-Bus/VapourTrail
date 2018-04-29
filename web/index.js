@@ -15,16 +15,16 @@ var map = new mapboxgl.Map({
     zoom: 11.952145030855498,
     hash: true
 });
-map.on('load', function () {
+map.on('load', function() {
 
-    map.on('mouseenter', 'transport_points', function () {
+    map.on('mouseenter', 'transport_points', function() {
         map.getCanvas().style.cursor = 'pointer';
     });
 
-    map.on('mouseleave', 'transport_points', function () {
+    map.on('mouseleave', 'transport_points', function() {
         map.getCanvas().style.cursor = '';
     });
-    map.on('click', 'transport_points', function (e) {
+    map.on('click', 'transport_points', function(e) {
         var feature = e.features[0];
         if (!feature.properties.routes_at_stop) {
             var routes_at_stop = []
@@ -55,15 +55,17 @@ map.on('load', function () {
 
         html += '<ul>'
         for (const route of routes_at_stop) {
-	    var route_in_json = JSON.stringify(route);
-	    var quote_escape_in_regexp = new RegExp("'", 'gi');
-	    var route_in_json = route_in_json.replace(quote_escape_in_regexp, '’');
+            var route_in_json = JSON.stringify(route);
+            var quote_escape_in_regexp = new RegExp("'", 'gi');
+            var route_in_json = route_in_json.replace(quote_escape_in_regexp, '’');
             html += ` <div style="float: left;width:10px;height:20px;background:${route['rel_colour'] || "grey"};"></div> `
             html += ` &nbsp; [${route['rel_network'] || '??'}] ${route['rel_ref'] || '??'} '${route['rel_origin'] || '??'}' > '${route['rel_destination'] || '??'}' `
             html += `<a href='#' onclick='filter_on_one_route(${route_in_json})'>Voir la ligne</a> </br>`
         }
         html += '</ul>'
-        var popup = new mapboxgl.Popup({closeButton: false}).setLngLat(e.lngLat).setHTML(html).addTo(map);
+        var popup = new mapboxgl.Popup({
+            closeButton: false
+        }).setLngLat(e.lngLat).setHTML(html).addTo(map);
     });
 })
 
