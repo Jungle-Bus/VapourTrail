@@ -53,16 +53,21 @@ map.on('load', function() {
             : ""} `;
         html += "</p>"
 
-        html += '<ul>'
         for (const route of routes_at_stop) {
             var route_in_json = JSON.stringify(route);
             var quote_escape_in_regexp = new RegExp("'", 'gi');
             var route_in_json = route_in_json.replace(quote_escape_in_regexp, '’');
-            html += ` <div style="float: left;width:10px;height:20px;background:${route['rel_colour'] || "grey"};"></div> `
-            html += ` &nbsp; [${route['rel_network'] || '??'}] ${route['rel_ref'] || '??'} '${route['rel_origin'] || '??'}' > '${route['rel_destination'] || '??'}' `
-            html += `<a href='#' onclick='filter_on_one_route(${route_in_json})'>Voir la ligne</a> </br>`
+            html += `<div class='bus_box_div'>
+                        <span class='bus_box' style='border-bottom-color: ${route['rel_colour'] || "grey"};' >
+                            [${route['rel_network'] || '??'}]
+                            <span>🚍</span>
+                            <span>${route['rel_ref'] || '??'}</span>
+                        </span>
+                      : ${route['rel_destination'] || '??'}
+                      <a href='#' onclick='filter_on_one_route(${route_in_json})'>Voir la ligne</a> </br>
+                    </div>`
         }
-        html += '</ul>'
+
         var popup = new mapboxgl.Popup({
             closeButton: false
         }).setLngLat(e.lngLat).setHTML(html).addTo(map);
