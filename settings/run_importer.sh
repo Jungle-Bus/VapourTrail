@@ -14,4 +14,5 @@ done
 ./import_osm.sh
 
 echo "Executing post-process script"
-/usr/src/app/psql.sh -f /mapping/post-process.sql
+/usr/src/app/psql.sh -f /mapping/post-process-internal.sql
+/usr/src/app/psql.sh -f /mapping/post-process-display.sql
