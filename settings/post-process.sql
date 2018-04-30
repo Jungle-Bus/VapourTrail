@@ -62,9 +62,9 @@ FROM
 (
 SELECT
   rel_osm_id,
-  ST_DistanceSphere(geometry, lag(geometry, 1, geometry) OVER (PARTITION BY rel_osm_id ORDER BY rel_osm_id, member_index)) AS distance
+  ST_Distance(geometry::geography, (lag(geometry, 1, geometry) OVER (PARTITION BY rel_osm_id ORDER BY rel_osm_id, member_index))::geography) AS distance
 FROM
-  (SELECT rel_osm_id, member_index, ST_Transform(geometry, 4326) AS geometry FROM public.osm_bus_route_members) AS t
+  (SELECT rel_osm_id, member_index, ST_Transform(geometry, 4326) AS geometry FROM public.osm_bus_route_members WHERE member_role LIKE '%stop%') AS t
 ) AS t
 WHERE
   distance > 10
