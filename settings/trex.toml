@@ -26,7 +26,8 @@ simplify = true
 query_limit = 1000
 
 [[tileset.layer]]
-name = "route_way_members"
+name = "ways"
+table_name = "osm_bus_ways"
 geometry_field = "geometry"
 geometry_type = "LINESTRING"
 srid = 3857
@@ -34,12 +35,17 @@ srid = 3857
 buffer_size = 2
 simplify = true
 query_limit = 1000
-[[tileset.layer.query]]
-sql = """
-SELECT *
-FROM osm_bus_route_members
-WHERE geometry && !bbox! AND ST_GeometryType(geometry) = 'ST_LineString'
-"""
+
+[[tileset.layer]]
+name = "transport_ways"
+table_name = "transport_bus_ways"
+geometry_field = "geometry"
+geometry_type = "LINESTRING"
+srid = 3857
+#fid_field = "id"
+buffer_size = 2
+simplify = true
+query_limit = 1000
 
 [[tileset.layer]]
 name = "route_stop_members"

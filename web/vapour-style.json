@@ -49,7 +49,7 @@
       "type": "line",
       "metadata": {},
       "source": "vapour_trail",
-      "source-layer": "route_way_members",
+      "source-layer": "ways",
       "filter": [
         "all",
         [
@@ -72,7 +72,7 @@
       "type": "line",
       "metadata": {},
       "source": "vapour_trail",
-      "source-layer": "route_way_members",
+      "source-layer": "ways",
       "minzoom": 12,
       "filter": [
         "all",
@@ -254,11 +254,85 @@
       }
     },
     {
+      "id": "line-intercity-shields",
+      "type": "symbol",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "ways",
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [
+          ">",
+          "diameter",
+          3000
+        ]
+      ],
+      "layout": {
+        "text-field": "{rel_ref}",
+        "text-size": {
+          "stops": [
+            [
+              12,
+              6
+            ],
+            [
+              18,
+              12
+            ]
+          ]
+        },
+        "text-max-width": 2
+      },
+      "paint": {
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-color": "#4898ff",
+        "text-halo-width": 5
+      }
+    },
+    {
+      "id": "line-urban-copy",
+      "type": "symbol",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "ways",
+      "minzoom": 14,
+      "filter": [
+        "all",
+        [
+          "<=",
+          "diameter",
+          3000
+        ]
+      ],
+      "layout": {
+        "text-field": "{rel_ref}",
+        "text-size": {
+          "stops": [
+            [
+              12,
+              6
+            ],
+            [
+              18,
+              12
+            ]
+          ]
+        },
+        "text-max-width": 2
+      },
+      "paint": {
+        "text-halo-color": "#4898ff",
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 5
+      }
+    },
+    {
       "id": "transport_ways_filtered_outline",
       "type": "line",
       "metadata": {},
       "source": "vapour_trail",
-      "source-layer": "route_way_members",
+      "source-layer": "transport_ways",
       "filter": [
         "==",
         "rel_osm_id",
@@ -271,30 +345,6 @@
       "paint": {
         "line-color": "#000",
         "line-width": 6
-      }
-    },
-    {
-      "id": "transport_ways_filtered",
-      "type": "line",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "route_way_members",
-      "filter": [
-        "==",
-        "rel_osm_id",
-        "dumb_filter"
-      ],
-      "layout": {
-        "visibility": "visible",
-        "line-cap": "round",
-        "line-join": "miter"
-      },
-      "paint": {
-        "line-color": {
-          "type": "identity",
-          "property": "rel_colour"
-        },
-        "line-width": 4
       }
     },
     {
@@ -313,20 +363,45 @@
           "type": "identity",
           "property": "rel_colour"
         },
-        "circle-opacity": 0.5,
+        "circle-opacity": 1,
         "circle-radius": {
           "base": 1,
           "stops": [
             [
               12,
-              12
+              3
             ],
             [
               18,
-              8
+              10
             ]
           ]
-        }
+        },
+        "circle-stroke-width": 1
+      }
+    },
+    {
+      "id": "transport_ways_filtered",
+      "type": "line",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "transport_ways",
+      "filter": [
+        "==",
+        "rel_osm_id",
+        "dumb_filter"
+      ],
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "miter"
+      },
+      "paint": {
+        "line-color": {
+          "type": "identity",
+          "property": "rel_colour"
+        },
+        "line-width": 4
       }
     }
   ],
