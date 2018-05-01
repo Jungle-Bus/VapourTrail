@@ -1,0 +1,334 @@
+{
+  "version": 8,
+  "name": "Vapour Trail",
+  "metadata": {
+    "mapbox:autocomposite": false,
+    "mapbox:type": "template",
+    "mapbox:groups": {
+      "b6371a3f2f5a9932464fa3867530a2e5": {
+        "name": "Transportation",
+        "collapsed": false
+      },
+      "a14c9607bc7954ba1df7205bf660433f": {
+        "name": "Boundaries"
+      },
+      "101da9f13b64a08fa4b6ac1168e89e5f": {
+        "name": "Places",
+        "collapsed": false
+      }
+    },
+    "openmaptiles:version": "3.x",
+    "openmaptiles:mapbox:owner": "openmaptiles",
+    "openmaptiles:mapbox:source:url": "mapbox://openmaptiles.4qljc88t"
+  },
+  "center": [
+    8.4565,
+    7.42015
+  ],
+  "zoom": 0.8902641636539237,
+  "bearing": 0,
+  "pitch": 0,
+  "sources": {
+    "vapour_trail": {
+      "type": "vector",
+      "url": "http://0.0.0.0:6767/vapour_trail.json"
+    }
+  },
+  "sprite": "https://rawgit.com/lukasmartinelli/osm-liberty/gh-pages/sprites/osm-liberty",
+  "glyphs": "https://free.tilehosting.com/fonts/{fontstack}/{range}.pbf?key=RiS4gsgZPZqeeMlIyxFo",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "rgb(242,243,240)"
+      }
+    },
+    {
+      "id": "line-intercity",
+      "type": "line",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "route_way_members",
+      "filter": [
+        "all",
+        [
+          ">",
+          "diameter",
+          3000
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#4898ff",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "line-urban",
+      "type": "line",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "route_way_members",
+      "minzoom": 12,
+      "filter": [
+        "all",
+        [
+          "<=",
+          "diameter",
+          3000
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#4898ff",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "stop-label-intercity",
+      "type": "symbol",
+      "source": "vapour_trail",
+      "source-layer": "transport_points",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          ">",
+          "avg_distance",
+          2000
+        ]
+      ],
+      "layout": {
+        "icon-image": "bus_11",
+        "text-anchor": "left",
+        "text-field": "{name}",
+        "text-font": [
+          "Klokantech Noto Sans Italic"
+        ],
+        "text-max-width": 5,
+        "text-offset": [
+          1,
+          0
+        ],
+        "text-padding": 2,
+        "text-size": {
+          "stops": [
+            [
+              12.99,
+              0
+            ],
+            [
+              13,
+              12
+            ],
+            [
+              24,
+              16
+            ]
+          ]
+        },
+        "visibility": "visible",
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-optional": true,
+        "text-justify": "left",
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false,
+        "icon-optional": false,
+        "icon-size": {
+          "stops": [
+            [
+              6,
+              0.2
+            ],
+            [
+              12,
+              0.5
+            ],
+            [
+              16,
+              1
+            ],
+            [
+              22,
+              1.5
+            ]
+          ]
+        }
+      },
+      "paint": {
+        "text-color": "#4898ff",
+        "text-halo-blur": 0.5,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.5,
+        "icon-color": "rgba(27, 65, 189, 1)"
+      }
+    },
+    {
+      "id": "stop-label-urban",
+      "type": "symbol",
+      "source": "vapour_trail",
+      "source-layer": "transport_points",
+      "minzoom": 12,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "<=",
+          "avg_distance",
+          2000
+        ]
+      ],
+      "layout": {
+        "icon-image": "bus_11",
+        "text-anchor": "left",
+        "text-field": "{name}",
+        "text-font": [
+          "Klokantech Noto Sans Italic"
+        ],
+        "text-max-width": 5,
+        "text-offset": [
+          1,
+          0
+        ],
+        "text-padding": 2,
+        "text-size": {
+          "stops": [
+            [
+              12.99,
+              0
+            ],
+            [
+              13,
+              12
+            ],
+            [
+              24,
+              16
+            ]
+          ]
+        },
+        "visibility": "visible",
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-optional": true,
+        "text-justify": "left",
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false,
+        "icon-optional": false,
+        "icon-size": {
+          "stops": [
+            [
+              6,
+              0.2
+            ],
+            [
+              12,
+              0.5
+            ],
+            [
+              16,
+              1
+            ],
+            [
+              22,
+              1.5
+            ]
+          ]
+        }
+      },
+      "paint": {
+        "text-color": "#4898ff",
+        "text-halo-blur": 0.5,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.5,
+        "icon-color": "rgba(27, 65, 189, 1)"
+      }
+    },
+    {
+      "id": "transport_ways_filtered_outline",
+      "type": "line",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "route_way_members",
+      "filter": [
+        "==",
+        "rel_osm_id",
+        "dumb_filter"
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "miter"
+      },
+      "paint": {
+        "line-color": "#000",
+        "line-width": 6
+      }
+    },
+    {
+      "id": "transport_ways_filtered",
+      "type": "line",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "route_way_members",
+      "filter": [
+        "==",
+        "rel_osm_id",
+        "dumb_filter"
+      ],
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "miter"
+      },
+      "paint": {
+        "line-color": {
+          "type": "identity",
+          "property": "rel_colour"
+        },
+        "line-width": 4
+      }
+    },
+    {
+      "id": "transport_points_filtered",
+      "type": "circle",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "route_stop_members",
+      "filter": [
+        "==",
+        "rel_osm_id",
+        "dumb_filter"
+      ],
+      "paint": {
+        "circle-color": {
+          "type": "identity",
+          "property": "rel_colour"
+        },
+        "circle-opacity": 0.5,
+        "circle-radius": {
+          "base": 1,
+          "stops": [
+            [
+              12,
+              12
+            ],
+            [
+              18,
+              8
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "id": "jvm1nxvdj"
+}

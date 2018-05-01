@@ -12,8 +12,8 @@ dbconn = "postgresql://vapour:vapour@postgres/vapour"
 predefined = "web_mercator"
 
 [[tileset]]
-name = "transport_points"
-extent = [-5.05458, 41.90090, 9.45420, 51.08534]
+name = "vapour_trail"
+
 [[tileset.layer]]
 name = "transport_points"
 table_name = "osm_bus_points"
@@ -25,26 +25,24 @@ buffer_size = 0
 simplify = true
 query_limit = 1000
 
-[[tileset]]
-name = "route_members"
-extent = [-5.05458, 41.90090, 9.45420, 51.08534]
 [[tileset.layer]]
-name = "route_members"
-table_name = "osm_bus_route_members"
+name = "route_way_members"
 geometry_field = "geometry"
 geometry_type = "LINESTRING"
 srid = 3857
 #fid_field = "id"
-buffer_size = 0
+buffer_size = 2
 simplify = true
 query_limit = 1000
+[[tileset.layer.query]]
+sql = """
+SELECT *
+FROM osm_bus_route_members
+WHERE geometry && !bbox! AND ST_GeometryType(geometry) = 'ST_LineString'
+"""
 
-[[tileset]]
-name = "route_stop_members"
-extent = [-5.05458, 41.90090, 9.45420, 51.08534]
 [[tileset.layer]]
 name = "route_stop_members"
-table_name = "osm_bus_route_members"
 geometry_field = "geometry"
 geometry_type = "POINT"
 srid = 3857
@@ -52,6 +50,12 @@ srid = 3857
 buffer_size = 0
 simplify = true
 query_limit = 1000
+[[tileset.layer.query]]
+sql = """
+SELECT *
+FROM osm_bus_route_members
+WHERE geometry && !bbox! AND ST_GeometryType(geometry) = 'ST_Point'
+"""
 
 #[cache.file]
 #base = "/srv/mvtcache"

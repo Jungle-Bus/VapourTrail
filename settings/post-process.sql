@@ -28,3 +28,70 @@ alter table osm_bus_points add routes_at_stop character varying;
 -- et on la remplit
 update osm_bus_points set routes_at_stop =
      (select json_agg from osm_stops where osm_stops.osm_id = osm_bus_points.osm_id);
+
+
+--- Add route "diameter" to osm_bus_route_members
+CREATE TEMP TABLE tt_osm_bus_route_members_diameter AS
+SELECT
+  rel_osm_id,
+  2 * sqrt(st_area(st_transform(ST_MinimumBoundingCircle(st_union(geometry)), 4326)::geography) / (3.14 )) AS diameter
+FROM
+  public.osm_bus_route_members
+GROUP BY
+  rel_osm_id
+;
+
+ALTER TABLE osm_bus_route_members ADD COLUMN diameter INTEGER;
+
+UPDATE
+  osm_bus_route_members
+SET
+  diameter = tt_osm_bus_route_members_diameter.diameter
+FROM
+  tt_osm_bus_route_members_diameter
+WHERE
+  tt_osm_bus_route_members_diameter.rel_osm_id = osm_bus_route_members.rel_osm_id
+;
+
+--- Add average stop distance on osm_bus_route_members and osm_bus_points
+CREATE TEMP TABLE tt_osm_bus_route_members_avg_distance AS
+SELECT
+  rel_osm_id,
+  avg(distance) AS avg_distance
+FROM
+(
+SELECT
+  rel_osm_id,
+  ST_Distance(geometry::geography, (lag(geometry, 1, geometry) OVER (PARTITION BY rel_osm_id ORDER BY rel_osm_id, member_index))::geography) AS distance
+FROM
+  (SELECT rel_osm_id, member_index, ST_Transform(geometry, 4326) AS geometry FROM public.osm_bus_route_members WHERE member_role LIKE '%stop%') AS t
+) AS t
+WHERE
+  distance > 10
+GROUP BY
+  rel_osm_id
+;
+
+ALTER TABLE osm_bus_route_members ADD COLUMN avg_distance INTEGER;
+
+UPDATE
+  osm_bus_route_members
+SET
+  avg_distance = tt_osm_bus_route_members_avg_distance.avg_distance
+FROM
+  tt_osm_bus_route_members_avg_distance
+WHERE
+  tt_osm_bus_route_members_avg_distance.rel_osm_id = osm_bus_route_members.rel_osm_id
+;
+
+ALTER TABLE osm_bus_points ADD COLUMN avg_distance INTEGER;
+
+UPDATE
+   osm_bus_points
+SET
+   avg_distance = osm_bus_route_members.avg_distance
+FROM
+  osm_bus_route_members
+WHERE
+  osm_bus_points.osm_id = osm_bus_route_members.member_osm_id
+;
