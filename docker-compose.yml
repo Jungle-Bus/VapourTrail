@@ -1,11 +1,12 @@
-
 version: "3"
+
 services:
   postgres:
     image: "openmaptiles/postgis:2.9"
     ports:
       - 54325:5432
     env_file: docker/.env
+
   importer:
     image: openmaptiles/import-osm
     env_file: docker/.env
@@ -18,6 +19,7 @@ services:
       - postgres
     entrypoint: /bin/bash
     command: "/mapping/run_importer.sh"
+
   t-rex:
     build: ./docker/t-rex
     volumes:
@@ -26,9 +28,10 @@ services:
       - postgres
     ports:
       - 6767:6767
+
   web:
     image: httpd:2.4
     volumes:
      - ./web/:/usr/local/apache2/htdocs/
     ports:
-      - 82:80
+      - 8082:80
