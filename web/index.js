@@ -15,16 +15,16 @@ var map = new mapboxgl.Map({
     zoom: 11.952145030855498,
     hash: true
 });
-map.on('load', function () {
+map.on('load', function() {
 
-    map.on('mouseenter', 'transport_points', function () {
+    map.on('mouseenter', 'transport_points', function() {
         map.getCanvas().style.cursor = 'pointer';
     });
 
-    map.on('mouseleave', 'transport_points', function () {
+    map.on('mouseleave', 'transport_points', function() {
         map.getCanvas().style.cursor = '';
     });
-    map.on('click', 'transport_points', function (e) {
+    map.on('click', 'transport_points', function(e) {
         var feature = e.features[0];
         if (!feature.properties.routes_at_stop) {
             var routes_at_stop = []
@@ -53,17 +53,24 @@ map.on('load', function () {
             : ""} `;
         html += "</p>"
 
-        html += '<ul>'
         for (const route of routes_at_stop) {
-	    var route_in_json = JSON.stringify(route);
-	    var quote_escape_in_regexp = new RegExp("'", 'gi');
-	    var route_in_json = route_in_json.replace(quote_escape_in_regexp, '’');
-            html += ` <div style="float: left;width:10px;height:20px;background:${route['rel_colour'] || "grey"};"></div> `
-            html += ` &nbsp; [${route['rel_network'] || '??'}] ${route['rel_ref'] || '??'} '${route['rel_origin'] || '??'}' > '${route['rel_destination'] || '??'}' `
-            html += `<a href='#' onclick='filter_on_one_route(${route_in_json})'>Voir la ligne</a> </br>`
+            var route_in_json = JSON.stringify(route);
+            var quote_escape_in_regexp = new RegExp("'", 'gi');
+            var route_in_json = route_in_json.replace(quote_escape_in_regexp, '’');
+            html += `<div class='bus_box_div'>
+                        <span class='bus_box' style='border-bottom-color: ${route['rel_colour'] || "grey"};' >
+                            [${route['rel_network'] || '??'}]
+                            <span>🚍</span>
+                            <span>${route['rel_ref'] || '??'}</span>
+                        </span>
+                      : ${route['rel_destination'] || '??'}
+                      <a href='#' onclick='filter_on_one_route(${route_in_json})'>Voir la ligne</a> </br>
+                    </div>`;
         }
-        html += '</ul>'
-        var popup = new mapboxgl.Popup({closeButton: false}).setLngLat(e.lngLat).setHTML(html).addTo(map);
+
+        var popup = new mapboxgl.Popup({
+            closeButton: false
+        }).setLngLat(e.lngLat).setHTML(html).addTo(map);
     });
 })
 
@@ -74,12 +81,22 @@ function filter_on_one_route(route) {
     map.setFilter('transport_ways_filtered_outline', ["==", "rel_osm_id", route_id]);
     map.setFilter('transport_ways_filtered', ["==", "rel_osm_id", route_id]);
     map.setFilter('transport_points_filtered', ["==", "rel_osm_id", route_id]);
-    caisson.add_content(`[operator] '${route['rel_operator'] || '??'}' <br/>
-        [network] '${route['rel_network'] || '??'}' <br/>
-        [ref] '${route['rel_ref'] || '??'}' <br/>
-        [from > to] '${route['rel_origin'] || '??'}' > '${route['rel_destination'] || '??'}' <br/>
-        [name] '${route['rel_name']}' <br/>
-        <a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a> <br/>`)
+    html = `<div class='bus_box_div'>
+                <span class='bus_box' style='border-bottom-color: ${route['rel_colour'] || "grey"};' >
+                    <span>🚍</span>
+                    <span>${route['rel_ref'] || '??'}</span>
+                </span>
+                &nbsp; ${route['rel_name']}
+            </div>`
+    html += `De <b>${route['rel_origin'] || '??'}</b> vers <b>${route['rel_destination'] || '??'}</b>`;
+    if (route.hasOwnProperty('rel_via')){
+        html += `via <b>${route['rel_via'] || '??'}</b>`;
+    }
+    html += `<br>Réseau ${route['rel_network'] || '??'}`;
+    html += `<br>Transporteur : ${route['rel_operator'] || '??'}`
+    html += `<br><a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a> <br/>`
+
+    caisson.add_content(html);
 };
 
 
