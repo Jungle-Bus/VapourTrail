@@ -1,45 +1,23 @@
 # VapourTrail
-VapourTrail is a vector tile schema for OpenStreetMap bus data.
 
-It allows to create interactive map with buses without using Overpass API (because Overpass is great but we need to learn to stop relying on it).
+VapourTrail is an interactive bus map made from OpenStreetMap data.
 
 ![demo](img/demo.gif)
-
-## Use cases
-
-Show bus stops
-
-Show roads where buses go
-
-Show properties of a bus stop (shelter, etc)
-
-Show bus routes serving a bus stop
-
-Show all tracks and stops for a selected bus route
-
-Show properties and list of stops for a selected bus route
-
-Show all routes for a bus line
-
-![where do the bus go](img/all_routes_and_stops.png)
-
-![where do the bus go](img/all_route_and_stop.png)
-
-![stop detail](img/stop_detail.png)
-
-![route detail](img/route_detail.png)
 
 ## Schema
 
 :construction::warning: This is a work in progress, the schema is not stable yet :warning::construction:
 
 ## Contribute
+
 ### Dependencies
+
 * imposm3
 * t-rex
 * docker / docker-compose
 
 ### How to run
+
 Put an .osm.pbf file into docker/imposm/import directory.
 
 Run `docker-compose up -d` to run the services in detached mode.
@@ -59,6 +37,7 @@ The web front-end is available at `http://localhost:8082/vapour_trail.html`.
 **Troubleshooting**: If you don't see the name of the bus stops on the map or if the bus stop popups are empty, try to restart t-rex service: `docker-compose restart t-rex`
 
 ### Style Edition
+
 The background style is in `web/glstyle.json` while the foreground style is in `web/vapour-style.json`. Both can be edited manually or with style editor.
 
 With the t-rex tiles server running locally you can upload `vapour-style.json` to the online [Maputnik Editor](http://editor.openmaptiles.org) and exported back.
@@ -75,6 +54,7 @@ This project relies on OpenStreetMap data so you need to credit the contributors
 If you value this work, show your support by donating to the [OSM French local chapter](http://openstreetmap.fr).
 
 ## Name
+
     🎼 There's a monkey in the jungle watching a vapour trail 🎶
 
     🎵 Caught up in the conflict between his brain and his tail 🎜
