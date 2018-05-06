@@ -87,9 +87,9 @@ FROM (
   ORDER BY
     i_routes.osm_id,
     coalesce(i_stops.name, i_positions.member_type::text || '_' || i_positions.member_osm_id::text),
-    ST_Distance(
-      i_positions.geom,
-      ST_LineInterpolatePoint(i_ways.geom, ST_LineLocatePoint(i_ways.geom, i_positions.geom))
+    ST_DistanceSphere(
+      ST_Transform(i_positions.geom, 4326),
+      ST_Transform(ST_LineInterpolatePoint(i_ways.geom, ST_LineLocatePoint(i_ways.geom, i_positions.geom)), 4326)
     )
   ) AS t
 GROUP BY
