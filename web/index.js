@@ -17,18 +17,17 @@ var map = new mapboxgl.Map({
 });
 map.on('load', function() {
 
-    map.on('mouseenter', 'stops-label-intercity', function() {
+    map.on('mouseenter', 'stops-intercity-icon', function() {
         map.getCanvas().style.cursor = 'pointer';
     });
-
-    map.on('mouseleave', 'stops-label-intercity', function() {
+    map.on('mouseleave', 'stops-intercity-icon', function() {
         map.getCanvas().style.cursor = '';
     });
-    map.on('mouseenter', 'stops-label-urban', function() {
+
+    map.on('mouseenter', 'stops-urban-icon', function() {
         map.getCanvas().style.cursor = 'pointer';
     });
-
-    map.on('mouseleave', 'stops-label-urban', function() {
+    map.on('mouseleave', 'stops-urban-icon', function() {
         map.getCanvas().style.cursor = '';
     });
 
@@ -80,8 +79,8 @@ map.on('load', function() {
         }).setLngLat(e.lngLat).setHTML(html).addTo(map);
     };
 
-    map.on('click', 'stops-label-intercity', on_stop);
-    map.on('click', 'stops-label-urban', on_stop);
+    map.on('click', 'stops-intercity-icon', on_stop);
+    map.on('click', 'stops-urban-icon', on_stop);
 });
 
 
