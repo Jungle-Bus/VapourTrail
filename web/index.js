@@ -17,18 +17,17 @@ var map = new mapboxgl.Map({
 });
 map.on('load', function() {
 
-    map.on('mouseenter', 'stop-label-intercity', function() {
+    map.on('mouseenter', 'stops-intercity-icon', function() {
         map.getCanvas().style.cursor = 'pointer';
     });
-
-    map.on('mouseleave', 'stop-label-intercity', function() {
+    map.on('mouseleave', 'stops-intercity-icon', function() {
         map.getCanvas().style.cursor = '';
     });
-    map.on('mouseenter', 'stop-label-urban', function() {
+
+    map.on('mouseenter', 'stops-urban-icon', function() {
         map.getCanvas().style.cursor = 'pointer';
     });
-
-    map.on('mouseleave', 'stop-label-urban', function() {
+    map.on('mouseleave', 'stops-urban-icon', function() {
         map.getCanvas().style.cursor = '';
     });
 
@@ -80,17 +79,20 @@ map.on('load', function() {
         }).setLngLat(e.lngLat).setHTML(html).addTo(map);
     };
 
-    map.on('click', 'stop-label-intercity', on_stop);
-    map.on('click', 'stop-label-urban', on_stop);
+    map.on('click', 'stops-intercity-icon', on_stop);
+    map.on('click', 'stops-urban-icon', on_stop);
 });
 
 
 function filter_on_one_route(route) {
     //route_id = -7773405
-    var route_id = route['rel_osm_id'];
-    map.setFilter('transport_ways_filtered_outline', ["==", "rel_osm_id", route_id]);
-    map.setFilter('transport_ways_filtered', ["==", "rel_osm_id", route_id]);
-    map.setFilter('transport_points_filtered', ["==", "rel_osm_id", route_id]);
+    var ways_ids = route['ways_ids'];
+    var positions_ids = route['positions_ids'];
+    map.setFilter('routes_ways_filtered_outline', ["in", "id"].concat(ways_ids));
+    map.setFilter('routes_ways_filtered', ["in", "id"].concat(ways_ids));
+    map.setFilter('routes_points_filtered', ["in", "id"].concat(positions_ids));
+    map.setPaintProperty('routes_ways_filtered', "line-color", route['rel_colour'] || 'grey')
+    map.setPaintProperty('routes_points_filtered', "circle-color", route['rel_colour'] || 'grey')
     html = `<div class='bus_box_div'>
                 <span class='bus_box' style='border-bottom-color: ${route['rel_colour'] || "grey"};' >
                     <span>🚍</span>
@@ -111,8 +113,8 @@ function filter_on_one_route(route) {
 
 
 function reset_filters_and_show_all_lines() {
-    map.setFilter('transport_ways_filtered_outline', ["==", "rel_osm_id", "dumb_filter_again"]);
-    map.setFilter('transport_ways_filtered', ["==", "rel_osm_id", "dumb_filter_again"]);
-    map.setFilter('transport_points_filtered', ["==", "rel_osm_id", "dumb_filter_again"]);
+    map.setFilter('routes_ways_filtered_outline', ["==", "rel_osm_id", "dumb_filter_again"]);
+    map.setFilter('routes_ways_filtered', ["==", "rel_osm_id", "dumb_filter_again"]);
+    map.setFilter('routes_points_filtered', ["==", "rel_osm_id", "dumb_filter_again"]);
     caisson.remove()
 }
