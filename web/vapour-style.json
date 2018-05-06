@@ -96,7 +96,7 @@
       }
     },
     {
-      "id": "stops-shield-urban-1",
+      "id": "stops-shield-urban-x",
       "type": "symbol",
       "metadata": {},
       "source": "vapour_trail",
@@ -107,7 +107,98 @@
         [
           "==",
           "i",
-          1
+          5
+        ]
+      ],
+      "layout": {
+        "text-field": "+",
+        "text-size": {
+          "stops": [
+            [
+              14,
+              6
+            ],
+            [
+              18,
+              12
+            ]
+          ]
+        },
+        "text-max-width": 10,
+        "text-offset": [
+          0,
+          6
+        ],
+        "text-justify": "center",
+        "text-allow-overlap": false,
+        "text-anchor": "center"
+      },
+      "paint": {
+        "text-halo-color": "#4898ff",
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 5
+      }
+    },
+    {
+      "id": "stops-shield-urban-4",
+      "type": "symbol",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "stops_shield",
+      "minzoom": 14,
+      "filter": [
+        "all",
+        [
+          "==",
+          "i",
+          4
+        ]
+      ],
+      "layout": {
+        "text-field": "{ref}",
+        "text-size": {
+          "stops": [
+            [
+              14,
+              6
+            ],
+            [
+              18,
+              12
+            ]
+          ]
+        },
+        "text-max-width": 10,
+        "text-offset": [
+          0.5,
+          3.9
+        ],
+        "text-justify": "center",
+        "text-allow-overlap": false,
+        "text-anchor": "left"
+      },
+      "paint": {
+        "text-halo-color": {
+          "type": "identity",
+          "property": "colour"
+        },
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 5
+      }
+    },
+    {
+      "id": "stops-shield-urban-3",
+      "type": "symbol",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "stops_shield",
+      "minzoom": 14,
+      "filter": [
+        "all",
+        [
+          "==",
+          "i",
+          3
         ]
       ],
       "layout": {
@@ -127,11 +218,10 @@
         "text-max-width": 10,
         "text-offset": [
           -0.5,
-          2
+          3.9
         ],
         "text-justify": "center",
         "text-allow-overlap": false,
-        "visibility": "visible",
         "text-anchor": "right"
       },
       "paint": {
@@ -175,7 +265,7 @@
         "text-max-width": 10,
         "text-offset": [
           0.5,
-          2
+          2.1
         ],
         "text-justify": "center",
         "text-allow-overlap": false,
@@ -192,7 +282,7 @@
       }
     },
     {
-      "id": "stops-shield-urban-3",
+      "id": "stops-shield-urban-1",
       "type": "symbol",
       "metadata": {},
       "source": "vapour_trail",
@@ -203,7 +293,7 @@
         [
           "==",
           "i",
-          3
+          1
         ]
       ],
       "layout": {
@@ -223,7 +313,7 @@
         "text-max-width": 10,
         "text-offset": [
           -0.5,
-          3.7
+          2.1
         ],
         "text-justify": "center",
         "text-allow-overlap": false,
@@ -234,97 +324,6 @@
           "type": "identity",
           "property": "colour"
         },
-        "text-color": "rgba(255, 255, 255, 1)",
-        "text-halo-width": 5
-      }
-    },
-    {
-      "id": "stops-shield-urban-4",
-      "type": "symbol",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "stops_shield",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        [
-          "==",
-          "i",
-          4
-        ]
-      ],
-      "layout": {
-        "text-field": "{ref}",
-        "text-size": {
-          "stops": [
-            [
-              14,
-              6
-            ],
-            [
-              18,
-              12
-            ]
-          ]
-        },
-        "text-max-width": 10,
-        "text-offset": [
-          0.5,
-          3.7
-        ],
-        "text-justify": "center",
-        "text-allow-overlap": false,
-        "text-anchor": "left"
-      },
-      "paint": {
-        "text-halo-color": {
-          "type": "identity",
-          "property": "colour"
-        },
-        "text-color": "rgba(255, 255, 255, 1)",
-        "text-halo-width": 5
-      }
-    },
-    {
-      "id": "stops-shield-urban-x",
-      "type": "symbol",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "stops_shield",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        [
-          "==",
-          "i",
-          5
-        ]
-      ],
-      "layout": {
-        "text-field": "+",
-        "text-size": {
-          "stops": [
-            [
-              14,
-              6
-            ],
-            [
-              18,
-              12
-            ]
-          ]
-        },
-        "text-max-width": 10,
-        "text-offset": [
-          0,
-          5.4
-        ],
-        "text-justify": "center",
-        "text-allow-overlap": false,
-        "text-anchor": "center"
-      },
-      "paint": {
-        "text-halo-color": "#4898ff",
         "text-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 5
       }
