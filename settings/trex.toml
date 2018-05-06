@@ -24,6 +24,8 @@ srid = 3857
 buffer_size = 0
 simplify = true
 query_limit = 1000
+[[tileset.layer.query]]
+minzoom = 10
 
 [[tileset.layer]]
 name = "stops_shield"

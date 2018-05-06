@@ -4,7 +4,7 @@ tags:
   - created_by
   - source
 tables:
-    nodes: &BUS_STOP
+    nodes_bus_stop: &BUS_STOP
         fields:
         - name: osm_id
           type: id
@@ -40,7 +40,7 @@ tables:
         mapping:
           highway: [bus_stop]
         type: point
-    ways:
+    ways_bus_stop:
         <<: *BUS_STOP
         type: linestring
     relation_members:

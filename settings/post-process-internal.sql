@@ -69,11 +69,11 @@ SELECT
   local_ref,
   ST_Centroid(geom) AS geom
 FROM
-  ((SELECT 0 AS osm_type, * FROM osm_nodes) UNION (SELECT 1 AS osm_type, * FROM osm_ways)) AS t
+  ((SELECT 0 AS osm_type, * FROM osm_nodes_bus_stop) UNION (SELECT 1 AS osm_type, * FROM osm_ways_bus_stop)) AS t
 ;
 
-DROP TABLE osm_nodes;
-DROP TABLE osm_ways;
+DROP TABLE osm_nodes_bus_stop;
+DROP TABLE osm_ways_bus_stop;
 
 
 -- Filter route ways from osm_relation_members

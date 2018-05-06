@@ -333,7 +333,7 @@
       "type": "symbol",
       "source": "vapour_trail",
       "source-layer": "stops",
-      "minzoom": 0,
+      "minzoom": 10,
       "maxzoom": 24,
       "filter": [
         "all",
@@ -358,7 +358,7 @@
         "text-size": {
           "stops": [
             [
-              12.99,
+              10,
               0
             ],
             [
@@ -390,7 +390,7 @@
       "type": "symbol",
       "source": "vapour_trail",
       "source-layer": "stops",
-      "minzoom": 0,
+      "minzoom": 10,
       "maxzoom": 24,
       "filter": [
         "all",
