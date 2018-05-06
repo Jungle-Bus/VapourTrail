@@ -106,5 +106,56 @@ WHERE
 ;
 
 
+-- When no bus stop present for a i_positions, add the clostest one
+INSERT INTO i_positions
+SELECT DISTINCT ON(i_positions.rel_osm_id, i_positions.member_type, i_positions.member_osm_id)
+  i_positions.rel_osm_id,
+  i_stops.osm_type AS member_type,
+  i_stops.osm_id AS member_osm_id,
+  ST_Centroid(i_stops.geom) AS geom
+FROM (
+  SELECT
+    i_positions.*
+  FROM
+    i_positions
+    LEFT JOIN (
+      SELECT
+        i_positions.rel_osm_id,
+        i_stops.osm_type,
+        i_stops.osm_id
+      FROM
+        i_positions
+        JOIN osm_relation_members ON
+          osm_relation_members.rel_osm_id = i_positions.rel_osm_id
+        JOIN i_stops ON
+          i_stops.osm_type = osm_relation_members.member_type AND
+          i_stops.osm_id = osm_relation_members.member_osm_id AND
+          ST_DistanceSphere(
+            ST_Transform(i_positions.geom, 4326),
+            ST_Transform(i_stops.geom, 4326)
+          ) < 100
+    ) AS no_stops ON
+      no_stops.rel_osm_id = i_positions.rel_osm_id AND
+      no_stops.osm_type = i_positions.member_type AND
+      no_stops.osm_id = i_positions.member_osm_id
+  WHERE
+    no_stops.osm_id IS NULL
+  ) AS i_positions
+  JOIN i_stops ON
+    ST_DistanceSphere(
+      ST_Transform(i_positions.geom, 4326),
+      ST_Transform(i_stops.geom, 4326)
+    ) < 20
+ORDER BY
+  i_positions.rel_osm_id,
+  i_positions.member_type,
+  i_positions.member_osm_id,
+  ST_DistanceSphere(
+    ST_Transform(i_positions.geom, 4326),
+    ST_Transform(i_stops.geom, 4326)
+  )
+;
+
+
 -- Clean
 DROP TABLE osm_relation_members;
