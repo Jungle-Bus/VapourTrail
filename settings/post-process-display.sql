@@ -145,11 +145,11 @@ SELECT
   array_agg(DISTINCT array[i_routes.ref, i_routes.colour]) AS routes_ref_colour
 FROM
   d_stops
-  JOIN osm_relation_members ON
-    osm_relation_members.member_type = d_stops.osm_type AND
-    osm_relation_members.member_osm_id = d_stops.osm_id
+  JOIN i_positions ON
+    i_positions.member_type = d_stops.osm_type AND
+    i_positions.member_osm_id = d_stops.osm_id
   JOIN i_routes ON
-    i_routes.osm_id = osm_relation_members.rel_osm_id
+    i_routes.osm_id = i_positions.rel_osm_id
 GROUP BY
   d_stops.osm_type,
   d_stops.osm_id
@@ -219,11 +219,11 @@ FROM (
       d_routes_position_ids.positions_ids AS positions_ids
     FROM
       d_stops
-      JOIN osm_relation_members ON
-        osm_relation_members.member_type = d_stops.osm_type AND
-        osm_relation_members.member_osm_id = d_stops.osm_id
+      JOIN i_positions ON
+        i_positions.member_type = d_stops.osm_type AND
+        i_positions.member_osm_id = d_stops.osm_id
       JOIN i_routes ON
-        i_routes.osm_id = osm_relation_members.rel_osm_id
+        i_routes.osm_id = i_positions.rel_osm_id
       JOIN d_routes_ways_ids ON
         d_routes_ways_ids.rel_osm_id = i_routes.osm_id
       JOIN d_routes_position_ids ON

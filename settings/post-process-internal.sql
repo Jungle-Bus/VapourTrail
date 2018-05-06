@@ -104,3 +104,7 @@ WHERE
   member_role LIKE '%stop%' OR
   member_role LIKE '%platform%'
 ;
+
+
+-- Clean
+DROP TABLE osm_relation_members;
