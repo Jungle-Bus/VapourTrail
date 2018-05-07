@@ -77,17 +77,48 @@ DROP TABLE osm_ways_bus_stop;
 
 
 -- Merge osm nodes and ways about stations
+DROP TABLE IF EXISTS t_stations;
+CREATE TEMP TABLE t_stations AS (
+  (SELECT 0 AS osm_type, *, ST_Transform(ST_Buffer(ST_Transform(geom, 4326)::geography, 200)::geometry, 3857) AS geom_buff FROM osm_nodes_bus_station)
+  UNION
+  (SELECT 1 AS osm_type, *, ST_Transform(ST_Buffer(ST_Transform(geom, 4326)::geography, 200)::geometry, 3857) AS geom_buff FROM osm_ways_bus_station)
+);
+
+-- Cluster close stations
 DROP TABLE IF EXISTS i_stations;
 CREATE TABLE i_stations AS
 SELECT
-  osm_type,
-  osm_id,
-  id,
-  name,
-  is_wheelchair_ok,
-  geom
-FROM
-  ((SELECT 0 AS osm_type, * FROM osm_nodes_bus_station) UNION (SELECT 1 AS osm_type, * FROM osm_ways_bus_station)) AS t
+  array_agg(t_stations.osm_type) AS osm_type,
+  array_agg(t_stations.osm_id) AS osm_id,
+  array_agg(t_stations.name) AS name,
+  array_agg(t_stations.is_wheelchair_ok) AS is_wheelchair_ok,
+  CASE
+    WHEN NOT ST_IsEmpty(ST_CollectionExtract(ST_Collect(t_stations.geom), 3)) THEN
+      ST_CollectionHomogenize(ST_CollectionExtract(ST_Collect(t_stations.geom), 3))
+    ELSE ST_Centroid(ST_Collect(t_stations.geom))
+  END AS geom
+FROM (
+  SELECT
+    num,
+    ST_Union(geom_buff) AS geom_buff_cluster
+  FROM (
+    SELECT
+      row_number() OVER() as num,
+      (ST_Dump(geom_buff_cluster)).geom AS geom_buff
+    FROM (
+      SELECT
+        ST_SetSRID(unnest(ST_ClusterIntersecting(geom_buff)), 3857) AS geom_buff_cluster
+      FROM
+        t_stations
+      ) AS t
+    ) AS t
+  GROUP BY
+    num
+  ) AS t
+  JOIN t_stations ON
+    ST_Contains(t.geom_buff_cluster, t_stations.geom)
+GROUP BY
+  t.num
 ;
 
 DROP TABLE osm_nodes_bus_station;

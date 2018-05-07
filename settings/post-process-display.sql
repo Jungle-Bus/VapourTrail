@@ -197,11 +197,8 @@ ALTER TABLE d_stops DROP COLUMN routes_ref_colour;
 DROP TABLE IF EXISTS d_stations;
 CREATE TABLE d_stations AS
 SELECT
-  osm_type,
-  osm_id,
-  id,
-  name,
-  is_wheelchair_ok,
+  array_to_string(name, E'\n') AS name,
+  --is_wheelchair_ok,
   ST_GeometryType(geom) = 'ST_Polygon' AS has_polygon,
   ST_Centroid(geom) AS geom
 FROM
@@ -212,7 +209,9 @@ CREATE INDEX idx_d_stations_geom ON d_stations USING GIST(geom);
 DROP TABLE IF EXISTS d_stations_area;
 CREATE TABLE d_stations_area AS
 SELECT
-  *
+  array_to_string(name, E'\n') AS name,
+  --is_wheelchair_ok,
+  geom
 FROM
   i_stations
 WHERE
