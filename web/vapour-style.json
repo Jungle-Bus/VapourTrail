@@ -45,6 +45,30 @@
       }
     },
     {
+      "id": "stations-area",
+      "type": "fill",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "stations_area",
+      "minzoom": 13,
+      "paint": {
+        "fill-color": "#4898ff",
+        "fill-opacity": {
+          "stops": [
+            [
+              13,
+              0
+            ],
+            [
+              15,
+              0.2
+            ]
+          ]
+        },
+        "fill-antialias": true
+      }
+    },
+    {
       "id": "ways-intercity",
       "type": "line",
       "metadata": {},
@@ -531,6 +555,85 @@
             ]
           ]
         }
+      }
+    },
+    {
+      "id": "stations-label",
+      "type": "symbol",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "stations",
+      "minzoom": 6,
+      "layout": {
+        "text-anchor": "bottom-left",
+        "text-field": "{name}",
+        "text-font": [
+          "Klokantech Noto Sans Italic"
+        ],
+        "text-max-width": 8,
+        "text-offset": [
+          1.6,
+          0.5
+        ],
+        "text-padding": 2,
+        "text-size": {
+          "stops": [
+            [
+              6,
+              0
+            ],
+            [
+              13,
+              14
+            ],
+            [
+              24,
+              20
+            ]
+          ]
+        },
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-optional": true,
+        "text-justify": "left"
+      },
+      "paint": {
+        "text-color": "#4898ff",
+        "text-halo-blur": 0.5,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.5
+      }
+    },
+    {
+      "id": "stations-icon",
+      "type": "symbol",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "stations",
+      "minzoom": 6,
+      "layout": {
+        "icon-image": "bus_15",
+        "icon-size": {
+          "stops": [
+            [
+              6,
+              0.2
+            ],
+            [
+              12,
+              1
+            ],
+            [
+              16,
+              1.6
+            ],
+            [
+              22,
+              2.5
+            ]
+          ]
+        },
+        "icon-allow-overlap": true
       }
     },
     {

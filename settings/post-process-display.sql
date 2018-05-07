@@ -193,6 +193,34 @@ FROM (
 ALTER TABLE d_stops DROP COLUMN routes_ref_colour;
 
 
+-- Collect stations
+DROP TABLE IF EXISTS d_stations;
+CREATE TABLE d_stations AS
+SELECT
+  osm_type,
+  osm_id,
+  id,
+  name,
+  is_wheelchair_ok,
+  ST_GeometryType(geom) = 'ST_Polygon' AS has_polygon,
+  ST_Centroid(geom) AS geom
+FROM
+  i_stations
+;
+CREATE INDEX idx_d_stations_geom ON d_stations USING GIST(geom);
+
+DROP TABLE IF EXISTS d_stations_area;
+CREATE TABLE d_stations_area AS
+SELECT
+  *
+FROM
+  i_stations
+WHERE
+  ST_GeometryType(geom) = 'ST_Polygon'
+;
+CREATE INDEX idx_d_stations_area_geom ON d_stations_area USING GIST(geom);
+
+
 -- Hack to inject JSON into vtiles, need an API to remove this.
 DROP TABLE IF EXISTS t_stops_json;
 CREATE TEMP TABLE t_stops_json AS

@@ -43,6 +43,24 @@ tables:
     ways_bus_stop:
         <<: *BUS_STOP
         type: linestring
+    nodes_bus_station: &BUS_STATION
+        fields:
+        - name: osm_id
+          type: id
+        - name: geom
+          type: geometry
+        - key: name
+          name: name
+          type: string
+        - key: wheelchair
+          name: is_wheelchair_ok
+          type: bool
+        mapping:
+          amenity: [bus_station]
+        type: point
+    ways_bus_station:
+        <<: *BUS_STATION
+        type: polygon
     relation_members_route:
       type: relation_member
       columns:

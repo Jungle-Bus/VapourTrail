@@ -76,6 +76,24 @@ DROP TABLE osm_nodes_bus_stop;
 DROP TABLE osm_ways_bus_stop;
 
 
+-- Merge osm nodes and ways about stations
+DROP TABLE IF EXISTS i_stations;
+CREATE TABLE i_stations AS
+SELECT
+  osm_type,
+  osm_id,
+  id,
+  name,
+  is_wheelchair_ok,
+  geom
+FROM
+  ((SELECT 0 AS osm_type, * FROM osm_nodes_bus_station) UNION (SELECT 1 AS osm_type, * FROM osm_ways_bus_station)) AS t
+;
+
+DROP TABLE osm_nodes_bus_station;
+DROP TABLE osm_ways_bus_station;
+
+
 -- Filter route ways from osm_relation_members_route
 DROP TABLE IF EXISTS i_ways;
 CREATE TABLE i_ways AS
