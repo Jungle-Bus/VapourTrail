@@ -25,7 +25,17 @@ buffer_size = 0
 simplify = true
 query_limit = 1000
 [[tileset.layer.query]]
-minzoom = 10
+minzoom = 11
+maxzoom = 13
+sql="""
+SELECT *
+FROM d_stops_cluster
+WHERE geom && !bbox!
+ORDER BY max_avg_distance
+LIMIT 1000
+"""
+[[tileset.layer.query]]
+minzoom = 14
 
 [[tileset.layer]]
 name = "stops_shield"
