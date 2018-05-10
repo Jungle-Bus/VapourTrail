@@ -1,4 +1,4 @@
--- Collect routes segements
+-- Collect route segments (every way where a bus route goes)
 DROP TABLE IF EXISTS d_ways;
 CREATE TABLE d_ways AS
 SELECT
@@ -10,13 +10,13 @@ FROM (
   SELECT
     max_diameter,
     number_of_routes,
-    ARRAY (SELECT DISTINCT id FROM unnest(rels_osm_id) AS t(id)) AS rels_osm_id,
+    ARRAY (SELECT id FROM unnest(rels_osm_id) AS t(id)) AS rels_osm_id,
     ST_LineMerge(ST_Union(geom)) AS geom
   FROM (
     SELECT
       max(i_routes.diameter) AS max_diameter,
-      count(*) AS number_of_routes,
-      array_agg(i_routes.osm_id) AS rels_osm_id,
+      count(DISTINCT i_routes.osm_id) AS number_of_routes,
+      array_agg(DISTINCT i_routes.osm_id) AS rels_osm_id,
       i_ways.geom
     FROM
       i_routes
@@ -36,7 +36,7 @@ DROP SEQUENCE IF EXISTS d_ways_id_seq;
 CREATE SEQUENCE d_ways_id_seq;
 ALTER TABLE d_ways ADD COLUMN id integer NOT NULL DEFAULT nextval('d_ways_id_seq');
 
--- Compute segment list for each route
+-- Compute the list of segments id for each bus route
 DROP TABLE IF EXISTS d_routes_ways_ids;
 CREATE TABLE d_routes_ways_ids AS
 SELECT
@@ -55,7 +55,7 @@ GROUP BY
 ALTER TABLE d_ways DROP COLUMN rels_osm_id;
 
 
--- Collect routes stop position
+-- Collect stop positions for each route : take the stop_position or project the stop on the way
 DROP TABLE IF EXISTS d_routes_position;
 CREATE TABLE d_routes_position AS
 SELECT
@@ -100,7 +100,7 @@ DROP SEQUENCE IF EXISTS d_routes_position_id_seq;
 CREATE SEQUENCE d_routes_position_id_seq;
 ALTER TABLE d_routes_position ADD COLUMN id integer NOT NULL DEFAULT nextval('d_routes_position_id_seq');
 
--- Compute route stop positions list for each route
+-- Compute the list of stop positions id for each bus route
 DROP TABLE IF EXISTS d_routes_position_ids;
 CREATE TABLE d_routes_position_ids AS
 SELECT
@@ -119,7 +119,7 @@ GROUP BY
 ALTER TABLE d_routes_position DROP COLUMN rels_osm_id;
 
 
--- Collect and complete stops
+-- Add bus routes info on bus stops
 DROP TABLE IF EXISTS d_stops;
 CREATE TABLE d_stops AS
 SELECT

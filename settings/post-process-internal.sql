@@ -97,6 +97,7 @@ SELECT
   rel_osm_id,
   member_type,
   member_osm_id,
+  member_index,
   ST_Centroid(geom) AS geom
 FROM
   osm_relation_members

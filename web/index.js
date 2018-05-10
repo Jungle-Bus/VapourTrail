@@ -85,7 +85,6 @@ map.on('load', function() {
 
 
 function filter_on_one_route(route) {
-    //route_id = -7773405
     var ways_ids = route['ways_ids'];
     var positions_ids = route['positions_ids'];
     map.setFilter('routes_ways_filtered_outline', ["in", "id"].concat(ways_ids));
