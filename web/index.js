@@ -76,7 +76,7 @@ map.on('load', function() {
 });
 
 
-function filter_on_one_route(route) {
+async function filter_on_one_route(route) {
     var ways_ids = route['ways_ids'];
     var positions_ids = route['positions_ids'];
     map.setFilter('routes_ways_filtered_outline', ["in", "id"].concat(ways_ids));
@@ -84,7 +84,7 @@ function filter_on_one_route(route) {
     map.setFilter('routes_points_filtered', ["in", "id"].concat(positions_ids));
     map.setPaintProperty('routes_ways_filtered', "line-color", route['rel_colour'] || 'grey')
     map.setPaintProperty('routes_points_filtered', "circle-color", route['rel_colour'] || 'grey')
-    html = `<div class='bus_box_div'>
+    var html = `<div class='bus_box_div'>
                 <span class='bus_box' style='border-bottom-color: ${route['rel_colour'] || "grey"};' >
                     <span>🚍</span>
                     <span>${route['rel_ref'] || '??'}</span>
@@ -92,16 +92,64 @@ function filter_on_one_route(route) {
                 &nbsp; ${route['rel_name']}
             </div>`
     html += `De <b>${route['rel_origin'] || '??'}</b> vers <b>${route['rel_destination'] || '??'}</b>`;
-    if (route.hasOwnProperty('rel_via')){
+    if (route.hasOwnProperty('rel_via')) {
         html += `via <b>${route['rel_via'] || '??'}</b>`;
     }
     html += `<br>Réseau ${route['rel_network'] || '??'}`;
     html += `<br>Transporteur : ${route['rel_operator'] || '??'}`
     html += `<br><a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a> <br/>`
 
-    caisson.add_content(html);
+    wait = `<br>...<br>`
+    caisson.add_content(html + wait);
+
+    try {
+        const stop_list_url = "http://www.mocky.io/v2/5af49b4b55000067007a539a" //TODO, use the api here
+        var stop_list_response = await fetch(stop_list_url);
+        var stop_list_data = await stop_list_response.json();
+
+        thermo = create_stop_list_for_a_route(stop_list_data['stop_list'], route['rel_colour'])
+        caisson.add_content(html + thermo)
+
+    } catch (err) {
+        console.log("erreur en récupérant la liste des arrêts : " + err)
+        caisson.add_content(html)
+    }
 };
 
+function create_stop_list_for_a_route(stop_list, route_colour) {
+    var route_colour = route_colour || 'grey';
+    var inner_html = '<div class="stop_list">'
+    for (const stop of stop_list) {
+        if (stop != stop_list[stop_list.length - 1]) {
+            inner_html += `<div class="stop_item" style="border-left-color:${route_colour};">`;
+        } else { // remove the border so the stop list stops on a dot
+            inner_html += `<div class="stop_item" style="border-left-color:#FFF;">`;
+        }
+
+        inner_html += `
+          <span class="stop_dot" style="border-color:${route_colour};"></span>
+          <div class="stop_name">${stop['name'] || '??'}</div>
+          <div class="stop_shields">
+          `
+        for (const shield of stop['shield_list']) {
+            inner_html += `
+                <div class='bus_box_inline_div'>
+                  <span class='bus_box' style='border-bottom-color: ${shield['colour'] || "grey"};' >
+                    <span>🚍</span>
+                  <span>${shield['ref'] || '??'}</span>
+                  </span>
+                </div>
+                `
+        }
+        inner_html += `
+          </div>
+        </div>
+        `
+    }
+
+    inner_html += '</div>'
+    return inner_html
+}
 
 function reset_filters_and_show_all_lines() {
     map.setFilter('routes_ways_filtered_outline', ["==", "rel_osm_id", "dumb_filter_again"]);
