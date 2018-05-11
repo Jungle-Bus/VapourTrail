@@ -4,3 +4,4 @@
 - traiter séparément les stop position et les arrêts (Les stop position ne devraient être visibles que dans la vue filtrée par parcours)
 - API avec le détail des infos d'un parcours (au moins ses tags, peut-être la liste ordonnée de ses arrêts en fonction de comment on souhaite gérer le thermomètre de ligne)
 - use a bus icon for the bus stop platform (maybe a slightly different one that the default display, to make them stand in the front of the others that are not part of the current line)
+- Sort route ref in shield and popup.
