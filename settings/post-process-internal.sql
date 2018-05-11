@@ -6,9 +6,9 @@ SELECT
   NULL::integer AS diameter,
   NULL::integer AS avg_distance
 FROM
-  osm_relations
+  osm_relations_route
 ;
-DROP TABLE osm_relations;
+DROP TABLE osm_relations_route;
 
 
 DROP TABLE IF EXISTS t_routes_avg_distance_diameter;
@@ -28,9 +28,9 @@ FROM (
       member_index,
       ST_Transform(geom, 4326) AS geom
     FROM
-      osm_relation_members
+      osm_relation_members_route
     WHERE
-      osm_relation_members.member_role LIKE '%stop%'
+      osm_relation_members_route.member_role LIKE '%stop%'
     ) AS t
   ) AS t
 WHERE
@@ -76,21 +76,21 @@ DROP TABLE osm_nodes_bus_stop;
 DROP TABLE osm_ways_bus_stop;
 
 
--- Filter route ways from osm_relation_members
+-- Filter route ways from osm_relation_members_route
 DROP TABLE IF EXISTS i_ways;
 CREATE TABLE i_ways AS
 SELECT
   rel_osm_id,
   geom
 FROM
-  osm_relation_members
+  osm_relation_members_route
 WHERE
   member_type = 1 AND
   member_role NOT LIKE '%stop%' AND
   member_role NOT LIKE '%platform%'
 ;
 
--- Filter stops and platform from osm_relation_members
+-- Filter stops and platform from osm_relation_members_route
 DROP TABLE IF EXISTS i_positions;
 CREATE TABLE i_positions AS
 SELECT
@@ -100,7 +100,7 @@ SELECT
   member_index,
   ST_Centroid(geom) AS geom
 FROM
-  osm_relation_members
+  osm_relation_members_route
 WHERE
   member_role LIKE '%stop%' OR
   member_role LIKE '%platform%'
@@ -108,4 +108,4 @@ WHERE
 
 
 -- Clean
-DROP TABLE osm_relation_members;
+DROP TABLE osm_relation_members_route;
