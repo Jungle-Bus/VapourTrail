@@ -180,7 +180,7 @@ SELECT
   osm_id,
   i,
   routes_ref_colour[i][1] AS ref,
-  CASE WHEN routes_ref_colour[i][2] IS NULL OR routes_ref_colour[i][2] = '' THEN '#4898ff' ELSE routes_ref_colour[i][2] END AS colour,
+  CASE WHEN routes_ref_colour[i][2] IS NULL OR routes_ref_colour[i][2] = '' THEN 'gray' ELSE routes_ref_colour[i][2] END AS colour,
   geom
 FROM (
   SELECT

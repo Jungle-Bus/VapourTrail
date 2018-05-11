@@ -134,7 +134,7 @@
         "text-anchor": "center"
       },
       "paint": {
-        "text-halo-color": "#4898ff",
+        "text-halo-color": "gray",
         "text-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 5
       }
