@@ -84,41 +84,54 @@ async function filter_on_one_route(route) {
     map.setFilter('routes_points_filtered', ["in", "id"].concat(positions_ids));
     map.setPaintProperty('routes_ways_filtered', "line-color", route['rel_colour'] || 'grey')
     map.setPaintProperty('routes_points_filtered', "circle-color", route['rel_colour'] || 'grey')
-    var html = `<div class='bus_box_div'>
-                <span class='bus_box' style='border-bottom-color: ${route['rel_colour'] || "grey"};' >
-                    <span>🚍</span>
-                    <span>${route['rel_ref'] || '??'}</span>
-                </span>
-                &nbsp; ${route['rel_name']}
-            </div>`
-    html += `De <b>${route['rel_origin'] || '??'}</b> vers <b>${route['rel_destination'] || '??'}</b>`;
-    if (route.hasOwnProperty('rel_via')) {
-        html += `via <b>${route['rel_via'] || '??'}</b>`;
-    }
-    html += `<br>Réseau ${route['rel_network'] || '??'}`;
-    html += `<br>Transporteur : ${route['rel_operator'] || '??'}`
-    html += `<br><a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a> <br/>`
 
-    wait = `<br>...<br>`
-    caisson.add_content(html + wait);
+    var caisson_content = `
+    <div id="route_info"></div>
+    <div id="close_caisson_button"></div>
+    <div id="stop_list" class="stop_list"></div>
+    `
+    caisson.add_content(caisson_content)
+
+    var close_caisson_button = document.getElementById('close_caisson_button')
+    close_caisson_button.innerHTML = `<a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a>`;
+
+    var route_info = document.getElementById('route_info')
+    route_info.innerHTML = create_route_medata(route);
 
     try {
         const stop_list_url = "http://www.mocky.io/v2/5af49b4b55000067007a539a" //TODO, use the api here
         var stop_list_response = await fetch(stop_list_url);
         var stop_list_data = await stop_list_response.json();
 
-        thermo = create_stop_list_for_a_route(stop_list_data['stop_list'], route['rel_colour'])
-        caisson.add_content(html + thermo)
+        var thermo = create_stop_list_for_a_route(stop_list_data['stop_list'], route['rel_colour'])
+        var stop_list = document.getElementById('stop_list')
+        stop_list.innerHTML = thermo;
 
     } catch (err) {
         console.log("erreur en récupérant la liste des arrêts : " + err)
-        caisson.add_content(html)
     }
 };
 
+function create_route_medata(route_info){
+    var inner_html = `<div class='bus_box_div'>
+                <span class='bus_box' style='border-bottom-color: ${route_info['rel_colour'] || "grey"};' >
+                    <span>🚍</span>
+                    <span>${route_info['rel_ref'] || '??'}</span>
+                </span>
+                &nbsp; ${route_info['rel_name']}
+            </div>`;
+    inner_html += `De <b>${route_info['rel_origin'] || '??'}</b> vers <b>${route_info['rel_destination'] || '??'}</b>`;
+    if (route_info.hasOwnProperty('rel_via')) {
+        inner_html += `via <b>${route_info['rel_via'] || '??'}</b>`;
+    };
+    inner_html += `<br>Réseau ${route_info['rel_network'] || '??'}`;
+    inner_html += `<br>Transporteur : ${route_info['rel_operator'] || '??'}`;
+    return inner_html ;
+}
+
 function create_stop_list_for_a_route(stop_list, route_colour) {
     var route_colour = route_colour || 'grey';
-    var inner_html = '<div class="stop_list">'
+    var inner_html = ''
     for (const stop of stop_list) {
         if (stop != stop_list[stop_list.length - 1]) {
             inner_html += `<div class="stop_item" style="border-left-color:${route_colour};">`;
@@ -147,7 +160,6 @@ function create_stop_list_for_a_route(stop_list, route_colour) {
         `
     }
 
-    inner_html += '</div>'
     return inner_html
 }
 
