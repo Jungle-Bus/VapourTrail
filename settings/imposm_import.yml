@@ -4,7 +4,7 @@ tags:
   - created_by
   - source
 tables:
-    bus_points:
+    nodes_bus_stop: &BUS_STOP
         fields:
         - name: osm_id
           type: id
@@ -38,10 +38,12 @@ tables:
           name: public_transport
           type: string
         mapping:
-          highway:
-          - bus_stop
+          highway: [bus_stop]
         type: point
-    bus_route_members:
+    ways_bus_stop:
+        <<: *BUS_STOP
+        type: linestring
+    relation_members_route:
       type: relation_member
       columns:
       - name: member_osm_id
@@ -52,38 +54,14 @@ tables:
         type: member_role
       - name: member_type
         type: member_type
-      - name: geometry
-        type: geometry
       - name: rel_osm_id
         type: id
-      - name: rel_ref
-        key: ref
-        type: string
-      - name: rel_network
-        key: network
-        type: string
-      - name: rel_operator
-        key: operator
-        type: string
-      - name: rel_origin
-        key: from
-        type: string
-      - name: rel_destination
-        key: to
-        type: string
-      - name: rel_colour
-        key: colour
-        type: string
-      - name: transport_mode
-        key: route
-        type: string
-      - name: rel_name
-        key: name
-        type: string
+      - name: geom
+        type: geometry
       relation_type: [route]
       mapping:
         route: [bus]
-    bus_routes:
+    relations_route:
       type: relation
       columns:
       - name: osm_id
