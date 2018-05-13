@@ -76,7 +76,7 @@ map.on('load', function() {
 });
 
 
-async function filter_on_one_route(route) {
+function filter_on_one_route(route) {
     var ways_ids = route['ways_ids'];
     var positions_ids = route['positions_ids'];
     map.setFilter('routes_ways_filtered_outline', ["in", "id"].concat(ways_ids));
@@ -92,27 +92,28 @@ async function filter_on_one_route(route) {
     `
     caisson.add_content(caisson_content)
 
-    var close_caisson_button = document.getElementById('close_caisson_button')
-    close_caisson_button.innerHTML = `<a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a>`;
-
     var route_info = document.getElementById('route_info')
     route_info.innerHTML = create_route_medata(route);
 
-    try {
-        const stop_list_url = "http://www.mocky.io/v2/5af49b4b55000067007a539a" //TODO, use the api here
-        var stop_list_response = await fetch(stop_list_url);
-        var stop_list_data = await stop_list_response.json();
+    const stop_list_url = "http://www.mocky.io/v2/5af49b4b55000067007a539a" //TODO, use the api here
+    fetch(stop_list_url)
+        .then(function(data) {
+            return data.json()
+        })
+        .then(function(stop_list_data) {
+            var thermo = create_stop_list_for_a_route(stop_list_data['stop_list'], route['rel_colour'])
+            var stop_list = document.getElementById('stop_list')
+            stop_list.innerHTML = thermo;
+        })
+        .catch(function(error) {
+            console.log("erreur en récupérant la liste des arrêts : " + error)
+        })
 
-        var thermo = create_stop_list_for_a_route(stop_list_data['stop_list'], route['rel_colour'])
-        var stop_list = document.getElementById('stop_list')
-        stop_list.innerHTML = thermo;
-
-    } catch (err) {
-        console.log("erreur en récupérant la liste des arrêts : " + err)
-    }
+    var close_caisson_button = document.getElementById('close_caisson_button')
+    close_caisson_button.innerHTML = `<a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a>`;
 };
 
-function create_route_medata(route_info){
+function create_route_medata(route_info) {
     var inner_html = `<div class='bus_box_div'>
                 <span class='bus_box' style='border-bottom-color: ${route_info['rel_colour'] || "grey"};' >
                     <span>🚍</span>
@@ -126,7 +127,7 @@ function create_route_medata(route_info){
     };
     inner_html += `<br>Réseau ${route_info['rel_network'] || '??'}`;
     inner_html += `<br>Transporteur : ${route_info['rel_operator'] || '??'}`;
-    return inner_html ;
+    return inner_html;
 }
 
 function create_stop_list_for_a_route(stop_list, route_colour) {
