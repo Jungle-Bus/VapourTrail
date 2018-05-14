@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  importer:
+    image: openmaptiles/import-osm
+    env_file: docker/.env
+    volumes:
+     - ./docker/imposm/import:/import
+     - ./settings/imposm_import.yml:/mapping/mapping.yaml
+     - ./settings/post-process-internal.sql:/mapping/post-process-internal.sql
+     - ./settings/post-process-display.sql:/mapping/post-process-display.sql
+     - ./settings/run_importer.sh:/mapping/run_importer.sh
+    entrypoint: /bin/bash
+    command: "/mapping/run_importer.sh"
+
+networks:
+  default:
+    external:
+      name: vapourtrail_default
