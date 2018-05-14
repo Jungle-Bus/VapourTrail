@@ -5,6 +5,7 @@ SELECT
   max_diameter,
   number_of_routes,
   rels_osm_id,
+  ST_Length((ST_Dump(geom)).geom) AS length,
   (ST_Dump(geom)).geom AS geom
 FROM (
   SELECT
