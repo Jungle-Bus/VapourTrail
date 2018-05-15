@@ -15,7 +15,9 @@ services:
      - ./settings/imposm_import.yml:/mapping/mapping.yaml
      - ./settings/post-process-internal.sql:/mapping/post-process-internal.sql
      - ./settings/post-process-display.sql:/mapping/post-process-display.sql
+     - ./settings/post-process-api.sql:/mapping/post-process-api.sql
      - ./settings/run_importer.sh:/mapping/run_importer.sh
+     - ./settings/api:/mapping/api
     depends_on:
       - postgres
     entrypoint: /bin/bash
