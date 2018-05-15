@@ -103,13 +103,13 @@ function filter_on_one_route(route) {
     var route_info = document.getElementById('route_info')
     route_info.innerHTML = create_route_medata(route);
 
-    const stop_list_url = "http://www.mocky.io/v2/5af49b4b55000067007a539a" //TODO, use the api here
+    const stop_list_url = `api/routes_${route.rel_osm_id}.json`;
     fetch(stop_list_url)
         .then(function(data) {
             return data.json()
         })
-        .then(function(stop_list_data) {
-            var thermo = create_stop_list_for_a_route(stop_list_data['stop_list'], route['rel_colour'])
+        .then(function(route) {
+            var thermo = create_stop_list_for_a_route(route['stop_list'], route['colour'])
             var stop_list = document.getElementById('stop_list')
             stop_list.innerHTML = thermo;
         })
@@ -153,12 +153,12 @@ function create_stop_list_for_a_route(stop_list, route_colour) {
           <div class="stop_name">${stop['name'] || '??'}</div>
           <div class="stop_shields">
           `
-        for (const shield of stop['shield_list']) {
+        for (const other_route of stop['other_routes']) {
             inner_html += `
                 <div class='bus_box_inline_div'>
-                  <span class='bus_box' style='border-bottom-color: ${shield['colour'] || "grey"};' >
+                  <span class='bus_box' style='border-bottom-color: ${other_route['colour'] || "grey"};' >
                     <span>🚍</span>
-                  <span>${shield['ref'] || '??'}</span>
+                  <span>${other_route['ref'] || '??'}</span>
                   </span>
                 </div>
                 `
