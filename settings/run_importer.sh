@@ -16,3 +16,12 @@ done
 echo "Executing post-process script"
 /usr/src/app/psql.sh -f /mapping/post-process-internal.sql
 /usr/src/app/psql.sh -f /mapping/post-process-display.sql
+/usr/src/app/psql.sh -f /mapping/post-process-api.sql
+
+#apt update && apt install -y jq
+
+rm /mapping/api/*
+psql -h $POSTGRES_HOST -U $POSTGRES_USER -d $POSTGRES_DB -At -c "SELECT * FROM a_stops" > /mapping/api/stops.json
+cat /mapping/api/stops.json | jq -r '. | "\(.[0].osm_type)_\(.[0].osm_id)\t\(.)"' | awk -F\\t '{ print $2 > "/mapping/api/stops_" $1 ".json" }'
+psql -h $POSTGRES_HOST -U $POSTGRES_USER -d $POSTGRES_DB -At -c "SELECT * FROM a_routes" > /mapping/api/routes.json
+cat /mapping/api/routes.json | jq -r '. | "\(.properties.osm_id)\t\(.)"' | awk -F\\t '{ print $2 > "/mapping/api/routes_" $1 ".json" }'
