@@ -46,46 +46,45 @@ GROUP BY
 DROP TABLE IF EXISTS a_routes;
 CREATE TABLE a_routes AS
 SELECT
-  row_to_json(t) AS json
-FROM (
-SELECT
-  rel_osm_id AS osm_id,
-  rel_ref AS ref,
-  rel_colour AS colour,
-  json_agg(json) AS stop_list
+  json_build_object(
+    'type', 'FeatureCollection',
+    'properties', json_build_object(
+      'osm_id', rel_osm_id,
+      'ref', rel_ref,
+      'colour', rel_colour
+    ),
+    'features', json_agg(feature)
+  ) AS json
 FROM (
   SELECT
-    rel_osm_id,
-    rel_ref,
-    rel_colour,
-    row_to_json(t) AS json
-  FROM (
-    SELECT
-      i_routes.osm_id AS rel_osm_id,
-      MAX(i_routes.ref) AS rel_ref,
-      MAX(i_routes.colour) AS rel_colour,
-      MAX(i_positions.member_index) AS index,
-      MAX(i_stops.name) AS name,
-      array_agg(DISTINCT hstore(ARRAY['osm_id', other_routes.osm_id::text, 'name', other_routes.name, 'ref', other_routes.ref::text, 'colour', other_routes.colour::text])) AS other_routes,
-      ST_X(ST_Transform(MAX(i_positions.geom), 4326)) AS lon,
-      ST_Y(ST_Transform(MAX(i_positions.geom), 4326)) AS lat
-    FROM
-      i_routes
-      JOIN i_positions ON
-        i_positions.rel_osm_id = i_routes.osm_id
-      LEFT JOIN i_stops ON
-        i_stops.osm_type = i_positions.member_type AND
-        i_stops.osm_id = i_positions.member_osm_id
-      LEFT JOIN i_positions AS other_positions ON
-        other_positions.member_type = i_positions.member_type AND
-        other_positions.member_osm_id = i_positions.member_osm_id AND
-        other_positions.rel_osm_id != i_routes.osm_id
-      LEFT JOIN i_routes AS other_routes ON
-        other_routes.osm_id = other_positions.rel_osm_id
-    GROUP BY
-      i_routes.osm_id,
-      coalesce(i_stops.name, i_positions.member_type::text || '_' || i_positions.member_osm_id::text)
-    ) AS t
+    i_routes.osm_id AS rel_osm_id,
+    MAX(i_routes.ref) AS rel_ref,
+    MAX(i_routes.colour) AS rel_colour,
+    MAX(i_positions.member_index) AS index,
+    json_build_object(
+      'type', 'Feature',
+      'properties', json_build_object(
+        'name', MAX(i_stops.name),
+        'other_routes', array_agg(DISTINCT hstore(ARRAY['osm_id', other_routes.osm_id::text, 'name', other_routes.name, 'ref', other_routes.ref::text, 'colour', other_routes.colour::text]))
+      ),
+      'geometry', ST_AsGeoJSON(ST_Transform(MAX(i_positions.geom), 4326))::json
+    ) AS feature
+  FROM
+    i_routes
+    JOIN i_positions ON
+      i_positions.rel_osm_id = i_routes.osm_id
+    LEFT JOIN i_stops ON
+      i_stops.osm_type = i_positions.member_type AND
+      i_stops.osm_id = i_positions.member_osm_id
+    LEFT JOIN i_positions AS other_positions ON
+      other_positions.member_type = i_positions.member_type AND
+      other_positions.member_osm_id = i_positions.member_osm_id AND
+      other_positions.rel_osm_id != i_routes.osm_id
+    LEFT JOIN i_routes AS other_routes ON
+      other_routes.osm_id = other_positions.rel_osm_id
+  GROUP BY
+    i_routes.osm_id,
+    coalesce(i_stops.name, i_positions.member_type::text || '_' || i_positions.member_osm_id::text)
   ORDER BY
     rel_osm_id,
     index
@@ -94,5 +93,4 @@ GROUP BY
   rel_osm_id,
   rel_ref,
   rel_colour
-) AS t
 ;

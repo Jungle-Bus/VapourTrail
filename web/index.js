@@ -109,7 +109,7 @@ function filter_on_one_route(route) {
             return data.json()
         })
         .then(function(route) {
-            var thermo = create_stop_list_for_a_route(route['stop_list'], route['colour'])
+            var thermo = create_stop_list_for_a_route(route['features'], route['properties']['colour'])
             var stop_list = document.getElementById('stop_list')
             stop_list.innerHTML = thermo;
         })
@@ -150,10 +150,10 @@ function create_stop_list_for_a_route(stop_list, route_colour) {
 
         inner_html += `
           <span class="stop_dot" style="border-color:${route_colour};"></span>
-          <div class="stop_name">${stop['name'] || '??'}</div>
+          <div class="stop_name">${stop['properties']['name'] || '??'}</div>
           <div class="stop_shields">
           `
-        for (const other_route of stop['other_routes']) {
+        for (const other_route of stop['properties']['other_routes']) {
             inner_html += `
                 <div class='bus_box_inline_div'>
                   <span class='bus_box' style='border-bottom-color: ${other_route['colour'] || "grey"};' >
