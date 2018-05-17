@@ -198,7 +198,6 @@ DROP TABLE IF EXISTS d_stations;
 CREATE TABLE d_stations AS
 SELECT
   array_to_string(name, E'\n') AS name,
-  --is_wheelchair_ok,
   ST_GeometryType(geom) = 'ST_Polygon' AS has_polygon,
   ST_Centroid(geom) AS geom
 FROM
@@ -210,7 +209,6 @@ DROP TABLE IF EXISTS d_stations_area;
 CREATE TABLE d_stations_area AS
 SELECT
   array_to_string(name, E'\n') AS name,
-  --is_wheelchair_ok,
   geom
 FROM
   i_stations

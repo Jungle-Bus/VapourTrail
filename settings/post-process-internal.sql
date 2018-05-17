@@ -91,7 +91,6 @@ SELECT
   array_agg(t_stations.osm_type) AS osm_type,
   array_agg(t_stations.osm_id) AS osm_id,
   array_agg(t_stations.name) AS name,
-  array_agg(t_stations.is_wheelchair_ok) AS is_wheelchair_ok,
   CASE
     WHEN NOT ST_IsEmpty(ST_CollectionExtract(ST_Collect(t_stations.geom), 3)) THEN
       ST_CollectionHomogenize(ST_CollectionExtract(ST_Collect(t_stations.geom), 3))
