@@ -120,6 +120,110 @@
       }
     },
     {
+      "id": "stations-label-z15",
+      "type": "symbol",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "stations",
+      "minzoom": 15,
+      "maxzoom": 24,
+      "layout": {
+        "text-anchor": "bottom-left",
+        "text-field": "{name}",
+        "text-font": [
+          "Klokantech Noto Sans Italic"
+        ],
+        "text-max-width": 8,
+        "text-offset": [
+          1.6,
+          0.5
+        ],
+        "text-padding": 2,
+        "text-size": {
+          "stops": [
+            [
+              6,
+              0
+            ],
+            [
+              13,
+              14
+            ],
+            [
+              24,
+              20
+            ]
+          ]
+        },
+        "text-allow-overlap": true
+      },
+      "paint": {
+        "text-color": "#4898ff",
+        "text-halo-blur": 0.5,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.5,
+        "text-opacity": {
+          "stops": [
+            [
+              15,
+              1
+            ],
+            [
+              15.5,
+              0.3
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "stations-icon-z15",
+      "type": "symbol",
+      "metadata": {},
+      "source": "vapour_trail",
+      "source-layer": "stations",
+      "minzoom": 15,
+      "maxzoom": 24,
+      "layout": {
+        "icon-image": "bus_15",
+        "icon-size": {
+          "stops": [
+            [
+              6,
+              0.2
+            ],
+            [
+              12,
+              1
+            ],
+            [
+              16,
+              1.6
+            ],
+            [
+              22,
+              2.5
+            ]
+          ]
+        },
+        "icon-allow-overlap": true
+      },
+      "paint": {
+        "icon-opacity": {
+          "stops": [
+            [
+              15,
+              1
+            ],
+            [
+              15.5,
+              0.3
+            ]
+          ]
+        }
+      }
+    },
+    {
       "id": "stops-shield-urban-x",
       "type": "symbol",
       "metadata": {},
@@ -564,6 +668,7 @@
       "source": "vapour_trail",
       "source-layer": "stations",
       "minzoom": 6,
+      "maxzoom": 15,
       "layout": {
         "text-anchor": "bottom-left",
         "text-field": "{name}",
@@ -611,6 +716,7 @@
       "source": "vapour_trail",
       "source-layer": "stations",
       "minzoom": 6,
+      "maxzoom": 15,
       "layout": {
         "icon-image": "bus_15",
         "icon-size": {
