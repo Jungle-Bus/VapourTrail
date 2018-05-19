@@ -44,6 +44,11 @@ The background style is in `web/glstyle.json` while the foreground style is in `
 
 With the t-rex tiles server running locally you can upload `vapour-style.json` to the online [Maputnik Editor](http://editor.openmaptiles.org) and exported back.
 
+### Server less static version
+
+After importing data, adjust the `Makefile` header variables and then run `make dump-tiles`. Tiles set will be present in `web/tiles`.
+
+
 ## License
 
 This project has been developed by the [Jungle Bus](http://junglebus.io/) team, a French non-profit organization dedicated to bus public transport in OpenStreetMap. Please reuse!
