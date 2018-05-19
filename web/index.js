@@ -12,7 +12,7 @@ var map = new mapboxgl.Map({
     center: [
         1.8659, 46.1662
     ],
-    zoom: 11.952145030855498,
+    zoom: 13,
     hash: true
 });
 map.on('load', function() {
@@ -22,6 +22,34 @@ map.on('load', function() {
     });
     map.on('mouseleave', 'stops-icon', function() {
         map.getCanvas().style.cursor = '';
+    });
+
+    //new layer to highlight a stop in the stop_list
+    map.addSource('highlight_stop_source', {
+        "type": "geojson",
+        "data": {
+            "type": "Point",
+            "coordinates": [1.8790708, 46.1740393]
+        }
+    });
+    map.addLayer({
+        "id": "highlighted_stop",
+        "source": "highlight_stop_source",
+        "type": "circle",
+        "layout": {
+          "visibility": "none",
+        },
+        'paint': {
+            'circle-radius': {
+                'base': 1.75,
+                'stops': [
+                    [12, 10],
+                    [22, 200]
+                ]
+            },
+            'circle-color': '#6e6b6b',
+            'circle-opacity': 0.5
+        }
     });
 
     function on_stop(e) {
@@ -87,7 +115,7 @@ function filter_on_one_route(route) {
     var close_caisson_button = document.getElementById('close_caisson_button')
     close_caisson_button.innerHTML = `<a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a>`;
 
-    const stop_list_url = "http://www.mocky.io/v2/5b00408f3100006c0076df14" //TODO, use the api here
+    const stop_list_url = "http://www.mocky.io/v2/5b0049da3100005e0076df1b" //TODO, use the api here
     fetch(stop_list_url)
         .then(function(data) {
             return data.json()
@@ -146,10 +174,14 @@ function create_stop_list_for_a_route(stop_list, route_colour) {
     var inner_html = ''
     for (const stop of stop_list) {
         if (stop != stop_list[stop_list.length - 1]) {
-            inner_html += `<div class="stop_item" style="border-left-color:${route_colour};">`;
+            var border_color = route_colour;
         } else { // remove the border so the stop list stops on a dot
-            inner_html += `<div class="stop_item" style="border-left-color:#FFF;">`;
+            var border_color = "#FFF";
         }
+
+        inner_html += `<div class="stop_item" style="border-left-color:${border_color};"
+                            onmouseover="highlight_one_stop(${stop['lon']}, ${stop['lat']})"
+                            onclick="map.flyTo({center: [${stop['lon']}, ${stop['lat']}]});">`;
 
         inner_html += `
           <span class="stop_dot" style="border-color:${route_colour};"></span>
@@ -173,11 +205,21 @@ function create_stop_list_for_a_route(stop_list, route_colour) {
     }
 
     return inner_html
-}
+};
 
 function reset_filters_and_show_all_lines() {
     map.setFilter('routes_ways_filtered_outline', ["==", "rel_osm_id", "dumb_filter_again"]);
     map.setFilter('routes_ways_filtered', ["==", "rel_osm_id", "dumb_filter_again"]);
     map.setFilter('routes_points_filtered', ["==", "rel_osm_id", "dumb_filter_again"]);
     caisson.remove()
-}
+};
+
+function highlight_one_stop(stop_lon, stop_lat) {
+ map.getSource('highlight_stop_source').setData(
+     {
+         "type": "Point",
+         "coordinates": [stop_lon, stop_lat]
+     }
+ );
+ map.setLayoutProperty('highlighted_stop', 'visibility', 'visible');
+};
