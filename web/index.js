@@ -89,11 +89,17 @@ function filter_on_one_route(route) {
     <div id="route_info"></div>
     <div id="close_caisson_button"></div>
     <div id="stop_list" class="stop_list"></div>
+    <div id="osm_attribution"></div>
     `
     caisson.add_content(caisson_content)
+    var close_caisson_button = document.getElementById('close_caisson_button')
+    close_caisson_button.innerHTML = `<a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a>`;
 
     var route_info = document.getElementById('route_info')
     route_info.innerHTML = create_route_medata(route);
+
+    var osm_attribution = document.getElementById('osm_attribution')
+    osm_attribution.innerHTML = create_osm_attribution_for_the_route(Math.abs(route['rel_osm_id']));
 
     const stop_list_url = "http://www.mocky.io/v2/5af49b4b55000067007a539a" //TODO, use the api here
     fetch(stop_list_url)
@@ -109,9 +115,13 @@ function filter_on_one_route(route) {
             console.log("erreur en récupérant la liste des arrêts : " + error)
         })
 
-    var close_caisson_button = document.getElementById('close_caisson_button')
-    close_caisson_button.innerHTML = `<a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a>`;
 };
+
+function create_osm_attribution_for_the_route(osm_route_id) {
+    var inner_html = `<small>Ces informations proviennent d'<a href='https://OpenStreetMap.org' target='_blank'>OpenStreetMap</a>, la carte libre et collaborative.
+    Rejoignez la communauté pour compléter ou corriger le détail de <a href='https://OpenStreetMap.org/relation/${osm_route_id}' target='_blank'>cette ligne</a> !</small>`;
+    return inner_html
+}
 
 function create_route_medata(route_info) {
     var inner_html = `<div class='bus_box_div'>

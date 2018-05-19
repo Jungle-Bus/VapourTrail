@@ -30,10 +30,14 @@ header {
     top: 60px;
     left: 0;
     padding: 10px;
+    opacity: 0.9;
     box-sizing: border-box;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
     display: none;
+    max-width: 35%;
+    max-height: calc(100vh - 60px);
+    overflow: auto;
 }
 
 @media screen and (max-width: 480px) {
@@ -81,6 +85,10 @@ header {
     border-left-width: 4px;
     border-left-color: #000;
     padding-left: 15px;
+}
+
+.stop_item:hover {
+ background-color:#e3e0e0;
 }
 
 .stop-shields {
