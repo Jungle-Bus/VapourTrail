@@ -34,5 +34,7 @@ services:
     image: httpd:2.4
     volumes:
      - ./web/:/usr/local/apache2/htdocs/
+    depends_on:
+      - t-rex
     ports:
       - 8082:80
