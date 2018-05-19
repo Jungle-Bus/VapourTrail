@@ -77,14 +77,6 @@ map.on('load', function() {
 
 
 function filter_on_one_route(route) {
-    var ways_ids = route['ways_ids'];
-    var positions_ids = route['positions_ids'];
-    map.setFilter('routes_ways_filtered_outline', ["in", "id"].concat(ways_ids));
-    map.setFilter('routes_ways_filtered', ["in", "id"].concat(ways_ids));
-    map.setFilter('routes_points_filtered', ["in", "id"].concat(positions_ids));
-    map.setPaintProperty('routes_ways_filtered', "line-color", route['rel_colour'] || 'grey')
-    map.setPaintProperty('routes_points_filtered', "circle-color", route['rel_colour'] || 'grey')
-
     var caisson_content = `
     <div id="route_info"></div>
     <div id="close_caisson_button"></div>
@@ -95,24 +87,33 @@ function filter_on_one_route(route) {
     var close_caisson_button = document.getElementById('close_caisson_button')
     close_caisson_button.innerHTML = `<a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a>`;
 
-    var route_info = document.getElementById('route_info')
-    route_info.innerHTML = create_route_medata(route);
-
-    var osm_attribution = document.getElementById('osm_attribution')
-    osm_attribution.innerHTML = create_osm_attribution_for_the_route(Math.abs(route['rel_osm_id']));
-
-    const stop_list_url = "http://www.mocky.io/v2/5af49b4b55000067007a539a" //TODO, use the api here
+    const stop_list_url = "http://www.mocky.io/v2/5b00408f3100006c0076df14" //TODO, use the api here
     fetch(stop_list_url)
         .then(function(data) {
             return data.json()
         })
-        .then(function(stop_list_data) {
-            var thermo = create_stop_list_for_a_route(stop_list_data['stop_list'], route['rel_colour'])
+        .then(function(route_data) {
+            var route_colour = route_data['route_info']['colour'] || 'grey';
+            var route_info = document.getElementById('route_info');
+            route_info.innerHTML = create_route_medata(route_data['route_info']);
+
+            var thermo = create_stop_list_for_a_route(route_data['stop_list'], route_colour)
             var stop_list = document.getElementById('stop_list')
             stop_list.innerHTML = thermo;
+
+            var ways_ids = route_data['geom_info']['ways_ids'];
+            var positions_ids = route_data['geom_info']['route_positions_ids'];
+            map.setFilter('routes_ways_filtered_outline', ["in", "id"].concat(ways_ids));
+            map.setFilter('routes_ways_filtered', ["in", "id"].concat(ways_ids));
+            map.setFilter('routes_points_filtered', ["in", "id"].concat(positions_ids));
+            map.setPaintProperty('routes_ways_filtered', "line-color", route_colour)
+            map.setPaintProperty('routes_points_filtered', "circle-color", route_colour)
+
+            var osm_attribution = document.getElementById('osm_attribution')
+            osm_attribution.innerHTML = create_osm_attribution_for_the_route(route_data['route_info']['osm_id']);
         })
         .catch(function(error) {
-            console.log("erreur en récupérant la liste des arrêts : " + error)
+            console.log("erreur en récupérant les informations sur la ligne : " + error)
         })
 
 };
@@ -125,18 +126,18 @@ function create_osm_attribution_for_the_route(osm_route_id) {
 
 function create_route_medata(route_info) {
     var inner_html = `<div class='bus_box_div'>
-                <span class='bus_box' style='border-bottom-color: ${route_info['rel_colour'] || "grey"};' >
+                <span class='bus_box' style='border-bottom-color: ${route_info['colour'] || "grey"};' >
                     <span>🚍</span>
-                    <span>${route_info['rel_ref'] || '??'}</span>
+                    <span>${route_info['ref'] || '??'}</span>
                 </span>
-                &nbsp; ${route_info['rel_name']}
+                &nbsp; ${route_info['name']}
             </div>`;
-    inner_html += `De <b>${route_info['rel_origin'] || '??'}</b> vers <b>${route_info['rel_destination'] || '??'}</b>`;
-    if (route_info.hasOwnProperty('rel_via')) {
-        inner_html += `via <b>${route_info['rel_via'] || '??'}</b>`;
+    inner_html += `De <b>${route_info['origin'] || '??'}</b> vers <b>${route_info['destination'] || '??'}</b>`;
+    if (route_info.hasOwnProperty('via')) {
+        inner_html += `via <b>${route_info['via'] || '??'}</b>`;
     };
-    inner_html += `<br>Réseau ${route_info['rel_network'] || '??'}`;
-    inner_html += `<br>Transporteur : ${route_info['rel_operator'] || '??'}`;
+    inner_html += `<br>Réseau ${route_info['network'] || '??'}`;
+    inner_html += `<br>Transporteur : ${route_info['operator'] || '??'}`;
     return inner_html;
 }
 
