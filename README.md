@@ -20,7 +20,7 @@ VapourTrail is an interactive bus map made from OpenStreetMap data.
 
 Put an .osm.pbf file into docker/imposm/import directory.
 
-Run `docker-compose up -d` to run the services in detached mode.
+Run `make docker-importer` to import the data to the Postgres database.
 
 The first run will perform several actions:
 
@@ -30,11 +30,13 @@ The first run will perform several actions:
 * import the osm.pbf file in the `docker/imposm/import/` directory
 * execute the post_process SQL file
 
+Run `make up-d` to run the services in detached mode.
+
 The tiles rendered by t-rex are available at `http://localhost:6767/`.
 
 The web front-end is available at `http://localhost:8082/vapour_trail.html`.
 
-**Troubleshooting**: If you don't see the name of the bus stops on the map or if the bus stop popups are empty, try to restart t-rex service: `docker-compose restart t-rex`
+**Troubleshooting**: If you don't see the name of the bus stops on the map after import or if the bus stop popups are empty, try to restart t-rex service: `docker-compose restart t-rex`
 
 ### Style Edition
 
