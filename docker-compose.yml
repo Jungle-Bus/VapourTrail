@@ -25,7 +25,7 @@ services:
     build: ./docker/t-rex
     volumes:
       - ./settings/trex.toml:/config/config.toml
-      - ./settings/mvtcache:/srv/mvtcache
+      - ./docker/trex_cache:/srv/mvtcache
     depends_on:
       - postgres
     ports:
