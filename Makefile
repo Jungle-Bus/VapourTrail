@@ -31,18 +31,23 @@ docker-web:
 
 docker-importer:
 	docker-compose run --rm importer
+	chmod a+rw docker/trex_cache
 	docker-compose restart t-rex
+
+test:
+	./scripts/test_on_monaco.sh
 
 dump-tiles:
 	@echo ""
 	@echo "Use extent: $(extent)"
-	@echo "Use URL: $(static_url)"
 	@echo ""
-	chmod a+rw docker/trex_cache #not sure why we need that ...
+
 	docker-compose run --rm --entrypoint 't_rex generate --config /config/config.toml --overwrite true --extent $(extent) --maxzoom 16 --minzoom 12' t-rex
 
 
 prepare-static:
+	@echo ""
+	@echo "Use URL: $(static_url)"
 	# init directory
 	rm -fr static
 	mkdir static
