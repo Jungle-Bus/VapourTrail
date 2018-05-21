@@ -34,6 +34,9 @@ docker-importer:
 test:
 	./scripts/test_on_monaco.sh
 
+generate-tiles:
+	./scripts/generate_all_tiles.sh
+
 prepare-static:
 	@echo ""
 	@echo "Use URL: $(static_url)"
