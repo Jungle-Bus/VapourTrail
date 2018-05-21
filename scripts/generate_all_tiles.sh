@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
+set -o pipefail
+set -o nounset
+#set -x
 
 if [ -z "$bbox" ]; then
     echo "You need to add the bounding box as a parameter"
@@ -9,4 +12,4 @@ if [ -z "$bbox" ]; then
     exit 1
 fi
 
-docker-compose run --rm --entrypoint "t_rex generate --config /config/config.toml --overwrite true --extent=${bbox} --maxzoom 16 --minzoom 12" t-rex
+docker-compose run --rm --entrypoint "t_rex generate --config /config/config.toml --overwrite true --extent=${bbox} --maxzoom 14 --minzoom 10" t-rex
