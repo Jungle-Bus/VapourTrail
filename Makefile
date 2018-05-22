@@ -1,3 +1,4 @@
+
 all: up
 
 up:
@@ -23,4 +24,13 @@ docker-web:
 
 docker-importer:
 	docker-compose run --rm importer
-	docker-compose restart t-rex
+	chmod a+rw docker/trex_cache
+
+test:
+	./scripts/test_on_monaco.sh
+
+generate-tiles:
+	./scripts/generate_all_tiles.sh
+
+prepare-static:
+	./scripts/prepare_static.sh

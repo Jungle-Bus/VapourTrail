@@ -66,13 +66,13 @@ query_limit = 1000
 [[tileset.layer.query]]
 minzoom = 14
 
-#[cache.file]
-#base = "/srv/mvtcache"
-#baseurl = "http://example.com/tiles"
-
 [webserver]
 # Bind address. Use 0.0.0.0 to listen on all adresses.
 bind = "0.0.0.0"
 port = 6767
 threads = 4
 #cache_control_max_age = 43200
+
+[cache.file]
+base = "/srv/mvtcache"
+baseurl = "http://example.com/tiles"
