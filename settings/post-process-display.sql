@@ -171,6 +171,58 @@ WHERE
 
 DROP TABLE t_stops_routes;
 
+-- Collect and complete stops cluster
+DROP TABLE IF EXISTS d_stops_cluster;
+CREATE TABLE d_stops_cluster AS
+SELECT
+  *,
+  NULL::int AS max_diameter,
+  NULL::int AS max_avg_distance,
+  NULL::int AS number_of_routes,
+  NULL::text[][] AS routes_ref_colour
+FROM
+  i_stops_cluster
+;
+CREATE INDEX idx_d_stops_cluster_geom ON d_stops_cluster USING GIST(geom);
+
+CREATE INDEX idx_i_positions_member_type_osm_id ON i_positions((member_type::text || '_' || member_osm_id::text));
+DROP TABLE IF EXISTS t_stops_routes;
+CREATE TEMP TABLE t_stops_routes AS
+SELECT
+  d_stops_cluster.osm_type,
+  d_stops_cluster.osm_id,
+  max(i_routes.diameter) AS max_diameter,
+  max(i_routes.avg_distance) AS max_avg_distance,
+  count(*) AS number_of_routes,
+  array_agg(DISTINCT array[i_routes.ref, i_routes.colour]) AS routes_ref_colour
+FROM
+  d_stops_cluster
+  JOIN i_positions ON
+    i_positions.member_type::text || '_' || i_positions.member_osm_id::text = ANY(d_stops_cluster.osm_type_id)
+  JOIN i_routes ON
+    i_routes.osm_id = i_positions.rel_osm_id
+GROUP BY
+  d_stops_cluster.osm_type,
+  d_stops_cluster.osm_id
+;
+DROP INDEX idx_i_positions_member_type_osm_id;
+
+UPDATE
+  d_stops_cluster
+SET
+  max_diameter = dt.max_diameter,
+  max_avg_distance = dt.max_avg_distance,
+  number_of_routes = dt.number_of_routes,
+  routes_ref_colour = dt.routes_ref_colour
+FROM
+  t_stops_routes AS dt
+WHERE
+  dt.osm_type = d_stops_cluster.osm_type AND
+  dt.osm_id = d_stops_cluster.osm_id
+;
+
+DROP TABLE t_stops_routes;
+
 
 -- Compute stops shield
 DROP TABLE IF EXISTS d_stops_shield;
@@ -191,6 +243,31 @@ FROM (
   ) AS t
 ;
 ALTER TABLE d_stops DROP COLUMN routes_ref_colour;
+
+
+-- Collect stations
+DROP TABLE IF EXISTS d_stations;
+CREATE TABLE d_stations AS
+SELECT
+  array_to_string(name, E'\n') AS name,
+  ST_GeometryType(geom) = 'ST_Polygon' AS has_polygon,
+  ST_Centroid(geom) AS geom
+FROM
+  i_stations
+;
+CREATE INDEX idx_d_stations_geom ON d_stations USING GIST(geom);
+
+DROP TABLE IF EXISTS d_stations_area;
+CREATE TABLE d_stations_area AS
+SELECT
+  array_to_string(name, E'\n') AS name,
+  geom
+FROM
+  i_stations
+WHERE
+  ST_GeometryType(geom) = 'ST_Polygon'
+;
+CREATE INDEX idx_d_stations_area_geom ON d_stations_area USING GIST(geom);
 
 
 -- Hack to inject JSON into vtiles, need an API to remove this.
