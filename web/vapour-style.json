@@ -69,54 +69,67 @@
       }
     },
     {
-      "id": "ways-intercity",
+      "id": "ways",
       "type": "line",
       "metadata": {},
       "source": "vapour_trail",
       "source-layer": "ways",
-      "filter": [
-        "all",
-        [
-          ">",
-          "max_diameter",
-          3000
-        ]
-      ],
+      "minzoom": 11,
+      "maxzoom": 24,
       "layout": {
         "line-cap": "round",
         "line-join": "round"
       },
       "paint": {
         "line-color": "#4898ff",
-        "line-width": 2
-      }
-    },
-    {
-      "id": "ways-urban",
-      "type": "line",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "ways",
-      "minzoom": 12,
-      "filter": [
-        "any",
-        [
-          "<=",
-          "max_diameter",
-          3000
-        ],
-        [
-          "!has",
-          "max_diameter"
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          11,
+          [
+            "min",
+            [
+              "-",
+              [
+                "get",
+                "number_of_routes"
+              ],
+              1.5
+            ],
+            0.5
+          ],
+          12,
+          [
+            "min",
+            [
+              "-",
+              [
+                "get",
+                "number_of_routes"
+              ],
+              0.5
+            ],
+            0.5
+          ],
+          14,
+          [
+            "min",
+            [
+              "+",
+              [
+                "get",
+                "number_of_routes"
+              ],
+              0.5
+            ],
+            4
+          ]
         ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round"
-      },
-      "paint": {
-        "line-color": "#4898ff",
-        "line-width": 2
       }
     },
     {
