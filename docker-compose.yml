@@ -22,7 +22,7 @@ services:
     command: "/mapping/run_importer.sh"
 
   t-rex:
-    build: ./docker/t-rex
+    image: sourcepole/t-rex
     volumes:
       - ./settings/trex.toml:/config/config.toml
       - ./docker/trex_cache:/srv/mvtcache
@@ -30,6 +30,7 @@ services:
       - postgres
     ports:
       - 6767:6767
+    entrypoint: /usr/bin/t_rex serve -c /config/config.toml
 
   web:
     image: httpd:2.4
