@@ -123,7 +123,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#4898ff",
+        "line-color": "#e2fc77",
         "line-width": [
           "interpolate",
           [
@@ -553,10 +553,10 @@
         "icon-allow-overlap": false
       },
       "paint": {
-        "text-color": "#4898ff",
+        "text-color": "#e2fc77",
         "text-halo-blur": 0.5,
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1.5,
+        "text-halo-color": "#000",
+        "text-halo-width": 0.5,
         "icon-color": "rgba(27, 65, 189, 1)"
       }
     },
