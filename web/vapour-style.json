@@ -76,8 +76,8 @@
       }
     }
   },
-  "sprite": "https://rawgit.com/lukasmartinelli/osm-liberty/gh-pages/sprites/osm-liberty",
-  "glyphs": "https://free.tilehosting.com/fonts/{fontstack}/{range}.pbf?key=hWWfWrAiWGtv68r8wA6D",
+  "sprite": "https://api.jawg.io/sprites/sprites",
+  "glyphs": "https://api.jawg.io/glyphs/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
@@ -186,7 +186,7 @@
         "text-anchor": "bottom-left",
         "text-field": "{name}",
         "text-font": [
-          "Klokantech Noto Sans Italic"
+          "Noto Regular"
         ],
         "text-max-width": 8,
         "text-offset": [
@@ -240,7 +240,7 @@
       "minzoom": 15,
       "maxzoom": 24,
       "layout": {
-        "icon-image": "bus_15",
+        "icon-image": "bus-15",
         "icon-size": {
           "stops": [
             [
@@ -522,7 +522,7 @@
         "text-anchor": "bottom-left",
         "text-field": "{name}",
         "text-font": [
-          "Klokantech Noto Sans Italic"
+          "Noto Regular"
         ],
         "text-max-width": 10,
         "text-offset": [
@@ -568,7 +568,7 @@
       "minzoom": 11,
       "maxzoom": 24,
       "layout": {
-        "icon-image": "bus_11",
+        "icon-image": "bus-11",
         "icon-allow-overlap": true,
         "icon-ignore-placement": false,
         "icon-optional": false,
@@ -606,7 +606,7 @@
         "text-anchor": "bottom-left",
         "text-field": "{name}",
         "text-font": [
-          "Klokantech Noto Sans Italic"
+          "Noto Regular"
         ],
         "text-max-width": 8,
         "text-offset": [
@@ -651,7 +651,7 @@
       "minzoom": 6,
       "maxzoom": 15,
       "layout": {
-        "icon-image": "bus_15",
+        "icon-image": "bus-15",
         "icon-size": {
           "stops": [
             [
