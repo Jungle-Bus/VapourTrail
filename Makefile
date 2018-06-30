@@ -24,6 +24,7 @@ docker-web:
 
 docker-importer:
 	docker-compose run --rm importer
+	docker-compose run --rm --entrypoint 'rm -rf /srv/mvtcache/*' t-rex
 	chmod a+rw docker/trex_cache
 
 docker/imposm/import/monaco.osm.pbf:
