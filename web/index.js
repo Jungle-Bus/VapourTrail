@@ -79,9 +79,9 @@ map.on('load', function() {
 function filter_on_one_route(route) {
     var ways_ids = route['ways_ids'];
     var positions_ids = route['positions_ids'];
-    map.setFilter('routes_ways_filtered_outline', ["in", "id"].concat(ways_ids));
-    map.setFilter('routes_ways_filtered', ["in", "id"].concat(ways_ids));
-    map.setFilter('routes_points_filtered', ["in", "id"].concat(positions_ids));
+    map.setFilter('routes_ways_filtered_outline', ["in", "id"].concat(ways_ids || []));
+    map.setFilter('routes_ways_filtered', ["in", "id"].concat(ways_ids || []));
+    map.setFilter('routes_points_filtered', ["in", "id"].concat(positions_ids || []));
     map.setPaintProperty('routes_ways_filtered', "line-color", route['rel_colour'] || 'grey')
     map.setPaintProperty('routes_points_filtered', "circle-color", route['rel_colour'] || 'grey')
     html = `<div class='bus_box_div'>

@@ -302,9 +302,9 @@ FROM (
         i_positions.member_osm_id = d_stops.osm_id
       JOIN i_routes ON
         i_routes.osm_id = i_positions.rel_osm_id
-      JOIN d_routes_ways_ids ON
+      LEFT JOIN d_routes_ways_ids ON
         d_routes_ways_ids.rel_osm_id = i_routes.osm_id
-      JOIN d_routes_position_ids ON
+      LEFT JOIN d_routes_position_ids ON
         d_routes_position_ids.rel_osm_id = i_routes.osm_id
     ) AS t
   ) AS t
