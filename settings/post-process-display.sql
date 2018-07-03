@@ -80,15 +80,14 @@ FROM (
       i_positions.member_type = i_stops.osm_type AND
       i_positions.member_osm_id = i_stops.osm_id
   WHERE
-    i_ways.geom && i_positions.geom AND
-    ST_DistanceSphere(
+    ST_Distance(
       ST_Transform(i_positions.geom, 4326),
       ST_Transform(ST_LineInterpolatePoint(i_ways.geom, ST_LineLocatePoint(i_ways.geom, i_positions.geom)), 4326)
-    ) < 10
+    ) < 20
   ORDER BY
     i_routes.osm_id,
     coalesce(i_stops.name, i_positions.member_type::text || '_' || i_positions.member_osm_id::text),
-    ST_DistanceSphere(
+    ST_Distance(
       ST_Transform(i_positions.geom, 4326),
       ST_Transform(ST_LineInterpolatePoint(i_ways.geom, ST_LineLocatePoint(i_ways.geom, i_positions.geom)), 4326)
     )
