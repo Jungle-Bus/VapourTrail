@@ -20,7 +20,7 @@ SELECT
 FROM (
   SELECT
     rel_osm_id,
-    ST_Distance(geom::geography, (lag(geom, 1, geom) OVER (PARTITION BY rel_osm_id ORDER BY rel_osm_id, member_index))::geography) AS distance,
+    ST_DistanceSpheroid(geom, (lag(geom, 1, geom) OVER (PARTITION BY rel_osm_id ORDER BY rel_osm_id, member_index)), 'SPHEROID["WGS 84",6378137,298.257223563]') AS distance,
     geom
   FROM (
     SELECT
