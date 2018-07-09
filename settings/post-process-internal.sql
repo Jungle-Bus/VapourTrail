@@ -173,8 +173,11 @@ SELECT
 FROM
   osm_relation_members_route
 WHERE
-  member_role LIKE '%stop%' OR
-  member_role LIKE '%platform%'
+  member_type IN (0, 1) AND -- Ignore relation member
+  (
+    member_role LIKE '%stop%' OR
+    member_role LIKE '%platform%'
+  )
 ;
 
 
