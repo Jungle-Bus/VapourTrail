@@ -11,29 +11,39 @@ import os
 
 db = SQLAlchemy(app)
 CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
+app.config["CORS_HEADERS"] = "Content-Type"
 
 ATTRIBUTION = "Jungle Bus, <a href='https://www.openstreetmap.org/copyright/'>© OpenStreetMap contributors</a>"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://{}:{}@{}:{}/{}'.format(
-    os.getenv('POSTGRES_USER', ''),
-    os.getenv('POSTGRES_PASSWORD', ''),
-    os.getenv('POSTGRES_HOST', ''),
-    os.getenv('POSTGRES_PORT', ''),
-    os.getenv('POSTGRES_DB', ''),
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://{}:{}@{}:{}/{}".format(
+    os.getenv("POSTGRES_USER", ""),
+    os.getenv("POSTGRES_PASSWORD", ""),
+    os.getenv("POSTGRES_HOST", ""),
+    os.getenv("POSTGRES_PORT", ""),
+    os.getenv("POSTGRES_DB", ""),
 )
 
+
 def get_route_properties(route_id):
-    fields = ["osm_id", "name", "ref", "network", "origin", "destination", "colour", "operator"]
-    result = db.engine.execute("SELECT {} FROM i_routes where osm_id = {}".format(
-        ", ".join(fields),
-        route_id)
+    fields = [
+        "osm_id",
+        "name",
+        "ref",
+        "network",
+        "origin",
+        "destination",
+        "colour",
+        "operator",
+    ]
+    result = db.engine.execute(
+        "SELECT {} FROM i_routes where osm_id = {}".format(", ".join(fields), route_id)
     )
     row = result.next()
     route = {}
     for i, f in enumerate(fields):
         route[f] = row[i]
     return route
+
 
 def get_route_geojson(route_id):
     sql = """
@@ -44,6 +54,7 @@ def get_route_geojson(route_id):
     result = db.engine.execute(sql.format(route_id))
     row = result.next()
     return row[0]
+
 
 def get_route_stop_positions(route_id):
     result = db.engine.execute(
@@ -61,7 +72,9 @@ def get_route_stop_positions(route_id):
                 on t.pos = d_routes_position.id
             WHERE rel_osm_id = {} 
             ORDER BY pos
-        """.format(route_id)
+        """.format(
+            route_id
+        )
     )
     route_stop_positions = []
     for row in result:
@@ -73,6 +86,7 @@ def get_route_stop_positions(route_id):
         }
         route_stop_positions.append(s)
     return route_stop_positions
+
 
 def get_route_stops_with_connections(route_id):
     result = db.engine.execute(
@@ -104,7 +118,9 @@ def get_route_stops_with_connections(route_id):
             GROUP BY i_positions.member_osm_id, i_positions.member_type, i_positions.member_index, 
             	i_stops.name, i_positions.geom
             ORDER BY member_index
-        """.format(route_id=route_id)
+        """.format(
+            route_id=route_id
+        )
     )
     route_stops = []
     for row in result:
@@ -115,21 +131,21 @@ def get_route_stops_with_connections(route_id):
             "geojson": ast.literal_eval(row[4]),
             "lon": row[5],
             "lat": row[6],
-            "shields": [{"ref": f[1], "colour": f[2]} for f in sorted(row[7], key=lambda x: x[1]) if f[1]],
+            "shields": [
+                {"ref": f[1], "colour": f[2]}
+                for f in sorted(row[7], key=lambda x: x[1])
+                if f[1]
+            ],
         }
         route_stops.append(s)
     return route_stops
 
+
 class Index(Resource):
     def get(self):
-        return {
-            "links": [
-                {
-                    "href": "api.py/route/<route_id>"
-                }
-            ]
-        }
-            
+        return {"links": [{"href": "api.py/route/<route_id>"}]}
+
+
 class Route(Resource):
     def get(self, route_id):
         if route_id:
@@ -137,15 +153,17 @@ class Route(Resource):
             route_properties = get_route_properties(route_id)
             r["route_info"] = route_properties
             route_stop_positions = get_route_stop_positions(route_id)
-            r["stop_positions"] = [{'lat': sp["lat"], 'lon': sp["lon"]} for sp in route_stop_positions]
-            
+            r["stop_positions"] = [
+                {"lat": sp["lat"], "lon": sp["lon"]} for sp in route_stop_positions
+            ]
+
             route_stops = get_route_stops_with_connections(route_id)
             for s in route_stops:
                 if s["member_type"] == 0:
                     s["osm_id"] = "node/"
                 elif s["member_type"] == 1:
                     s["osm_id"] = "way/"
-                else : 
+                else:
                     s["osm_id"] = "relation/"
                 s["osm_id"] = s["osm_id"] + str(s["member_osm_id"])
                 s.pop("member_type")
@@ -160,9 +178,9 @@ class Route(Resource):
 
 
 api = Api(app)
-api.add_resource(Index, '/')
-api.add_resource(Route, '/route/', '/route/<string:route_id>')
+api.add_resource(Index, "/")
+api.add_resource(Route, "/route/", "/route/<string:route_id>")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

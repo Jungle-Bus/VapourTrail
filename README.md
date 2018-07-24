@@ -38,7 +38,7 @@ The tiles rendered by t-rex are available at `http://localhost:6767/`.
 
 The web front-end is available at `http://localhost:8082/vapour_trail.html`.
 
-The API (used by the front-end) is available at `http://localhost:5000`. The endpoint used is `/beta/<string:route_id>`.
+The API (used by the front-end) is available at `http://localhost:5000`. The endpoint used is `/route/<string:route_id>`.
 
 **Troubleshooting**: If you don't see the name of the bus stops on the map after import or if the bus stop popups are empty, try to restart t-rex service: `docker-compose restart t-rex`
 
