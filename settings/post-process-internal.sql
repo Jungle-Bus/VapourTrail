@@ -152,6 +152,7 @@ DROP TABLE IF EXISTS i_ways;
 CREATE TABLE i_ways AS
 SELECT
   rel_osm_id,
+  member_index as index,
   geom
 FROM
   osm_relation_members_route

@@ -1,7 +1,7 @@
 from flask_restful import Resource, Api
 from flask import send_from_directory
 from vapour_api import app
-from geojson import Feature, Point
+from geojson import Feature, GeometryCollection, Point
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 from collections import OrderedDict
@@ -50,6 +50,7 @@ def get_route_geojson(route_id):
         SELECT ST_asgeojson(ST_MakeLine((ST_Transform(geom, 4326))))
         FROM i_ways
         WHERE rel_osm_id = {}
+        order by index
     """
     result = db.engine.execute(sql.format(route_id))
     row = result.next()
@@ -153,10 +154,10 @@ class Route(Resource):
             route_properties = get_route_properties(route_id)
             r["route_info"] = route_properties
             route_stop_positions = get_route_stop_positions(route_id)
-            r["stop_positions"] = [
-                {"lat": sp["lat"], "lon": sp["lon"]} for sp in route_stop_positions
+            geo_stops = [
+                Point((sp["lat"], sp["lon"])) for sp in route_stop_positions
             ]
-
+            r["stop_positions"] = GeometryCollection(geo_stops)
             route_stops = get_route_stops_with_connections(route_id)
             for s in route_stops:
                 if s["member_type"] == 0:
