@@ -8,6 +8,7 @@ from collections import OrderedDict
 import psycopg2
 import ast
 import os
+from sqlalchemy.sql import text
 
 db = SQLAlchemy(app)
 CORS(app)
@@ -27,16 +28,19 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://{}:{}@{}:{}/{}".format(
 def get_route_properties(route_id):
     fields = [
         "osm_id",
-        "name",
         "ref",
+        "name",
         "network",
+        "operator",
         "origin",
         "destination",
         "colour",
-        "operator",
     ]
     result = db.engine.execute(
-        "SELECT {} FROM i_routes where osm_id = {}".format(", ".join(fields), route_id)
+        text(
+            "SELECT {} FROM d_routes where osm_id = :route_id".format(", ".join(fields))
+        ),
+        route_id=route_id,
     )
     row = result.next()
     route = {}
@@ -47,19 +51,19 @@ def get_route_properties(route_id):
 
 def get_route_geojson(route_id):
     sql = """
-        SELECT ST_asgeojson(ST_MakeLine((ST_Transform(geom, 4326))))
-        FROM i_ways
-        WHERE rel_osm_id = {}
-        order by index
+        SELECT ST_asgeojson(ST_Transform(geom, 4326))
+        FROM d_routes
+        WHERE osm_id = :route_id
     """
-    result = db.engine.execute(sql.format(route_id))
+    result = db.engine.execute(text(sql), route_id=route_id)
     row = result.next()
     return row[0]
 
 
 def get_route_stop_positions(route_id):
     result = db.engine.execute(
-        """
+        text(
+            """
             SELECT 
                 pos,
                 st_asGeoJSON(ST_Transform(geom, 4326)) as geojson, 
@@ -71,11 +75,11 @@ def get_route_stop_positions(route_id):
             ) t 
             INNER JOIN d_routes_position 
                 on t.pos = d_routes_position.id
-            WHERE rel_osm_id = {} 
+            WHERE rel_osm_id = :route_id
             ORDER BY pos
-        """.format(
-            route_id
-        )
+        """
+        ),
+        route_id=route_id,
     )
     route_stop_positions = []
     for row in result:
@@ -91,37 +95,20 @@ def get_route_stop_positions(route_id):
 
 def get_route_stops_with_connections(route_id):
     result = db.engine.execute(
+        text(
+            """
+            SELECT stop_osm_id, stop_osm_type, stop_index, 
+                stop_name,
+                st_asGeoJSON(ST_Transform(stop_geom, 4326)), 
+                st_X(ST_Transform(stop_geom, 4326)) as lon,
+                st_Y(ST_Transform(stop_geom, 4326)) as lat,
+                other_routes_at_stop
+            from d_route_stops_with_connections
+            where route_osm_id = :route_id
+            order by stop_index;
         """
-            SELECT distinct i_positions.member_osm_id, i_positions.member_type, 
-                i_positions.member_index, 
-                i_stops.name,
-                st_asGeoJSON(ST_Transform(i_positions.geom, 4326)), 
-                st_X(ST_Transform(i_positions.geom, 4326)) as lon,
-                st_Y(ST_Transform(i_positions.geom, 4326)) as lat,
-                array_agg(distinct 
-                    array_append(
-	                    array_append(
-	                    	array_append(Array[]::text[], other_routes.osm_id || ''),
-		                    	other_routes.ref || ''
-	                	),
-                    	other_routes.colour || ''
-                	)
-                ) 
-            FROM i_positions 
-            	INNER JOIN i_stops on i_positions.member_osm_id = i_stops.osm_id
-                LEFT JOIN i_positions AS other_positions ON
-                    other_positions.member_type = i_positions.member_type AND
-                    other_positions.member_osm_id = i_positions.member_osm_id AND
-                    other_positions.rel_osm_id != {route_id}
-                LEFT JOIN i_routes AS other_routes ON
-                    other_routes.osm_id = other_positions.rel_osm_id
-            WHERE i_positions.rel_osm_id = {route_id}
-            GROUP BY i_positions.member_osm_id, i_positions.member_type, i_positions.member_index, 
-            	i_stops.name, i_positions.geom
-            ORDER BY member_index
-        """.format(
-            route_id=route_id
-        )
+        ),
+        route_id=route_id,
     )
     route_stops = []
     for row in result:
@@ -154,9 +141,7 @@ class Route(Resource):
             route_properties = get_route_properties(route_id)
             r["route_info"] = route_properties
             route_stop_positions = get_route_stop_positions(route_id)
-            geo_stops = [
-                Point((sp["lat"], sp["lon"])) for sp in route_stop_positions
-            ]
+            geo_stops = [Point((sp["lat"], sp["lon"])) for sp in route_stop_positions]
             r["stop_positions"] = GeometryCollection(geo_stops)
             route_stops = get_route_stops_with_connections(route_id)
             for s in route_stops:
