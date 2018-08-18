@@ -1,718 +1,723 @@
 {
-  "version": 8,
-  "name": "Vapour Trail",
-  "metadata": {
-    "mapbox:autocomposite": false,
-    "mapbox:type": "template",
-    "mapbox:groups": {
-      "b6371a3f2f5a9932464fa3867530a2e5": {
-        "name": "Transportation",
-        "collapsed": false
-      },
-      "a14c9607bc7954ba1df7205bf660433f": {
-        "name": "Boundaries"
-      },
-      "101da9f13b64a08fa4b6ac1168e89e5f": {
-        "name": "Places",
-        "collapsed": false
-      }
-    },
-    "openmaptiles:version": "3.x",
-    "openmaptiles:mapbox:owner": "openmaptiles",
-    "openmaptiles:mapbox:source:url": "mapbox://openmaptiles.4qljc88t"
-  },
-  "center": [
-    8.4565,
-    7.42015
-  ],
-  "zoom": 0.8902641636539237,
-  "bearing": 0,
-  "pitch": 0,
-  "sources": {
-    "vapour_trail": {
-      "type": "vector",
-      "url": "http://0.0.0.0:6767/vapour_trail.json"
-    }
-  },
-  "sprite": "https://rawgit.com/lukasmartinelli/osm-liberty/gh-pages/sprites/osm-liberty",
-  "glyphs": "https://free.tilehosting.com/fonts/{fontstack}/{range}.pbf?key=hWWfWrAiWGtv68r8wA6D",
-  "layers": [
-    {
-      "id": "background",
-      "type": "background",
-      "paint": {
-        "background-color": "rgb(242,243,240)"
-      }
-    },
-    {
-      "id": "stations-area",
-      "type": "fill",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "stations_area",
-      "minzoom": 13,
-      "paint": {
-        "fill-color": "#4898ff",
-        "fill-opacity": {
-          "stops": [
-            [
-              13,
-              0
-            ],
-            [
-              15,
-              0.2
-            ]
-          ]
+    "version": 8,
+    "name": "Vapour Trail",
+    "metadata": {
+        "mapbox:autocomposite": false,
+        "mapbox:type": "template",
+        "mapbox:groups": {
+            "b6371a3f2f5a9932464fa3867530a2e5": {
+                "name": "Transportation",
+                "collapsed": false
+            },
+            "a14c9607bc7954ba1df7205bf660433f": {
+                "name": "Boundaries"
+            },
+            "101da9f13b64a08fa4b6ac1168e89e5f": {
+                "name": "Places",
+                "collapsed": false
+            }
         },
-        "fill-antialias": true
-      }
+        "openmaptiles:version": "3.x",
+        "openmaptiles:mapbox:owner": "openmaptiles",
+        "openmaptiles:mapbox:source:url": "mapbox://openmaptiles.4qljc88t"
     },
-    {
-      "id": "ways",
-      "type": "line",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "ways",
-      "minzoom": 11,
-      "maxzoom": 24,
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round"
-      },
-      "paint": {
-        "line-color": "#4898ff",
-        "line-width": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          11,
-          [
-            "min",
-            [
-              "-",
-              [
-                "get",
-                "number_of_routes"
-              ],
-              1.5
-            ],
-            0.5
-          ],
-          12,
-          [
-            "min",
-            [
-              "-",
-              [
-                "get",
-                "number_of_routes"
-              ],
-              0.5
-            ],
-            0.5
-          ],
-          14,
-          [
-            "min",
-            [
-              "+",
-              [
-                "get",
-                "number_of_routes"
-              ],
-              0.5
-            ],
-            4
-          ]
-        ]
-      }
-    },
-    {
-      "id": "stations-label-z15",
-      "type": "symbol",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "stations",
-      "minzoom": 15,
-      "maxzoom": 24,
-      "layout": {
-        "text-anchor": "bottom-left",
-        "text-field": "{name}",
-        "text-font": [
-          "Klokantech Noto Sans Italic"
-        ],
-        "text-max-width": 8,
-        "text-offset": [
-          1.6,
-          0.5
-        ],
-        "text-padding": 2,
-        "text-size": {
-          "stops": [
-            [
-              6,
-              0
-            ],
-            [
-              13,
-              14
-            ],
-            [
-              24,
-              20
-            ]
-          ]
+    "center": [
+        8.4565,
+        7.42015
+    ],
+    "zoom": 0.8902641636539237,
+    "bearing": 0,
+    "pitch": 0,
+    "sources": {
+        "vapour_trail": {
+            "type": "vector",
+            "url": "http://0.0.0.0:6767/vapour_trail.json"
         },
-        "text-allow-overlap": true
-      },
-      "paint": {
-        "text-color": "#4898ff",
-        "text-halo-blur": 0.5,
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1.5,
-        "text-opacity": {
-          "stops": [
-            [
-              15,
-              0.5
-            ],
-            [
-              15.5,
-              0.3
-            ]
-          ]
+        "route_filter": {
+            "type": "geojson",
+            "data": {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                        [0, 0],
+                        [0, 0]
+                    ]
+                }
+            }
+        },
+        "route_positions_filter": {
+            "type": "geojson",
+            "data": {
+                "type": "GeometryCollection",
+                "geometries": [{
+                        "type": "Point",
+                        "coordinates": [100.0, 0.0]
+                    },
+                    {
+                        "type": "Point",
+                        "coordinates": [100.0, 0.0]
+                    }
+                ]
+            }
         }
-      }
     },
-    {
-      "id": "stations-icon-z15",
-      "type": "symbol",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "stations",
-      "minzoom": 15,
-      "maxzoom": 24,
-      "layout": {
-        "icon-image": "bus_15",
-        "icon-size": {
-          "stops": [
-            [
-              6,
-              0.2
-            ],
-            [
-              12,
-              1
-            ],
-            [
-              16,
-              1.6
-            ],
-            [
-              22,
-              2.5
-            ]
-          ]
+    "sprite": "https://rawgit.com/lukasmartinelli/osm-liberty/gh-pages/sprites/osm-liberty",
+    "glyphs": "https://free.tilehosting.com/fonts/{fontstack}/{range}.pbf?key=hWWfWrAiWGtv68r8wA6D",
+    "layers": [{
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "rgb(242,243,240)"
+            }
         },
-        "icon-allow-overlap": true
-      },
-      "paint": {
-        "icon-opacity": {
-          "stops": [
-            [
-              15,
-              0.5
+        {
+            "id": "stations-area",
+            "type": "fill",
+            "metadata": {},
+            "source": "vapour_trail",
+            "source-layer": "stations_area",
+            "minzoom": 13,
+            "paint": {
+                "fill-color": "#4898ff",
+                "fill-opacity": {
+                    "stops": [
+                        [
+                            13,
+                            0
+                        ],
+                        [
+                            15,
+                            0.2
+                        ]
+                    ]
+                },
+                "fill-antialias": true
+            }
+        },
+        {
+            "id": "ways",
+            "type": "line",
+            "metadata": {},
+            "source": "vapour_trail",
+            "source-layer": "ways",
+            "minzoom": 11,
+            "maxzoom": 24,
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#4898ff",
+                "line-width": [
+                    "interpolate", [
+                        "linear"
+                    ],
+                    [
+                        "zoom"
+                    ],
+                    11, [
+                        "min", [
+                            "-", [
+                                "get",
+                                "number_of_routes"
+                            ],
+                            1.5
+                        ],
+                        0.5
+                    ],
+                    12, [
+                        "min", [
+                            "-", [
+                                "get",
+                                "number_of_routes"
+                            ],
+                            0.5
+                        ],
+                        0.5
+                    ],
+                    14, [
+                        "min", [
+                            "+", [
+                                "get",
+                                "number_of_routes"
+                            ],
+                            0.5
+                        ],
+                        4
+                    ]
+                ]
+            }
+        },
+        {
+            "id": "stations-label-z15",
+            "type": "symbol",
+            "metadata": {},
+            "source": "vapour_trail",
+            "source-layer": "stations",
+            "minzoom": 15,
+            "maxzoom": 24,
+            "layout": {
+                "text-anchor": "bottom-left",
+                "text-field": "{name}",
+                "text-font": [
+                    "Klokantech Noto Sans Italic"
+                ],
+                "text-max-width": 8,
+                "text-offset": [
+                    1.6,
+                    0.5
+                ],
+                "text-padding": 2,
+                "text-size": {
+                    "stops": [
+                        [
+                            6,
+                            0
+                        ],
+                        [
+                            13,
+                            14
+                        ],
+                        [
+                            24,
+                            20
+                        ]
+                    ]
+                },
+                "text-allow-overlap": true
+            },
+            "paint": {
+                "text-color": "#4898ff",
+                "text-halo-blur": 0.5,
+                "text-halo-color": "#ffffff",
+                "text-halo-width": 1.5,
+                "text-opacity": {
+                    "stops": [
+                        [
+                            15,
+                            0.5
+                        ],
+                        [
+                            15.5,
+                            0.3
+                        ]
+                    ]
+                }
+            }
+        },
+        {
+            "id": "stations-icon-z15",
+            "type": "symbol",
+            "metadata": {},
+            "source": "vapour_trail",
+            "source-layer": "stations",
+            "minzoom": 15,
+            "maxzoom": 24,
+            "layout": {
+                "icon-image": "bus_15",
+                "icon-size": {
+                    "stops": [
+                        [
+                            6,
+                            0.2
+                        ],
+                        [
+                            12,
+                            1
+                        ],
+                        [
+                            16,
+                            1.6
+                        ],
+                        [
+                            22,
+                            2.5
+                        ]
+                    ]
+                },
+                "icon-allow-overlap": true
+            },
+            "paint": {
+                "icon-opacity": {
+                    "stops": [
+                        [
+                            15,
+                            0.5
+                        ],
+                        [
+                            15.5,
+                            0.3
+                        ]
+                    ]
+                }
+            }
+        },
+        {
+            "id": "stops-shield-urban-x",
+            "type": "symbol",
+            "metadata": {},
+            "source": "vapour_trail",
+            "source-layer": "stops_shield",
+            "minzoom": 14,
+            "filter": [
+                "all", [
+                    "==",
+                    "i",
+                    5
+                ]
             ],
-            [
-              15.5,
-              0.3
-            ]
-          ]
+            "layout": {
+                "text-field": "+",
+                "text-size": {
+                    "stops": [
+                        [
+                            14,
+                            6
+                        ],
+                        [
+                            18,
+                            12
+                        ]
+                    ]
+                },
+                "text-max-width": 10,
+                "text-offset": [
+                    0,
+                    6
+                ],
+                "text-justify": "center",
+                "text-allow-overlap": false,
+                "text-anchor": "center"
+            },
+            "paint": {
+                "text-halo-color": "gray",
+                "text-color": "rgba(255, 255, 255, 1)",
+                "text-halo-width": 5
+            }
+        },
+        {
+            "id": "stops-shield-urban-4",
+            "type": "symbol",
+            "metadata": {},
+            "source": "vapour_trail",
+            "source-layer": "stops_shield",
+            "minzoom": 14,
+            "filter": [
+                "all", [
+                    "==",
+                    "i",
+                    4
+                ]
+            ],
+            "layout": {
+                "text-field": "{ref}",
+                "text-size": {
+                    "stops": [
+                        [
+                            14,
+                            6
+                        ],
+                        [
+                            18,
+                            12
+                        ]
+                    ]
+                },
+                "text-max-width": 10,
+                "text-offset": [
+                    0.5,
+                    3.9
+                ],
+                "text-justify": "center",
+                "text-allow-overlap": false,
+                "text-anchor": "left"
+            },
+            "paint": {
+                "text-halo-color": {
+                    "type": "identity",
+                    "property": "colour"
+                },
+                "text-color": "rgba(255, 255, 255, 1)",
+                "text-halo-width": 5
+            }
+        },
+        {
+            "id": "stops-shield-urban-3",
+            "type": "symbol",
+            "metadata": {},
+            "source": "vapour_trail",
+            "source-layer": "stops_shield",
+            "minzoom": 14,
+            "filter": [
+                "all", [
+                    "==",
+                    "i",
+                    3
+                ]
+            ],
+            "layout": {
+                "text-field": "{ref}",
+                "text-size": {
+                    "stops": [
+                        [
+                            14,
+                            6
+                        ],
+                        [
+                            18,
+                            12
+                        ]
+                    ]
+                },
+                "text-max-width": 10,
+                "text-offset": [-0.5,
+                    3.9
+                ],
+                "text-justify": "center",
+                "text-allow-overlap": false,
+                "text-anchor": "right"
+            },
+            "paint": {
+                "text-halo-color": {
+                    "type": "identity",
+                    "property": "colour"
+                },
+                "text-color": "rgba(255, 255, 255, 1)",
+                "text-halo-width": 5
+            }
+        },
+        {
+            "id": "stops-shield-urban-2",
+            "type": "symbol",
+            "metadata": {},
+            "source": "vapour_trail",
+            "source-layer": "stops_shield",
+            "minzoom": 14,
+            "filter": [
+                "all", [
+                    "==",
+                    "i",
+                    2
+                ]
+            ],
+            "layout": {
+                "text-field": "{ref}",
+                "text-size": {
+                    "stops": [
+                        [
+                            14,
+                            6
+                        ],
+                        [
+                            18,
+                            12
+                        ]
+                    ]
+                },
+                "text-max-width": 10,
+                "text-offset": [
+                    0.5,
+                    2.1
+                ],
+                "text-justify": "center",
+                "text-allow-overlap": false,
+                "text-anchor": "left",
+                "text-ignore-placement": false
+            },
+            "paint": {
+                "text-halo-color": {
+                    "type": "identity",
+                    "property": "colour"
+                },
+                "text-color": "rgba(255, 255, 255, 1)",
+                "text-halo-width": 5
+            }
+        },
+        {
+            "id": "stops-shield-urban-1",
+            "type": "symbol",
+            "metadata": {},
+            "source": "vapour_trail",
+            "source-layer": "stops_shield",
+            "minzoom": 14,
+            "filter": [
+                "all", [
+                    "==",
+                    "i",
+                    1
+                ]
+            ],
+            "layout": {
+                "text-field": "{ref}",
+                "text-size": {
+                    "stops": [
+                        [
+                            14,
+                            6
+                        ],
+                        [
+                            18,
+                            12
+                        ]
+                    ]
+                },
+                "text-max-width": 10,
+                "text-offset": [-0.5,
+                    2.1
+                ],
+                "text-justify": "center",
+                "text-allow-overlap": false,
+                "text-anchor": "right"
+            },
+            "paint": {
+                "text-halo-color": {
+                    "type": "identity",
+                    "property": "colour"
+                },
+                "text-color": "rgba(255, 255, 255, 1)",
+                "text-halo-width": 5
+            }
+        },
+        {
+            "id": "stops-label",
+            "type": "symbol",
+            "source": "vapour_trail",
+            "source-layer": "stops",
+            "minzoom": 13,
+            "maxzoom": 24,
+            "layout": {
+                "text-anchor": "bottom-left",
+                "text-field": "{name}",
+                "text-font": [
+                    "Klokantech Noto Sans Italic"
+                ],
+                "text-max-width": 10,
+                "text-offset": [
+                    1,
+                    0.5
+                ],
+                "text-padding": 2,
+                "text-size": {
+                    "stops": [
+                        [
+                            10,
+                            0
+                        ],
+                        [
+                            13,
+                            12
+                        ],
+                        [
+                            24,
+                            16
+                        ]
+                    ]
+                },
+                "text-allow-overlap": false,
+                "text-ignore-placement": false,
+                "text-optional": true,
+                "text-justify": "left",
+                "icon-allow-overlap": false
+            },
+            "paint": {
+                "text-color": "#4898ff",
+                "text-halo-blur": 0.5,
+                "text-halo-color": "#ffffff",
+                "text-halo-width": 1.5,
+                "icon-color": "rgba(27, 65, 189, 1)"
+            }
+        },
+        {
+            "id": "stops-icon",
+            "type": "symbol",
+            "source": "vapour_trail",
+            "source-layer": "stops",
+            "minzoom": 11,
+            "maxzoom": 24,
+            "layout": {
+                "icon-image": "bus_11",
+                "icon-allow-overlap": true,
+                "icon-ignore-placement": false,
+                "icon-optional": false,
+                "icon-size": {
+                    "stops": [
+                        [
+                            6,
+                            0.2
+                        ],
+                        [
+                            12,
+                            0.5
+                        ],
+                        [
+                            16,
+                            1
+                        ],
+                        [
+                            22,
+                            1.5
+                        ]
+                    ]
+                }
+            }
+        },
+        {
+            "id": "stations-label",
+            "type": "symbol",
+            "metadata": {},
+            "source": "vapour_trail",
+            "source-layer": "stations",
+            "minzoom": 6,
+            "maxzoom": 15,
+            "layout": {
+                "text-anchor": "bottom-left",
+                "text-field": "{name}",
+                "text-font": [
+                    "Klokantech Noto Sans Italic"
+                ],
+                "text-max-width": 8,
+                "text-offset": [
+                    1.6,
+                    0.5
+                ],
+                "text-padding": 2,
+                "text-size": {
+                    "stops": [
+                        [
+                            6,
+                            0
+                        ],
+                        [
+                            13,
+                            14
+                        ],
+                        [
+                            24,
+                            20
+                        ]
+                    ]
+                },
+                "text-allow-overlap": false,
+                "text-ignore-placement": false,
+                "text-optional": true,
+                "text-justify": "left"
+            },
+            "paint": {
+                "text-color": "#4898ff",
+                "text-halo-blur": 0.5,
+                "text-halo-color": "#ffffff",
+                "text-halo-width": 1.5
+            }
+        },
+        {
+            "id": "stations-icon",
+            "type": "symbol",
+            "metadata": {},
+            "source": "vapour_trail",
+            "source-layer": "stations",
+            "minzoom": 6,
+            "maxzoom": 15,
+            "layout": {
+                "icon-image": "bus_15",
+                "icon-size": {
+                    "stops": [
+                        [
+                            6,
+                            0.2
+                        ],
+                        [
+                            12,
+                            1
+                        ],
+                        [
+                            16,
+                            1.6
+                        ],
+                        [
+                            22,
+                            2.5
+                        ]
+                    ]
+                },
+                "icon-allow-overlap": true
+            }
+        },
+        {
+            "id": "routes_ways_filtered_outline",
+            "type": "line",
+            "metadata": {},
+            "source": "route_filter",
+            "filter": [
+                "all", [
+                    "in",
+                    "id",
+                    "dumb_filter"
+                ]
+            ],
+            "layout": {
+                "line-cap": "round",
+                "line-join": "miter"
+            },
+            "paint": {
+                "line-color": "#000",
+                "line-width": 6
+            }
+        },
+        {
+            "id": "routes_points_filtered",
+            "type": "circle",
+            "metadata": {},
+            "source": "route_positions_filter",
+            "filter": [
+                "all", [
+                    "in",
+                    "id",
+                    "dumb_filter"
+                ]
+            ],
+            "paint": {
+                "circle-color": "gray",
+                "circle-opacity": 1,
+                "circle-radius": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            12,
+                            3
+                        ],
+                        [
+                            18,
+                            10
+                        ]
+                    ]
+                },
+                "circle-stroke-width": 1
+            }
+        },
+        {
+            "id": "routes_ways_filtered",
+            "type": "line",
+            "metadata": {},
+            "source": "route_filter",
+            "filter": [
+                "all", [
+                    "in",
+                    "id",
+                    "dumb_filter"
+                ]
+            ],
+            "layout": {
+                "visibility": "visible",
+                "line-cap": "round",
+                "line-join": "miter"
+            },
+            "paint": {
+                "line-color": "gray",
+                "line-width": 4
+            }
         }
-      }
-    },
-    {
-      "id": "stops-shield-urban-x",
-      "type": "symbol",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "stops_shield",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        [
-          "==",
-          "i",
-          5
-        ]
-      ],
-      "layout": {
-        "text-field": "+",
-        "text-size": {
-          "stops": [
-            [
-              14,
-              6
-            ],
-            [
-              18,
-              12
-            ]
-          ]
-        },
-        "text-max-width": 10,
-        "text-offset": [
-          0,
-          6
-        ],
-        "text-justify": "center",
-        "text-allow-overlap": false,
-        "text-anchor": "center"
-      },
-      "paint": {
-        "text-halo-color": "gray",
-        "text-color": "rgba(255, 255, 255, 1)",
-        "text-halo-width": 5
-      }
-    },
-    {
-      "id": "stops-shield-urban-4",
-      "type": "symbol",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "stops_shield",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        [
-          "==",
-          "i",
-          4
-        ]
-      ],
-      "layout": {
-        "text-field": "{ref}",
-        "text-size": {
-          "stops": [
-            [
-              14,
-              6
-            ],
-            [
-              18,
-              12
-            ]
-          ]
-        },
-        "text-max-width": 10,
-        "text-offset": [
-          0.5,
-          3.9
-        ],
-        "text-justify": "center",
-        "text-allow-overlap": false,
-        "text-anchor": "left"
-      },
-      "paint": {
-        "text-halo-color": {
-          "type": "identity",
-          "property": "colour"
-        },
-        "text-color": "rgba(255, 255, 255, 1)",
-        "text-halo-width": 5
-      }
-    },
-    {
-      "id": "stops-shield-urban-3",
-      "type": "symbol",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "stops_shield",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        [
-          "==",
-          "i",
-          3
-        ]
-      ],
-      "layout": {
-        "text-field": "{ref}",
-        "text-size": {
-          "stops": [
-            [
-              14,
-              6
-            ],
-            [
-              18,
-              12
-            ]
-          ]
-        },
-        "text-max-width": 10,
-        "text-offset": [
-          -0.5,
-          3.9
-        ],
-        "text-justify": "center",
-        "text-allow-overlap": false,
-        "text-anchor": "right"
-      },
-      "paint": {
-        "text-halo-color": {
-          "type": "identity",
-          "property": "colour"
-        },
-        "text-color": "rgba(255, 255, 255, 1)",
-        "text-halo-width": 5
-      }
-    },
-    {
-      "id": "stops-shield-urban-2",
-      "type": "symbol",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "stops_shield",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        [
-          "==",
-          "i",
-          2
-        ]
-      ],
-      "layout": {
-        "text-field": "{ref}",
-        "text-size": {
-          "stops": [
-            [
-              14,
-              6
-            ],
-            [
-              18,
-              12
-            ]
-          ]
-        },
-        "text-max-width": 10,
-        "text-offset": [
-          0.5,
-          2.1
-        ],
-        "text-justify": "center",
-        "text-allow-overlap": false,
-        "text-anchor": "left",
-        "text-ignore-placement": false
-      },
-      "paint": {
-        "text-halo-color": {
-          "type": "identity",
-          "property": "colour"
-        },
-        "text-color": "rgba(255, 255, 255, 1)",
-        "text-halo-width": 5
-      }
-    },
-    {
-      "id": "stops-shield-urban-1",
-      "type": "symbol",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "stops_shield",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        [
-          "==",
-          "i",
-          1
-        ]
-      ],
-      "layout": {
-        "text-field": "{ref}",
-        "text-size": {
-          "stops": [
-            [
-              14,
-              6
-            ],
-            [
-              18,
-              12
-            ]
-          ]
-        },
-        "text-max-width": 10,
-        "text-offset": [
-          -0.5,
-          2.1
-        ],
-        "text-justify": "center",
-        "text-allow-overlap": false,
-        "text-anchor": "right"
-      },
-      "paint": {
-        "text-halo-color": {
-          "type": "identity",
-          "property": "colour"
-        },
-        "text-color": "rgba(255, 255, 255, 1)",
-        "text-halo-width": 5
-      }
-    },
-    {
-      "id": "stops-label",
-      "type": "symbol",
-      "source": "vapour_trail",
-      "source-layer": "stops",
-      "minzoom": 13,
-      "maxzoom": 24,
-      "layout": {
-        "text-anchor": "bottom-left",
-        "text-field": "{name}",
-        "text-font": [
-          "Klokantech Noto Sans Italic"
-        ],
-        "text-max-width": 10,
-        "text-offset": [
-          1,
-          0.5
-        ],
-        "text-padding": 2,
-        "text-size": {
-          "stops": [
-            [
-              10,
-              0
-            ],
-            [
-              13,
-              12
-            ],
-            [
-              24,
-              16
-            ]
-          ]
-        },
-        "text-allow-overlap": false,
-        "text-ignore-placement": false,
-        "text-optional": true,
-        "text-justify": "left",
-        "icon-allow-overlap": false
-      },
-      "paint": {
-        "text-color": "#4898ff",
-        "text-halo-blur": 0.5,
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1.5,
-        "icon-color": "rgba(27, 65, 189, 1)"
-      }
-    },
-    {
-      "id": "stops-icon",
-      "type": "symbol",
-      "source": "vapour_trail",
-      "source-layer": "stops",
-      "minzoom": 11,
-      "maxzoom": 24,
-      "layout": {
-        "icon-image": "bus_11",
-        "icon-allow-overlap": true,
-        "icon-ignore-placement": false,
-        "icon-optional": false,
-        "icon-size": {
-          "stops": [
-            [
-              6,
-              0.2
-            ],
-            [
-              12,
-              0.5
-            ],
-            [
-              16,
-              1
-            ],
-            [
-              22,
-              1.5
-            ]
-          ]
-        }
-      }
-    },
-    {
-      "id": "stations-label",
-      "type": "symbol",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "stations",
-      "minzoom": 6,
-      "maxzoom": 15,
-      "layout": {
-        "text-anchor": "bottom-left",
-        "text-field": "{name}",
-        "text-font": [
-          "Klokantech Noto Sans Italic"
-        ],
-        "text-max-width": 8,
-        "text-offset": [
-          1.6,
-          0.5
-        ],
-        "text-padding": 2,
-        "text-size": {
-          "stops": [
-            [
-              6,
-              0
-            ],
-            [
-              13,
-              14
-            ],
-            [
-              24,
-              20
-            ]
-          ]
-        },
-        "text-allow-overlap": false,
-        "text-ignore-placement": false,
-        "text-optional": true,
-        "text-justify": "left"
-      },
-      "paint": {
-        "text-color": "#4898ff",
-        "text-halo-blur": 0.5,
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1.5
-      }
-    },
-    {
-      "id": "stations-icon",
-      "type": "symbol",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "stations",
-      "minzoom": 6,
-      "maxzoom": 15,
-      "layout": {
-        "icon-image": "bus_15",
-        "icon-size": {
-          "stops": [
-            [
-              6,
-              0.2
-            ],
-            [
-              12,
-              1
-            ],
-            [
-              16,
-              1.6
-            ],
-            [
-              22,
-              2.5
-            ]
-          ]
-        },
-        "icon-allow-overlap": true
-      }
-    },
-    {
-      "id": "routes_ways_filtered_outline",
-      "type": "line",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "ways",
-      "filter": [
-        "all",
-        [
-          "in",
-          "id",
-          "dumb_filter"
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "miter"
-      },
-      "paint": {
-        "line-color": "#000",
-        "line-width": 6
-      }
-    },
-    {
-      "id": "routes_points_filtered",
-      "type": "circle",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "routes_position",
-      "filter": [
-        "all",
-        [
-          "in",
-          "id",
-          "dumb_filter"
-        ]
-      ],
-      "paint": {
-        "circle-color": "gray",
-        "circle-opacity": 1,
-        "circle-radius": {
-          "base": 1,
-          "stops": [
-            [
-              12,
-              3
-            ],
-            [
-              18,
-              10
-            ]
-          ]
-        },
-        "circle-stroke-width": 1
-      }
-    },
-    {
-      "id": "routes_ways_filtered",
-      "type": "line",
-      "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "ways",
-      "filter": [
-        "all",
-        [
-          "in",
-          "id",
-          "dumb_filter"
-        ]
-      ],
-      "layout": {
-        "visibility": "visible",
-        "line-cap": "round",
-        "line-join": "miter"
-      },
-      "paint": {
-        "line-color": "gray",
-        "line-width": 4
-      }
-    }
-  ],
-  "id": "jvm1nxvdj"
+    ],
+    "id": "jvm1nxvdj"
 }
