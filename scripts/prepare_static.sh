@@ -21,8 +21,6 @@ cp -r web/* static/
 
 # copy dumped tiles
 cp -r docker/trex_cache/ static/tiles
-find static/tiles -name "*.pbf" -size `du -b static/tiles/vapour_trail/0/0/0.pbf | cut -f 1`c -delete
-find static/tiles -type d -empty -delete
 find static/tiles -name "*.pbf" -exec mv {} {}.gz \;
 find static/tiles -name "*.pbf.gz" -exec gzip -d {} \;
 
