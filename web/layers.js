@@ -10,9 +10,6 @@ map.on('load', function() {
                     map.addSource(source, json.sources[source]);
                 }
 
-                // that's a little hack to add the attribution, that is not set in the t-rex tilejson
-                // "attribution": "Jungle Bus"
-
                 for (var i = 0; i < json.layers.length; i++) {
                     if (json.layers[i].type != 'background') {
                         map.addLayer(json.layers[i]);

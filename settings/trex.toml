@@ -13,6 +13,11 @@ predefined = "web_mercator"
 
 [[tileset]]
 name = "vapour_trail"
+attribution = "<a href='http://junglebus.io/'>Jungle Bus</a> <a href='http://www.openstreetmap.org/copyright'>© OpenStreetMap contributors</a>"
+minzoom = 6
+#maxzoom = 22
+#center = 0, 0 # longitude, latitude
+start_zoom = 10
 
 [[tileset.layer]]
 name = "stops"
