@@ -2,8 +2,8 @@
 DROP TABLE IF EXISTS d_routes;
 CREATE TABLE d_routes AS
 SELECT 
-	osm_id, ref, name, network, operator, origin, destination, colour,
-	ST_Collect(geom ORDER BY index) as geom
+  osm_id, ref, name, network, operator, origin, destination, colour,
+  ST_Collect(geom ORDER BY index) as geom
 FROM (
   SELECT DISTINCT
     i_routes.osm_id as osm_id, ref, name, network, operator, origin, destination, colour,
@@ -17,8 +17,8 @@ GROUP BY osm_id, ref, name, network, operator, origin, destination, colour;
 DROP TABLE IF EXISTS d_route_stops_with_connections;
 CREATE TABLE d_route_stops_with_connections AS
 SELECT DISTINCT 
-	d_routes.osm_id as route_osm_id,	
-	i_positions.member_osm_id as stop_osm_id, i_positions.member_type as stop_osm_type, 
+  d_routes.osm_id as route_osm_id,
+  i_positions.member_osm_id as stop_osm_id, i_positions.member_type as stop_osm_type, 
   i_positions.member_index as stop_index, 
   i_stops.name as stop_name,
   i_positions.geom as stop_geom, 
@@ -30,11 +30,11 @@ SELECT DISTINCT
         ),
         other_routes.colour || ''
     )
-	) as other_routes_at_stop
+  ) as other_routes_at_stop
 FROM 
-	d_routes
-	INNER JOIN i_positions ON i_positions.rel_osm_id = d_routes.osm_id
-	INNER JOIN i_stops ON i_positions.member_osm_id = i_stops.osm_id
+  d_routes
+  INNER JOIN i_positions ON i_positions.rel_osm_id = d_routes.osm_id
+  INNER JOIN i_stops ON i_positions.member_osm_id = i_stops.osm_id
     LEFT JOIN i_positions AS other_positions ON
         other_positions.member_type = i_positions.member_type AND
         other_positions.member_osm_id = i_positions.member_osm_id AND
@@ -42,8 +42,8 @@ FROM
     LEFT JOIN i_routes AS other_routes ON
         other_routes.osm_id = other_positions.rel_osm_id
 GROUP BY 
-	d_routes.osm_id, i_positions.member_osm_id, i_positions.member_type, i_positions.member_index, 
-	i_stops.name, i_positions.geom;
+  d_routes.osm_id, i_positions.member_osm_id, i_positions.member_type, i_positions.member_index, 
+  i_stops.name, i_positions.geom;
 
 
 -- Collect route segments (every way where a bus route goes)

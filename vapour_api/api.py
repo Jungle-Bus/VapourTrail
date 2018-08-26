@@ -42,11 +42,7 @@ def get_route_properties(route_id):
         ),
         route_id=route_id,
     )
-    row = result.next()
-    route = {}
-    for i, f in enumerate(fields):
-        route[f] = row[i]
-    return route
+    return dict(result.next().items())
 
 
 def get_route_geojson(route_id):
@@ -165,7 +161,7 @@ class Route(Resource):
 
 api = Api(app)
 api.add_resource(Index, "/")
-api.add_resource(Route, "/route/", "/route/<string:route_id>")
+api.add_resource(Route, "/routes/", "/routes/<string:route_id>")
 
 
 if __name__ == "__main__":
