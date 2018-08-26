@@ -12,4 +12,4 @@ set -o pipefail
 set -o nounset
 #set -x
 
-docker-compose run --rm --entrypoint "t_rex generate --config /config/config.toml --overwrite true --extent=${bbox} --maxzoom 16 --minzoom 0" t-rex
+docker-compose run --rm --entrypoint "t_rex generate --config /config/config.toml --overwrite true --extent=${bbox} --maxzoom 16 --minzoom 6" t-rex
