@@ -1,3 +1,4 @@
 docker/imposm/import
 docker/trex_cache/vapour*
 static
+__pycache__

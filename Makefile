@@ -5,7 +5,7 @@ up:
 	docker-compose up web
 
 up-d:
-	docker-compose up -d web
+	docker-compose up -d web && docker-compose up -d api
 
 down:
 	docker-compose down

@@ -7,6 +7,16 @@ services:
       - 54325:5432
     env_file: docker/.env
 
+  api:
+    build: ./vapour_api/
+    volumes:
+      - ./vapour_api:/vapour_api
+    depends_on:
+      - postgres
+    ports:
+      - 5000:5000
+    env_file: docker/.env
+
   importer:
     image: openmaptiles/import-osm
     env_file: docker/.env
