@@ -4,6 +4,11 @@ VapourTrail is an interactive bus map made from OpenStreetMap data.
 
 ![demo](img/demo.gif)
 
+VapourTrail aims to be a large scale or local solution for visualizing bus lines based on OpenStreetMap data composed of:
+* an interactive map with a schematic bus route display
+* an API for bus routes
+* a tileset of vector tiles
+
 ## Schema
 
 :construction::warning: This is a work in progress, the schema is not stable yet :warning::construction:
