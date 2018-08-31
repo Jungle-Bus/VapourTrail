@@ -8,9 +8,9 @@ services:
     env_file: docker-postgres-env
 
   api:
-    build: ./vapour_api/
+    build: ./api/
     volumes:
-      - ./vapour_api:/vapour_api
+      - ./api:/vapour_api
     depends_on:
       - postgres
     ports:
