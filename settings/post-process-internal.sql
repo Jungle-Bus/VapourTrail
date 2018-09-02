@@ -1,3 +1,10 @@
+-- fix route ids modified by imposm
+UPDATE osm_relations_route
+SET osm_id = ABS(osm_id);
+
+UPDATE osm_relation_members_route
+SET rel_osm_id = ABS(rel_osm_id);
+
 -- Build routes meta data
 DROP TABLE IF EXISTS i_routes;
 CREATE TABLE i_routes AS
