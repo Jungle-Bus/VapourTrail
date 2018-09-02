@@ -166,6 +166,20 @@ GROUP BY
 ;
 ALTER TABLE d_routes_position DROP COLUMN rels_osm_id;
 
+-- Stop positions by route
+DROP TABLE IF EXISTS d_route_stop_positions;
+CREATE TABLE d_route_stop_positions AS
+SELECT DISTINCT
+  rel_osm_id as route_osm_id,
+  pos,
+  geom
+FROM (
+  SELECT rel_osm_id, unnest(positions_ids) as pos
+  FROM d_routes_position_ids
+) t
+INNER JOIN d_routes_position
+  on t.pos = d_routes_position.id
+ORDER BY pos;
 
 -- Add bus routes info on bus stops
 DROP TABLE IF EXISTS d_stops;
