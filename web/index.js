@@ -84,6 +84,7 @@ map.on('load', function() {
         html += "</p>"
 
         for (const route of routes_at_stop) {
+            const route_id = Math.abs(route['rel_osm_id'])
             var route_in_json = JSON.stringify(route);
             var quote_escape_in_regexp = new RegExp("'", 'gi');
             var route_in_json = route_in_json.replace(quote_escape_in_regexp, '’');
@@ -94,7 +95,7 @@ map.on('load', function() {
                             <span>${route['rel_ref'] || '??'}</span>
                         </span>
                       : ${route['rel_destination'] || '??'}
-                      <a href='#' onclick='filter_on_one_route(${route_in_json})'>Voir la ligne</a> </br>
+                      <a href='#' onclick='filter_on_one_route(${route_id});map.flyTo({center:[${feature.geometry.coordinates}]})'>Voir la ligne</a> </br>
                     </div>`;
         }
         var popup = new mapboxgl.Popup({
@@ -106,7 +107,7 @@ map.on('load', function() {
 });
 
 
-function filter_on_one_route(route) {
+function filter_on_one_route(route_id) {
     reset_filters_and_show_all_lines();
 
     var caisson_content = `
@@ -118,8 +119,6 @@ function filter_on_one_route(route) {
     caisson.add_content(caisson_content)
     var close_caisson_button = document.getElementById('close_caisson_button')
     close_caisson_button.innerHTML = `<a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a>`;
-
-    const route_id = route['rel_osm_id'];
 
     const stop_list_url = vapour_trail_api_base_url + "/routes/" + route_id;
     fetch(stop_list_url)
