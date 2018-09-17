@@ -65,13 +65,8 @@ def get_route_stop_positions(route_id):
                 st_asGeoJSON(ST_Transform(geom, 4326)) as geojson, 
                 st_X(ST_Transform(geom, 4326)) as lon,
                 st_Y(ST_Transform(geom, 4326)) as lat
-            FROM (
-                SELECT rel_osm_id, unnest(positions_ids) as pos
-                FROM d_routes_position_ids
-            ) t 
-            INNER JOIN d_routes_position 
-                on t.pos = d_routes_position.id
-            WHERE rel_osm_id = :route_id
+            FROM d_route_stop_positions
+            WHERE route_osm_id = :route_id
             ORDER BY pos
         """
         ),
