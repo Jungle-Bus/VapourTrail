@@ -32,6 +32,48 @@
     "vapour_trail": {
       "type": "vector",
       "url": "http://0.0.0.0:6767/vapour_trail.json"
+    },
+    "route_filter": {
+      "type": "geojson",
+      "data": {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ]
+        }
+      }
+    },
+    "route_positions_filter": {
+      "type": "geojson",
+      "data": {
+        "type": "GeometryCollection",
+        "geometries": [
+          {
+            "type": "Point",
+            "coordinates": [
+              100,
+              0
+            ]
+          },
+          {
+            "type": "Point",
+            "coordinates": [
+              100,
+              0
+            ]
+          }
+        ]
+      }
     }
   },
   "sprite": "https://rawgit.com/lukasmartinelli/osm-liberty/gh-pages/sprites/osm-liberty",
@@ -637,8 +679,7 @@
       "id": "routes_ways_filtered_outline",
       "type": "line",
       "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "ways",
+      "source": "route_filter",
       "filter": [
         "all",
         [
@@ -660,8 +701,7 @@
       "id": "routes_points_filtered",
       "type": "circle",
       "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "routes_position",
+      "source": "route_positions_filter",
       "filter": [
         "all",
         [
@@ -693,8 +733,7 @@
       "id": "routes_ways_filtered",
       "type": "line",
       "metadata": {},
-      "source": "vapour_trail",
-      "source-layer": "ways",
+      "source": "route_filter",
       "filter": [
         "all",
         [
