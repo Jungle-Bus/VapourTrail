@@ -20,7 +20,7 @@ mkdir static
 cp -r web/* static/
 
 # copy dumped tiles
-cp -r docker/trex_cache/ static/tiles
+cp -r t-rex/cache/ static/tiles
 find static/tiles -name "*.pbf" -exec mv {} {}.gz \;
 find static/tiles -name "*.pbf.gz" -exec gzip -d {} \;
 

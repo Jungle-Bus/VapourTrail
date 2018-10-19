@@ -2,7 +2,7 @@
 
 VapourTrail is an interactive bus map made from OpenStreetMap data.
 
-![demo](img/demo.gif)
+![demo](demo.gif)
 
 VapourTrail aims to be a large scale or local solution for visualizing bus lines based on OpenStreetMap data composed of:
 * an interactive map with a schematic bus route display
@@ -25,7 +25,7 @@ VapourTrail aims to be a large scale or local solution for visualizing bus lines
 
 ### How to run
 
-Put an .osm.pbf file into `docker/imposm/import` directory.
+Put an .osm.pbf file into `imposm/import/` directory.
 
 Run `make docker-importer` to import the data to the Postgres database.
 
