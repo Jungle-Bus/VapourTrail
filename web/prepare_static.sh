@@ -25,5 +25,5 @@ find static/tiles -name "*.pbf" -exec mv {} {}.gz \;
 find static/tiles -name "*.pbf.gz" -exec gzip -d {} \;
 
 # use static_url instead of t_rex server
-sed -i -e "s=http://0.0.0.0:6767/vapour_trail.json=${static_url}/vapour_trail.json=g" static/vapour-style.json
+sed -i -e "s=http://0.0.0.0:6767/vapour_trail.json=${static_url}/vapour_trail.json=g" static/glstyle.json
 sed -i -e "s=http://example.com/tiles/vapour_trail/{z}/{x}/{y}.pbf=${static_url}/vapour_trail/{z}/{x}/{y}.pbf=g" static/tiles/vapour_trail.json
