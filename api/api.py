@@ -1,6 +1,6 @@
 from flask_restful import Resource, Api
 from flask import send_from_directory
-from vapour_api import app
+from api import app
 from geojson import Feature, GeometryCollection, Point
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
@@ -119,10 +119,57 @@ def get_route_stops_with_connections(route_id):
         route_stops.append(s)
     return route_stops
 
+def get_stop(stop_id):
+    result = db.engine.execute(
+        text(
+            """
+            SELECT 
+                osm_type,
+                osm_id,
+                name,
+                local_ref,
+                has_shelter,
+                has_bench,
+                has_tactile_paving,
+                has_departures_board,
+                is_wheelchair_ok,
+                st_asGeoJSON(ST_Transform(geom, 4326)) as geojson, 
+                routes_at_stop
+            FROM d_stops
+            WHERE osm_id = :stop_id
+        """
+        ),
+        stop_id=stop_id,
+    )
+    stops = []
+    for row in result:
+        d = OrderedDict(row)
+        s = OrderedDict([])
+        for k in d:
+            s[k] = d[k]
+        stops.append(s)
+    return stops
 
 class Index(Resource):
     def get(self):
         return {"links": [{"href": "api.py/route/<route_id>"}]}
+
+osm_types = {
+    0 : 'node',
+    1 : 'way',
+    2 : 'relation'
+}
+
+class Stop(Resource):
+    def get(self, stop_id):
+        if stop_id:
+            stops = get_stop(stop_id)
+            if len(stops) > 0 : 
+                stops[0]['osm_type'] = osm_types[stops[0]['osm_type']]
+                stops[0]['geojson'] = ast.literal_eval(stops[0]['geojson'])
+                stops[0]['routes_at_stop'] = ast.literal_eval(stops[0]['routes_at_stop'])
+                return stops[0]
+        return {}
 
 
 class Route(Resource):
@@ -157,6 +204,7 @@ class Route(Resource):
 api = Api(app)
 api.add_resource(Index, "/")
 api.add_resource(Route, "/routes/", "/routes/<string:route_id>")
+api.add_resource(Stop, "/stops/", "/stops/<string:stop_id>")
 
 
 if __name__ == "__main__":
