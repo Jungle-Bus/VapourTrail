@@ -119,6 +119,7 @@ def get_route_stops_with_connections(route_id):
         route_stops.append(s)
     return route_stops
 
+
 def get_stop(stop_id):
     result = db.engine.execute(
         text(
@@ -133,7 +134,7 @@ def get_stop(stop_id):
                 has_tactile_paving,
                 has_departures_board,
                 is_wheelchair_ok,
-                st_asGeoJSON(ST_Transform(geom, 4326)) as geojson, 
+                st_asGeoJSON(ST_Transform(geom, 4326)) as geojson,
                 routes_at_stop
             FROM d_stops
             WHERE osm_id = :stop_id
@@ -141,35 +142,30 @@ def get_stop(stop_id):
         ),
         stop_id=stop_id,
     )
-    stops = []
-    for row in result:
-        d = OrderedDict(row)
-        s = OrderedDict([])
-        for k in d:
-            s[k] = d[k]
-        stops.append(s)
-    return stops
+    try:
+        return dict(result.next().items())
+    except:
+        return False
+
 
 class Index(Resource):
     def get(self):
         return {"links": [{"href": "api.py/route/<route_id>"}]}
 
-osm_types = {
-    0 : 'node',
-    1 : 'way',
-    2 : 'relation'
-}
+
+osm_types = {0: "node", 1: "way", 2: "relation"}
+
 
 class Stop(Resource):
     def get(self, stop_id):
         if stop_id:
-            stops = get_stop(stop_id)
-            if len(stops) > 0 : 
-                stops[0]['osm_type'] = osm_types[stops[0]['osm_type']]
-                stops[0]['geojson'] = ast.literal_eval(stops[0]['geojson'])
-                stops[0]['routes_at_stop'] = ast.literal_eval(stops[0]['routes_at_stop'])
-                return stops[0]
-        return {}
+            stop = get_stop(stop_id)
+            if stop:
+                stop["osm_type"] = osm_types[stop["osm_type"]]
+                stop["geojson"] = ast.literal_eval(stop["geojson"])
+                stop["routes_at_stop"] = ast.literal_eval(stop["routes_at_stop"])
+                return stop
+        return {"error": "stop_id not found"}, 404
 
 
 class Route(Resource):

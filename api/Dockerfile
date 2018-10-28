@@ -7,5 +7,5 @@ RUN pip3 install flask flask-restful flask-cors geojson gunicorn SQLAlchemy flas
 
 
 WORKDIR /
-ENTRYPOINT gunicorn -w 4 -b 0.0.0.0:5000 --access-logfile - vapour_api:app
+ENTRYPOINT gunicorn -w 4 -b 0.0.0.0:5000 --access-logfile - api:app
 
