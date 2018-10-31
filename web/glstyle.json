@@ -4143,9 +4143,6 @@
           "in",
           "type",
           "rail",
-          "station",
-          "bus_stop",
-          "bus",
           "tram_stop",
           "subway_entrance"
         ]
@@ -4250,9 +4247,6 @@
           "in",
           "type",
           "rail",
-          "station",
-          "bus_stop",
-          "bus",
           "tram_stop",
           "subway_entrance"
         ]
