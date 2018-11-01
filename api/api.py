@@ -174,9 +174,26 @@ class Stop(Resource):
         if stop_id:
             stop = get_stop(osm_type, stop_id)
             if stop:
-                stop["osm_type"] = osm_types[stop["osm_type"]]
+                stop["osm_id"] = "{}/{}".format(
+                    osm_types[stop["osm_type"]],
+                    stop["osm_id"]
+                )
+                stop.pop("osm_type")
                 stop["geojson"] = ast.literal_eval(stop["geojson"])
-                stop["routes_at_stop"] = ast.literal_eval(stop["routes_at_stop"])
+                routes = ast.literal_eval(stop["routes_at_stop"])
+                stop["routes_at_stop"] = []
+                for r in routes:
+                    stop["routes_at_stop"].append({
+                        "route_osm_id": r["rel_osm_id"],
+                        "ref": r["rel_ref"],
+                        "name": r["rel_name"],
+                        "network": r["rel_network"],
+                        "operator": r["rel_operator"],
+                        "transport_mode": r["transport_mode"],
+                        "origin": r["rel_origin"],
+                        "destination": r["rel_destination"],
+                        "colour": r["rel_colour"],
+                    })
                 return stop
         return {"error": "stop_id not found"}, 404
 
