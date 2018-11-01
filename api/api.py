@@ -120,7 +120,7 @@ def get_route_stops_with_connections(route_id):
     return route_stops
 
 
-def get_stop(stop_id):
+def get_stop(osm_type, stop_id):
     result = db.engine.execute(
         text(
             """
@@ -138,9 +138,13 @@ def get_stop(stop_id):
                 routes_at_stop
             FROM d_stops
             WHERE osm_id = :stop_id
+                AND osm_type = :osm_type
         """
         ),
-        stop_id=stop_id,
+        {
+            'stop_id': stop_id,
+            'osm_type': osm_type
+        }
     )
     try:
         return dict(result.next().items())
@@ -157,9 +161,18 @@ osm_types = {0: "node", 1: "way", 2: "relation"}
 
 
 class Stop(Resource):
-    def get(self, stop_id):
+    def get(self, stop_id, osm_type=None):
+        if osm_type:
+            for (k, v) in osm_types.items():
+                if v == osm_type:
+                    osm_type = k
+        else:
+            osm_type = 0
+        if isinstance(osm_type, str):
+            return {"error": "incorrect type of object"}, 400
+
         if stop_id:
-            stop = get_stop(stop_id)
+            stop = get_stop(osm_type, stop_id)
             if stop:
                 stop["osm_type"] = osm_types[stop["osm_type"]]
                 stop["geojson"] = ast.literal_eval(stop["geojson"])
@@ -200,7 +213,7 @@ class Route(Resource):
 api = Api(app)
 api.add_resource(Index, "/")
 api.add_resource(Route, "/routes/", "/routes/<string:route_id>")
-api.add_resource(Stop, "/stops/", "/stops/<string:stop_id>")
+api.add_resource(Stop, "/stops/", "/stops/<string:stop_id>", "/stops/<string:osm_type>/<string:stop_id>")
 
 
 if __name__ == "__main__":
