@@ -1,4 +1,4 @@
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from flask import send_from_directory
 from api import app
 from geojson import Feature, GeometryCollection, Point
@@ -141,10 +141,7 @@ def get_stop(osm_type, stop_id):
                 AND osm_type = :osm_type
         """
         ),
-        {
-            'stop_id': stop_id,
-            'osm_type': osm_type
-        }
+        {"stop_id": stop_id, "osm_type": osm_type},
     )
     try:
         return dict(result.next().items())
@@ -159,9 +156,14 @@ class Index(Resource):
 
 osm_types = {0: "node", 1: "way", 2: "relation"}
 
+parser = reqparse.RequestParser()
+parser.add_argument("osm_type")
+
 
 class Stop(Resource):
-    def get(self, stop_id, osm_type=None):
+    def get(self, stop_id):
+        args = parser.parse_args()
+        osm_type = args["osm_type"]
         if osm_type:
             for (k, v) in osm_types.items():
                 if v == osm_type:
@@ -174,27 +176,26 @@ class Stop(Resource):
         if stop_id:
             stop = get_stop(osm_type, stop_id)
             if stop:
-                stop["osm_id"] = "{}/{}".format(
-                    osm_types[stop["osm_type"]],
-                    stop["osm_id"]
-                )
-                stop.pop("osm_type")
-                stop["geojson"] = ast.literal_eval(stop["geojson"])
+                stop_geojson = ast.literal_eval(stop["geojson"])
+                stop.pop("geojson")
                 routes = ast.literal_eval(stop["routes_at_stop"])
+                stop["osm_type"] = osm_types[stop["osm_type"]]
                 stop["routes_at_stop"] = []
                 for r in routes:
-                    stop["routes_at_stop"].append({
-                        "route_osm_id": r["rel_osm_id"],
-                        "ref": r["rel_ref"],
-                        "name": r["rel_name"],
-                        "network": r["rel_network"],
-                        "operator": r["rel_operator"],
-                        "transport_mode": r["transport_mode"],
-                        "origin": r["rel_origin"],
-                        "destination": r["rel_destination"],
-                        "colour": r["rel_colour"],
-                    })
-                return stop
+                    stop["routes_at_stop"].append(
+                        {
+                            "route_osm_id": r["rel_osm_id"],
+                            "ref": r["rel_ref"],
+                            "name": r["rel_name"],
+                            "network": r["rel_network"],
+                            "operator": r["rel_operator"],
+                            "transport_mode": r["transport_mode"],
+                            "origin": r["rel_origin"],
+                            "destination": r["rel_destination"],
+                            "colour": r["rel_colour"],
+                        }
+                    )
+                return Feature(geometry=stop_geojson, properties=stop)
         return {"error": "stop_id not found"}, 404
 
 
@@ -230,7 +231,7 @@ class Route(Resource):
 api = Api(app)
 api.add_resource(Index, "/")
 api.add_resource(Route, "/routes/", "/routes/<string:route_id>")
-api.add_resource(Stop, "/stops/", "/stops/<string:stop_id>", "/stops/<string:osm_type>/<string:stop_id>")
+api.add_resource(Stop, "/stops/", "/stops/<string:stop_id>")
 
 
 if __name__ == "__main__":
