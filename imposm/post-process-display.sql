@@ -1,7 +1,7 @@
 -- Route infos used in display
 DROP TABLE IF EXISTS d_routes;
 CREATE TABLE d_routes AS
-SELECT 
+SELECT
   osm_id, ref, name, network, operator, origin, destination, colour,
   ST_Collect(geom ORDER BY index) as geom
 FROM (
@@ -16,13 +16,13 @@ GROUP BY osm_id, ref, name, network, operator, origin, destination, colour;
 -- Stops by route with connections infos
 DROP TABLE IF EXISTS d_route_stops_with_connections;
 CREATE TABLE d_route_stops_with_connections AS
-SELECT DISTINCT 
+SELECT DISTINCT
   d_routes.osm_id as route_osm_id,
-  i_positions.member_osm_id as stop_osm_id, i_positions.member_type as stop_osm_type, 
-  i_positions.member_index as stop_index, 
+  i_positions.member_osm_id as stop_osm_id, i_positions.member_type as stop_osm_type,
+  i_positions.member_index as stop_index,
   i_stops.name as stop_name,
-  i_positions.geom as stop_geom, 
-  array_agg(distinct 
+  i_positions.geom as stop_geom,
+  array_agg(distinct
       array_append(
           array_append(
             array_append(Array[]::text[], other_routes.osm_id || ''),
@@ -31,7 +31,7 @@ SELECT DISTINCT
         other_routes.colour || ''
     )
   ) as other_routes_at_stop
-FROM 
+FROM
   d_routes
   INNER JOIN i_positions ON i_positions.rel_osm_id = d_routes.osm_id
   INNER JOIN i_stops ON i_positions.member_osm_id = i_stops.osm_id
@@ -41,8 +41,8 @@ FROM
         other_positions.rel_osm_id != d_routes.osm_id
     LEFT JOIN i_routes AS other_routes ON
         other_routes.osm_id = other_positions.rel_osm_id
-GROUP BY 
-  d_routes.osm_id, i_positions.member_osm_id, i_positions.member_type, i_positions.member_index, 
+GROUP BY
+  d_routes.osm_id, i_positions.member_osm_id, i_positions.member_type, i_positions.member_index,
   i_stops.name, i_positions.geom;
 
 
@@ -331,58 +331,26 @@ WHERE
 ;
 CREATE INDEX idx_d_stations_area_geom ON d_stations_area USING GIST(geom);
 
-
--- Hack to inject JSON into vtiles, need an API to remove this.
-DROP TABLE IF EXISTS t_stops_json;
-CREATE TEMP TABLE t_stops_json AS
+-- Collect routes at each stop
+DROP TABLE IF EXISTS d_routes_at_stop;
+CREATE TABLE d_routes_at_stop AS
 SELECT
-  json_agg(routes_at_stop) AS json,
-  osm_id
-FROM (
-  SELECT
-    row_to_json(t) AS routes_at_stop,
-    osm_id
-  FROM (
-    SELECT
-      d_stops.osm_id,
-      i_routes.osm_id AS rel_osm_id,
-      i_routes.transport_mode,
-      i_routes.network AS rel_network,
-      i_routes.operator AS rel_operator,
-      i_routes.ref AS rel_ref,
-      i_routes.origin AS rel_origin,
-      i_routes.destination AS rel_destination,
-      i_routes.colour AS rel_colour,
-      i_routes.name AS rel_name,
-      d_routes_ways_ids.ways_ids AS ways_ids,
-      d_routes_position_ids.positions_ids AS positions_ids
-    FROM
-      d_stops
-      JOIN i_positions ON
-        i_positions.member_type = d_stops.osm_type AND
-        i_positions.member_osm_id = d_stops.osm_id
-      JOIN i_routes ON
-        i_routes.osm_id = i_positions.rel_osm_id
-      LEFT JOIN d_routes_ways_ids ON
-        d_routes_ways_ids.rel_osm_id = i_routes.osm_id
-      LEFT JOIN d_routes_position_ids ON
-        d_routes_position_ids.rel_osm_id = i_routes.osm_id
-    ) AS t
-  ) AS t
-GROUP BY
-  osm_id
-;
-
-ALTER TABLE d_stops ADD COLUMN routes_at_stop VARCHAR;
-UPDATE
-  d_stops
-SET
-  routes_at_stop = t_stops_json.json
+  d_stops.osm_id,
+  d_stops.osm_type,
+  i_routes.osm_id AS rel_osm_id,
+  i_routes.transport_mode,
+  i_routes.network AS rel_network,
+  i_routes.operator AS rel_operator,
+  i_routes.ref AS rel_ref,
+  i_routes.origin AS rel_origin,
+  i_routes.destination AS rel_destination,
+  i_routes.colour AS rel_colour,
+  i_routes.name AS rel_name
 FROM
-  t_stops_json
-WHERE
-  d_stops.osm_id = t_stops_json.osm_id
+  d_stops
+  JOIN i_positions ON
+    i_positions.member_type = d_stops.osm_type AND
+    i_positions.member_osm_id = d_stops.osm_id
+  JOIN i_routes ON
+    i_routes.osm_id = i_positions.rel_osm_id
 ;
-
-DROP TABLE t_stops_json;
-

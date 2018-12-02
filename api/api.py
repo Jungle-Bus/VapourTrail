@@ -60,9 +60,9 @@ def get_route_stop_positions(route_id):
     result = db.engine.execute(
         text(
             """
-            SELECT 
+            SELECT
                 pos,
-                st_asGeoJSON(ST_Transform(geom, 4326)) as geojson, 
+                st_asGeoJSON(ST_Transform(geom, 4326)) as geojson,
                 st_X(ST_Transform(geom, 4326)) as lon,
                 st_Y(ST_Transform(geom, 4326)) as lat
             FROM d_route_stop_positions
@@ -88,9 +88,9 @@ def get_route_stops_with_connections(route_id):
     result = db.engine.execute(
         text(
             """
-            SELECT stop_osm_id, stop_osm_type, stop_index, 
+            SELECT stop_osm_id, stop_osm_type, stop_index,
                 stop_name,
-                st_asGeoJSON(ST_Transform(stop_geom, 4326)), 
+                st_asGeoJSON(ST_Transform(stop_geom, 4326)),
                 st_X(ST_Transform(stop_geom, 4326)) as lon,
                 st_Y(ST_Transform(stop_geom, 4326)) as lat,
                 other_routes_at_stop
@@ -124,7 +124,7 @@ def get_stop(osm_type, stop_id):
     result = db.engine.execute(
         text(
             """
-            SELECT 
+            SELECT
                 osm_type,
                 osm_id,
                 name,
@@ -134,8 +134,7 @@ def get_stop(osm_type, stop_id):
                 has_tactile_paving,
                 has_departures_board,
                 is_wheelchair_ok,
-                st_asGeoJSON(ST_Transform(geom, 4326)) as geojson,
-                routes_at_stop
+                st_asGeoJSON(ST_Transform(geom, 4326)) as geojson
             FROM d_stops
             WHERE osm_id = :stop_id
                 AND osm_type = :osm_type
@@ -147,6 +146,45 @@ def get_stop(osm_type, stop_id):
         return dict(result.next().items())
     except:
         return False
+
+
+def get_routes_at_stop(osm_type, stop_id):
+    result = db.engine.execute(
+        text(
+            """
+            SELECT
+                rel_osm_id,
+                transport_mode,
+                rel_network,
+                rel_operator,
+                rel_ref,
+                rel_origin,
+                rel_destination,
+                rel_colour,
+                rel_name
+            FROM d_routes_at_stop
+            WHERE osm_id = :stop_id
+                AND osm_type = :osm_type
+            ORDER BY rel_ref
+        """
+        ),
+        {"stop_id": stop_id, "osm_type": osm_type},
+    )
+    routes_at_stop = []
+    for row in result:
+        s = {
+            "route_osm_id": row[0],
+            "ref": row[4],
+            "name": row[8],
+            "network": row[2],
+            "operator": row[3],
+            "transport_mode": row[1],
+            "origin": row[5],
+            "destination": row[6],
+            "colour": row[7],
+        }
+        routes_at_stop.append(s)
+    return routes_at_stop
 
 
 class Index(Resource):
@@ -178,23 +216,8 @@ class Stop(Resource):
             if stop:
                 stop_geojson = ast.literal_eval(stop["geojson"])
                 stop.pop("geojson")
-                routes = ast.literal_eval(stop["routes_at_stop"])
                 stop["osm_type"] = osm_types[stop["osm_type"]]
-                stop["routes_at_stop"] = []
-                for r in routes:
-                    stop["routes_at_stop"].append(
-                        {
-                            "route_osm_id": r["rel_osm_id"],
-                            "ref": r["rel_ref"],
-                            "name": r["rel_name"],
-                            "network": r["rel_network"],
-                            "operator": r["rel_operator"],
-                            "transport_mode": r["transport_mode"],
-                            "origin": r["rel_origin"],
-                            "destination": r["rel_destination"],
-                            "colour": r["rel_colour"],
-                        }
-                    )
+                stop["routes_at_stop"] = get_routes_at_stop(osm_type, stop_id)
                 return Feature(geometry=stop_geojson, properties=stop)
         return {"error": "stop_id not found"}, 404
 
