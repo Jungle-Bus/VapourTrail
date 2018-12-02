@@ -56,51 +56,60 @@ map.on('load', function() {
 
     function on_stop(e) {
         var feature = e.features[0];
-        if (!feature.properties.routes_at_stop) {
-            var routes_at_stop = []
-        } else {
-            var routes_at_stop = JSON.parse(feature.properties.routes_at_stop);
+        const stop_id = feature.properties.osm_id;
+        var stop_detail_url = vapour_trail_api_base_url + "/stops/" + feature.properties.osm_id;
+        if (feature.properties.osm_type == "1") {
+            stop_detail_url += "?osm_type=way"
         }
-        let html = ""
-        html += `<h2> <a target="_blank" href="http://osm.org/node/${feature.properties.osm_id}">${bus_img}</a> `
-        html += ` ${feature.properties.name || "pas de nom :("}</h2>`;
+        fetch(stop_detail_url)
+            .then(function(data) {
+                return data.json()
+            })
+            .then(function(stop_data) {
+                var html = ""
+                html += `<h2> <a target="_blank" href="http://osm.org/${stop_data.properties.osm_type}/${stop_data.properties.osm_id}">${bus_img}</a> `
+                html += ` ${stop_data.properties.name || "pas de nom :("}</h2>`;
 
-        html += "<p>"
-        html += `${ (feature.properties.has_bench)
-            ? bench_img
-            : ""} `;
-        html += `${ (feature.properties.has_shelter)
-            ? shelter_img
-            : ""} `;
-        html += `${ (feature.properties.has_departures_board)
-            ? departures_img
-            : ""} `;
-        html += `${ (feature.properties.is_wheelchair_ok)
-            ? wheelchair_img
-            : ""} `;
-        html += `${ (feature.properties.has_tactile_paving)
-            ? tactile_img
-            : ""} `;
-        html += "</p>"
+                html += "<p>"
+                html += `${ (stop_data.properties.has_bench)
+                    ? bench_img
+                    : ""} `;
+                html += `${ (stop_data.has_shelter)
+                    ? shelter_img
+                    : ""} `;
+                html += `${ (stop_data.properties.has_departures_board)
+                    ? departures_img
+                    : ""} `;
+                html += `${ (stop_data.properties.is_wheelchair_ok)
+                    ? wheelchair_img
+                    : ""} `;
+                html += `${ (stop_data.properties.has_tactile_paving)
+                    ? tactile_img
+                    : ""} `;
+                html += "</p>"
 
-        for (const route of routes_at_stop) {
-            const route_id = Math.abs(route['rel_osm_id'])
-            var route_in_json = JSON.stringify(route);
-            var quote_escape_in_regexp = new RegExp("'", 'gi');
-            var route_in_json = route_in_json.replace(quote_escape_in_regexp, '’');
-            html += `<div class='bus_box_div'>
-                        <span class='bus_box' style='border-bottom-color: ${route['rel_colour'] || "grey"};' >
-                            [${route['rel_network'] || '??'}]
-                            <span>🚍</span>
-                            <span>${route['rel_ref'] || '??'}</span>
-                        </span>
-                      : ${route['rel_destination'] || '??'}
-                      <a href='#' onclick='filter_on_one_route(${route_id});map.flyTo({center:[${feature.geometry.coordinates}]})'>Voir la ligne</a> </br>
-                    </div>`;
-        }
-        var popup = new mapboxgl.Popup({
-            closeButton: false
-        }).setLngLat(e.lngLat).setHTML(html).addTo(map);
+                for (const route of stop_data.properties.routes_at_stop) {
+                    const route_id = route['route_osm_id'];
+                    html += `<div class='bus_box_div'>
+                                <span class='bus_box' style='border-bottom-color: ${route['colour'] || "grey"};' >
+                                    [${route['network'] || '??'}]
+                                    <span>🚍</span>
+                                    <span>${route['ref'] || '??'}</span>
+                                </span>
+                              : ${route['destination'] || '??'}
+                              <a href='#' onclick='filter_on_one_route(${route_id});map.flyTo({center:[${stop_data.geometry.coordinates}]})'>Voir la ligne</a> </br>
+                            </div>`;
+                }
+
+                var popup = new mapboxgl.Popup({
+                    closeButton: false
+                }).setLngLat(e.lngLat).setHTML(html).addTo(map);
+
+            })
+            .catch(function(error) {
+                console.log("erreur en récupérant les informations sur l'arrêt : " + error)
+            })
+
     };
 
     map.on('click', 'stops-icon', on_stop);
