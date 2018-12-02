@@ -10,7 +10,7 @@ services:
   api:
     build: ./api/
     volumes:
-      - ./api:/vapour_api
+      - ./api:/api
     depends_on:
       - postgres
     ports:

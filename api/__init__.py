@@ -2,4 +2,4 @@ from flask import Flask
 
 app = Flask(__name__)
 
-from vapour_api import api
+from api import api
