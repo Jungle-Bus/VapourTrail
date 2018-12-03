@@ -39,7 +39,7 @@ map.on('load', function() {
         "source": "highlight_stop_source",
         "type": "circle",
         "layout": {
-          "visibility": "none",
+            "visibility": "none",
         },
         'paint': {
             'circle-radius': {
@@ -67,26 +67,17 @@ map.on('load', function() {
             })
             .then(function(stop_data) {
                 var html = ""
-                html += `<h2> <a target="_blank" href="http://osm.org/${stop_data.properties.osm_type}/${stop_data.properties.osm_id}">${bus_img}</a> `
-                html += ` ${stop_data.properties.name || "pas de nom :("}</h2>`;
-
-                html += "<p>"
-                html += `${ (stop_data.properties.has_bench)
-                    ? bench_img
-                    : ""} `;
-                html += `${ (stop_data.has_shelter)
-                    ? shelter_img
-                    : ""} `;
-                html += `${ (stop_data.properties.has_departures_board)
-                    ? departures_img
-                    : ""} `;
-                html += `${ (stop_data.properties.is_wheelchair_ok)
-                    ? wheelchair_img
-                    : ""} `;
-                html += `${ (stop_data.properties.has_tactile_paving)
-                    ? tactile_img
-                    : ""} `;
-                html += "</p>"
+                html += `<h2>
+                        <a target="_blank" href="http://osm.org/${stop_data.properties.osm_type}/${stop_data.properties.osm_id}">${bus_img}</a>
+                        ${stop_data.properties.name || "pas de nom :("}
+                    </h2>
+                    <p>
+                        ${ (stop_data.properties.has_bench) ? bench_img : ""}
+                        ${ (stop_data.has_shelter) ? shelter_img : ""}
+                        ${ (stop_data.properties.has_departures_board) ? departures_img : ""}
+                        ${ (stop_data.properties.is_wheelchair_ok) ? wheelchair_img : ""}
+                        ${ (stop_data.properties.has_tactile_paving) ? tactile_img : ""}
+                    </p>`
 
                 for (const route of stop_data.properties.routes_at_stop) {
                     const route_id = route['route_osm_id'];
@@ -234,11 +225,9 @@ function reset_filters_and_show_all_lines() {
 };
 
 function highlight_one_stop(stop_lon, stop_lat) {
- map.getSource('highlight_stop_source').setData(
-     {
-         "type": "Point",
-         "coordinates": [stop_lon, stop_lat]
-     }
- );
- map.setLayoutProperty('highlighted_stop', 'visibility', 'visible');
+    map.getSource('highlight_stop_source').setData({
+        "type": "Point",
+        "coordinates": [stop_lon, stop_lat]
+    });
+    map.setLayoutProperty('highlighted_stop', 'visibility', 'visible');
 };
