@@ -119,14 +119,14 @@ function filter_on_one_route(route_id) {
     reset_filters_and_show_all_lines();
 
     var caisson_content = `
-    <div id="route_info"></div>
     <div id="close_caisson_button"></div>
+    <div id="route_info"></div>
     <div id="stop_list" class="stop_list"></div>
     <div id="osm_attribution"></div>
     `
     caisson.add_content(caisson_content)
     var close_caisson_button = document.getElementById('close_caisson_button')
-    close_caisson_button.innerHTML = `<a href='#' onclick='reset_filters_and_show_all_lines()'>Masquer la ligne</a>`;
+    close_caisson_button.innerHTML = `<span onclick='reset_filters_and_show_all_lines()'>x</span>`;
 
     const stop_list_url = vapour_trail_api_base_url + "/routes/" + route_id;
     fetch(stop_list_url)
