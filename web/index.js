@@ -6,7 +6,8 @@ var tactile_img = "<img src='img/tactile.svg' heigth='20px' width='20px' />"
 var bench_img = "<img src='img/bench.svg' heigth='20px' width='20px' />"
 var departures_img = "<img src='img/departures.svg' heigth='20px' width='20px' />"
 
-const vapour_trail_api_base_url = "http://localhost:5000";
+const vapour_trail_api_base_url = "/api";
+const vapour_trail_tileserver_url = `${window.location.origin}/tiles/`;
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -15,7 +16,14 @@ var map = new mapboxgl.Map({
         1.8659, 46.1662
     ],
     zoom: 13,
-    hash: true
+    hash: true,
+    transformRequest: (url, resourceType)=> {
+    if(url.startsWith('http://t-rex:6767')) {
+      return {
+       url: url.replace('http://t-rex:6767/',  vapour_trail_tileserver_url)
+     }
+    }
+  }
 });
 map.on('load', function() {
 
