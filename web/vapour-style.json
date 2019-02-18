@@ -31,7 +31,7 @@
   "sources": {
     "vapour_trail": {
       "type": "vector",
-      "url": "http://0.0.0.0:6767/vapour_trail.json"
+      "url": "http://t-rex:6767/vapour_trail.json"
     },
     "route_filter": {
       "type": "geojson",

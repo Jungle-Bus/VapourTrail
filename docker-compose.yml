@@ -43,11 +43,11 @@ services:
     entrypoint: /usr/bin/t_rex serve -c /config/config.toml
 
   web:
-    image: httpd:2.4
+    build: ./front/
     volumes:
-     - ./web/:/usr/local/apache2/htdocs/
-     - ./web_httpd.conf:/usr/local/apache2/conf/httpd.conf
+     - ./web/:/usr/share/nginx/html/
     depends_on:
       - t-rex
+      - api
     ports:
       - 8082:80
