@@ -12,7 +12,7 @@
     },
     "vapour_trail": {
       "type": "vector",
-      "url": "http://0.0.0.0:6767/vapour_trail.json"
+      "url": "http://t-rex:6767/vapour_trail.json"
     },
     "route_filter": {
       "type": "geojson",
@@ -57,7 +57,7 @@
       }
     }
   },
-  "sprite": "http://localhost:8082/img/sprites",
+  "sprite": "http://web:8082/img/sprites",
   "glyphs": "https://api.jawg.io/glyphs/{fontstack}/{range}.pbf",
   "layers": [
     {

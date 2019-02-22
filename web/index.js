@@ -22,6 +22,11 @@ var map = new mapboxgl.Map({
       return {
        url: url.replace('http://t-rex:6767/',  vapour_trail_tileserver_url)
      }
+    } else if (url.startsWith('http://web:8082')) {
+        console.log(url.replace('http://web:8082',  window.location.origin));
+        return {
+          url: url.replace('http://web:8082',  window.location.origin)
+        }
     }
   }
 });
