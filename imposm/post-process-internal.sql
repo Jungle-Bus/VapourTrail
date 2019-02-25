@@ -1,3 +1,5 @@
+SET search_path TO import, public;
+
 -- fix route ids modified by imposm
 UPDATE osm_relations_route
 SET osm_id = ABS(osm_id);

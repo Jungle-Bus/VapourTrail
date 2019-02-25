@@ -1,3 +1,18 @@
+run:
+	docker-compose up -d web
+
+restart:
+	docker-compose restart api
+	docker-compose restart t-rex
+	docker-compose restart web
+
+update-data:
+	docker-compose run --rm importer
+	docker-compose run --rm --entrypoint 'rm -rf /srv/mvtcache/*' t-rex
+	chmod a+rw t-rex/cache
+	docker-compose restart api
+	docker-compose restart t-rex
+	docker-compose restart web
 
 all: up
 
@@ -5,7 +20,7 @@ up:
 	docker-compose up web
 
 up-d:
-	docker-compose up -d web && docker-compose up -d api
+	docker-compose up -d web
 
 down:
 	docker-compose down

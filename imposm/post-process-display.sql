@@ -1,3 +1,5 @@
+SET search_path TO import, public;
+
 -- Route infos used in display
 DROP TABLE IF EXISTS d_routes;
 CREATE TABLE d_routes AS
