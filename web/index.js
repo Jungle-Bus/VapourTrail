@@ -31,10 +31,15 @@ var map = new mapboxgl.Map({
   }
 });
 map.on('load', function() {
+    var popup = new mapboxgl.Popup({
+        closeButton: false,
+    });
 
     map.on('mouseenter', 'stops-icon', function() {
         map.getCanvas().style.cursor = 'pointer';
     });
+    map.on('mouseenter', 'stops-icon', display_stop_popup);
+
     map.on('mouseleave', 'stops-icon', function() {
         map.getCanvas().style.cursor = '';
     });
@@ -67,7 +72,10 @@ map.on('load', function() {
         }
     });
 
-    function on_stop(e) {
+    function display_stop_popup(e) {
+        if (map.getZoom() < 14) {
+            return
+        }
         var feature = e.features[0];
         const stop_id = feature.properties.osm_id;
         var stop_detail_url = vapour_trail_api_base_url + "/stops/" + feature.properties.osm_id;
@@ -107,9 +115,7 @@ map.on('load', function() {
 
                 html += create_osm_attribution_for_the_stop(stop_data.properties.osm_id, stop_data.properties.osm_type)
 
-                var popup = new mapboxgl.Popup({
-                    closeButton: false
-                }).setLngLat(e.lngLat).setHTML(html).addTo(map);
+                popup.setLngLat(e.lngLat).setHTML(html).addTo(map);
 
             })
             .catch(function(error) {
@@ -118,7 +124,12 @@ map.on('load', function() {
 
     };
 
-    map.on('click', 'stops-icon', on_stop);
+    map.on('click', 'stops-icon', function(e) {
+        if (map.getZoom() < 14) {
+            map.flyTo({center: e.features[0].geometry.coordinates, zoom: 15});
+        }
+    });
+
 });
 
 
