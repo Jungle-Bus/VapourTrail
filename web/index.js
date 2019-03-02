@@ -105,6 +105,8 @@ map.on('load', function() {
                             </div>`;
                 }
 
+                html += create_osm_attribution_for_the_stop(stop_data.properties.osm_id, stop_data.properties.osm_type)
+
                 var popup = new mapboxgl.Popup({
                     closeButton: false
                 }).setLngLat(e.lngLat).setHTML(html).addTo(map);
@@ -170,8 +172,16 @@ function filter_on_one_route(route_id) {
 };
 
 function create_osm_attribution_for_the_route(osm_route_id) {
+    return create_osm_attribution(osm_route_id, 'relation', 'cette ligne')
+}
+
+function create_osm_attribution_for_the_stop(osm_stop_id, osm_type) {
+    return create_osm_attribution(osm_stop_id, osm_type, 'cet arrêt')
+}
+
+function create_osm_attribution(osm_object_id, osm_type, object_designation) {
     var inner_html = `<small>Ces informations proviennent d'<a href='https://OpenStreetMap.org' target='_blank'>OpenStreetMap</a>, la carte libre et collaborative.
-    Rejoignez la communauté pour compléter ou corriger le détail de <a href='https://OpenStreetMap.org/relation/${osm_route_id}' target='_blank'>cette ligne</a> !</small>`;
+    Rejoignez la communauté pour compléter ou corriger le détail de <a href='https://OpenStreetMap.org/${osm_type}/${osm_object_id}' target='_blank'>${object_designation}</a> !</small>`;
     return inner_html
 }
 
