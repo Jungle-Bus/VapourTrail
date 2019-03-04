@@ -60,9 +60,9 @@ To get a static version (that can work without t-rex and postgres):
 
 ### Style Edition
 
-The background style is in `web/glstyle.json` while the foreground style is in `web/vapour-style.json`. Both can be edited manually or with style editor.
+The displayed map used bus vector tiles served by the t-rex server and [Jawg vector tiles](https://jawg.io) with a custom theme for the background style.
 
-With the t-rex tiles server running locally you can upload `vapour-style.json` to the online [Maputnik Editor](http://editor.openmaptiles.org) and exported back.
+While the t-rex tiles server is running you can upload `glstyle.json` to the online [Maputnik Editor](http://editor.openmaptiles.org), make your changes and export it back to the project.
 
 ## License
 
