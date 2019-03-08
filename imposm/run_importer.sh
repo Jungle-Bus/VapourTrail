@@ -64,12 +64,11 @@ echo "Executing post-process script (part 2/2)"
 
 
 echo "Data publication (rotating tables in schemas)"
-/usr/src/app/psql.sh -f /mapping/helpers.sql
-/usr/src/app/psql.sh -c "select publish_data();";
-
-
-# This command only move tables declared in mapping file
+# This command only move tables declared in mapping file, so it can't be used
 # imposm3 import \
 #     -connection "$PG_CONNECT" \
 #     -mapping "$MAPPING_YAML" \
 #     -deployproduction
+# Using a SQL rotation instead
+/usr/src/app/psql.sh -f /mapping/helpers.sql
+/usr/src/app/psql.sh -c "select publish_data();";
