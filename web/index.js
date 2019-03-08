@@ -31,10 +31,15 @@ var map = new mapboxgl.Map({
   }
 });
 map.on('load', function() {
+    var popup = new mapboxgl.Popup({
+        closeButton: false,
+    });
 
     map.on('mouseenter', 'stops-icon', function() {
         map.getCanvas().style.cursor = 'pointer';
     });
+    map.on('mouseenter', 'stops-icon', display_stop_popup);
+
     map.on('mouseleave', 'stops-icon', function() {
         map.getCanvas().style.cursor = '';
     });
@@ -67,7 +72,10 @@ map.on('load', function() {
         }
     });
 
-    function on_stop(e) {
+    function display_stop_popup(e) {
+        if (map.getZoom() < 14) {
+            return
+        }
         var feature = e.features[0];
         const stop_id = feature.properties.osm_id;
         var stop_detail_url = vapour_trail_api_base_url + "/stops/" + feature.properties.osm_id;
@@ -105,9 +113,9 @@ map.on('load', function() {
                             </div>`;
                 }
 
-                var popup = new mapboxgl.Popup({
-                    closeButton: false
-                }).setLngLat(e.lngLat).setHTML(html).addTo(map);
+                html += create_osm_attribution_for_the_stop(stop_data.properties.osm_id, stop_data.properties.osm_type)
+
+                popup.setLngLat(e.lngLat).setHTML(html).addTo(map);
 
             })
             .catch(function(error) {
@@ -116,7 +124,12 @@ map.on('load', function() {
 
     };
 
-    map.on('click', 'stops-icon', on_stop);
+    map.on('click', 'stops-icon', function(e) {
+        if (map.getZoom() < 14) {
+            map.flyTo({center: e.features[0].geometry.coordinates, zoom: 15});
+        }
+    });
+
 });
 
 
@@ -170,8 +183,16 @@ function filter_on_one_route(route_id) {
 };
 
 function create_osm_attribution_for_the_route(osm_route_id) {
+    return create_osm_attribution(osm_route_id, 'relation', 'cette ligne')
+}
+
+function create_osm_attribution_for_the_stop(osm_stop_id, osm_type) {
+    return create_osm_attribution(osm_stop_id, osm_type, 'cet arrêt')
+}
+
+function create_osm_attribution(osm_object_id, osm_type, object_designation) {
     var inner_html = `<small>Ces informations proviennent d'<a href='https://OpenStreetMap.org' target='_blank'>OpenStreetMap</a>, la carte libre et collaborative.
-    Rejoignez la communauté pour compléter ou corriger le détail de <a href='https://OpenStreetMap.org/relation/${osm_route_id}' target='_blank'>cette ligne</a> !</small>`;
+    Rejoignez la communauté pour compléter ou corriger le détail de <a href='https://OpenStreetMap.org/${osm_type}/${osm_object_id}' target='_blank'>${object_designation}</a> !</small>`;
     return inner_html
 }
 
