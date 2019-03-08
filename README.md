@@ -28,7 +28,7 @@ VapourTrail aims to be a large scale or local solution for visualizing bus lines
 Put an .osm.pbf file into `imposm/import/` directory.
 
 Run `make run` to run the services (web, api, tiles and database) in detached mode.
-Run `make data-update` to import or update the data to the Postgres database.
+Run `make update-data` to import or update the data to the Postgres database.
 
 The tiles rendered by t-rex are available at `http://localhost:6767/`.
 

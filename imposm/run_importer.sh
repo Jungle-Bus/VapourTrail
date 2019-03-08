@@ -48,7 +48,7 @@ function import_osm_with_first_pbf() {
         done
     else
         echo "No PBF files for import found."
-        echo "Please mount the $IMPORT_DIR volume to a folder containing OSM PBF files."
+        echo "Please check that the imput folder is containing OSM PBF files."
         exit 404
     fi
 }
