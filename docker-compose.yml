@@ -25,6 +25,7 @@ services:
      - ./imposm/vapourtrail_mapping.yml:/mapping/mapping.yaml
      - ./imposm/post-process-internal.sql:/mapping/post-process-internal.sql
      - ./imposm/post-process-display.sql:/mapping/post-process-display.sql
+     - ./imposm/helpers.sql:/mapping/helpers.sql
      - ./imposm/run_importer.sh:/mapping/run_importer.sh
     depends_on:
       - postgres
