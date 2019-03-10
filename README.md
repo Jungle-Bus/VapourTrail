@@ -27,10 +27,10 @@ If you have performance issues, you may want to pre-generate the tiles before us
 ## Contribute
 
 Behind the scenes, Vapour Trail uses
-* postgre / postgis
-* imposm3
-* t-rex
-* python3 with flask and SQLAlchemy
+* [postgre](https://www.postgresql.org/) / [postgis](http://postgis.net/)
+* [imposm3](https://imposm.org/)
+* [t-rex](https://t-rex.tileserver.ch/)
+* python3 with [flask](http://flask.pocoo.org/) and [SQLAlchemy](https://www.sqlalchemy.org/)
 
 The API is available at `http://localhost:5000`.
 
