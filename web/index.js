@@ -7,8 +7,8 @@ var bench_img = "<img src='img/bench.svg' heigth='20px' width='20px' />"
 var shelter_bench_img = "<img src='img/shelter_bench.svg' heigth='20px' width='20px' />"
 var departures_img = "<img src='img/departures.svg' heigth='20px' width='20px' />"
 
-const vapour_trail_api_base_url = "/api";
-const vapour_trail_tileserver_url = `${window.location.origin}/tiles/`;
+const vapour_trail_api_base_url = "http://poc-osm.navitia.io/vapourtrail/api";
+const vapour_trail_tileserver_url = `http://poc-osm.navitia.io/vapourtrail/tiles/`;
 
 var map = new mapboxgl.Map({
     container: 'map',
