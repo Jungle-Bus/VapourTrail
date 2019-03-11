@@ -4,47 +4,43 @@ VapourTrail is an interactive bus map made from OpenStreetMap data.
 
 ![demo](demo.gif)
 
-VapourTrail aims to be a large scale or local solution for visualizing bus lines based on OpenStreetMap data composed of:
-* an interactive map with a schematic bus route display
-* an API for bus routes
-* a tileset of vector tiles
+VapourTrail aims to be a large scale or local solution for visualizing bus lines from OpenStreetMap data.
+Vapour Trail is made of:
+* a tileset of map vector tiles
+* an API to query bus routes and stops
+* a web front-end that turns the tiles and API into an interactive map
 
-## Schema
+## How to run
 
-:construction::warning: This is a work in progress, the schema is not stable yet :warning::construction:
+You will need [docker]() and [docker-compose]().
 
-## Contribute
+* Grab some OSM data (in `.osm.pbf` format) and put the file into the `imposm/import/` directory
+* Start the services with `make run`
+* Import or update the OSM data with `make data-update`
 
-### Dependencies
-
-* imposm3
-* postgre / postgis
-* t-rex
-* docker / docker-compose
-* python3 with flask and SQLAlchemy
-
-### How to run
-
-Put an .osm.pbf file into `imposm/import/` directory.
-
-Run `make run` to run the services (web, api, tiles and database) in detached mode.
-Run `make update-data` to import or update the data to the Postgres database.
-
-The tiles rendered by t-rex are available at `http://localhost:6767/`.
-
-The web front-end is available at `http://localhost:8082/vapour_trail.html`.
-
-The API (used by the front-end) is available at `http://localhost:5000`. The endpoint used is `/route/<string:route_id>`.
+You can then browse your interactive map at `http://localhost:8082/`
 
 **Troubleshooting**:
 
-If you have performance issues, you may want to pre-generate the tiles before using the front : `make generate-tiles bbox=minlon,minlat,maxlon,maxlat`
+If you have performance issues, you may want to pre-generate the tiles before using the front-end : `make generate-tiles bbox=minlon,minlat,maxlon,maxlat`
+
+## Contribute
+
+Behind the scenes, Vapour Trail uses
+* [postgre](https://www.postgresql.org/) / [postgis](http://postgis.net/)
+* [imposm3](https://imposm.org/)
+* [t-rex](https://t-rex.tileserver.ch/)
+* python3 with [flask](http://flask.pocoo.org/) and [SQLAlchemy](https://www.sqlalchemy.org/)
+
+The API is available at `http://localhost:5000`.
+
+The tiles rendered by t-rex are available at `http://localhost:6767/`.
 
 ### Deploy a static version
 
-To get a static version (that can work without t-rex and postgres):
+If you are only interested in the vector tiles, you can get a static version (that can work without t-rex and postgres):
 
-* import data: `make docker-importer`
+* import data: `make data-update`
 * generate tiles for your area of interest: `make generate-tiles bbox=minlon,minlat,maxlon,maxlat`
 * prepare static publication: `make prepare-static static_url=http://localhost/tile`
 * you can now deploy and serve the `static` folder

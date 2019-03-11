@@ -4,6 +4,7 @@ var wheelchair_img = "<img src='img/wheelchair.svg' heigth='20px' width='20px' /
 var shelter_img = "<img src='img/shelter.svg' heigth='20px' width='20px' />"
 var tactile_img = "<img src='img/tactile.svg' heigth='20px' width='20px' />"
 var bench_img = "<img src='img/bench.svg' heigth='20px' width='20px' />"
+var shelter_bench_img = "<img src='img/shelter_bench.svg' heigth='20px' width='20px' />"
 var departures_img = "<img src='img/departures.svg' heigth='20px' width='20px' />"
 
 const vapour_trail_api_base_url = "/api";
@@ -92,9 +93,11 @@ map.on('load', function() {
                         <a target="_blank" href="http://osm.org/${stop_data.properties.osm_type}/${stop_data.properties.osm_id}">${bus_img}</a>
                         ${stop_data.properties.name || "pas de nom :("}
                     </h2>
+
                     <p>
-                        ${ (stop_data.properties.has_bench) ? bench_img : ""}
-                        ${ (stop_data.has_shelter) ? shelter_img : ""}
+                        ${ (stop_data.properties.has_shelter && stop_data.properties.has_bench) ? shelter_bench_img : ""}
+                        ${ (stop_data.properties.has_shelter && !stop_data.properties.has_bench) ? shelter_img : ""}
+                        ${ (!stop_data.properties.has_shelter && stop_data.properties.has_bench) ? bench_img : ""}
                         ${ (stop_data.properties.has_departures_board) ? departures_img : ""}
                         ${ (stop_data.properties.is_wheelchair_ok) ? wheelchair_img : ""}
                         ${ (stop_data.properties.has_tactile_paving) ? tactile_img : ""}
