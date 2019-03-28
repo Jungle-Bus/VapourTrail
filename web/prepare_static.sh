@@ -3,7 +3,7 @@
 
 if [ -z "${static_url}" ]; then
     echo "You need to add the url of your static server as a parameter"
-    echo "   example: ${0##*/} static_url=http://localhost:8080/tiles"
+    echo "   example: ${0##*/} static_url=http://localhost:8080"
     exit 1
 fi
 
@@ -25,5 +25,5 @@ find static/tiles -name "*.pbf" -exec mv {} {}.gz \;
 find static/tiles -name "*.pbf.gz" -exec gzip -d {} \;
 
 # use static_url instead of t_rex server
-sed -i -e "s=http://0.0.0.0:6767/vapour_trail.json=${static_url}/vapour_trail.json=g" static/glstyle.json
-sed -i -e "s=http://example.com/tiles/vapour_trail/{z}/{x}/{y}.pbf=${static_url}/vapour_trail/{z}/{x}/{y}.pbf=g" static/tiles/vapour_trail.json
+sed -i -e "s=http://0.0.0.0:6767/vapour_trail.json=${static_url}/tiles/vapour_trail.json=g" static/glstyle.json
+sed -i -e "s=http://example.com/tiles/vapour_trail/{z}/{x}/{y}.pbf=${static_url}/tiles/vapour_trail/{z}/{x}/{y}.pbf=g" static/tiles/vapour_trail.json

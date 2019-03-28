@@ -30,4 +30,6 @@ generate-tiles:
 	./t-rex/generate_all_tiles.sh
 
 prepare-static:
+	docker-compose run --rm --entrypoint '/mapping/dump_objects_list.sh' importer 
 	./web/prepare_static.sh
+	./api/scrap_api_for_static.sh

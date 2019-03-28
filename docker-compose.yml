@@ -27,6 +27,7 @@ services:
      - ./imposm/post-process-display.sql:/mapping/post-process-display.sql
      - ./imposm/helpers.sql:/mapping/helpers.sql
      - ./imposm/run_importer.sh:/mapping/run_importer.sh
+     - ./imposm/dump_objects_list.sh:/mapping/dump_objects_list.sh
     depends_on:
       - postgres
     entrypoint: /bin/bash
