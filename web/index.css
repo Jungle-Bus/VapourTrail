@@ -103,6 +103,12 @@ header {
     padding-left: 15px;
 }
 
+.osm_attribution {
+    border: solid 1px #e0e1e6;
+    border-radius: 3px;
+    padding: 10px;
+}
+
 #close_caisson_button {
     position: absolute;
     height: 36px;
