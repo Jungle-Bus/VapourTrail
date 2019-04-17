@@ -1,4 +1,4 @@
-FROM python:3.5.5-jessie
+FROM python:3.5.7-jessie
 
 RUN apt update && \
     apt install python3-psycopg2 -y

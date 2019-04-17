@@ -24,6 +24,16 @@ You can then browse your interactive map at `http://localhost:8082/`
 
 If you have performance issues, you may want to pre-generate the tiles before using the front-end : `make generate-tiles bbox=minlon,minlat,maxlon,maxlat`
 
+## Deploy a static version
+
+If you are on a small area or network, you can create and use a static version (that can work without its database, tile server and API):
+
+* start the services with `make run`
+* import data: `make update-data`
+* generate tiles for your area of interest: `make generate-tiles bbox=minlon,minlat,maxlon,maxlat`
+* prepare static publication: `make prepare-static static_url=http://localhost/`
+* you can now deploy and serve the `static` folder
+
 ## Contribute
 
 Behind the scenes, Vapour Trail uses
@@ -35,15 +45,6 @@ Behind the scenes, Vapour Trail uses
 The API is available at `http://localhost:5000`.
 
 The tiles rendered by t-rex are available at `http://localhost:6767/`.
-
-### Deploy a static version
-
-If you are only interested in the vector tiles, you can get a static version (that can work without t-rex and postgres):
-
-* import data: `make data-update`
-* generate tiles for your area of interest: `make generate-tiles bbox=minlon,minlat,maxlon,maxlat`
-* prepare static publication: `make prepare-static static_url=http://localhost/tile`
-* you can now deploy and serve the `static` folder
 
 ### Style Edition
 

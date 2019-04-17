@@ -20,4 +20,4 @@ before_install:
   - docker -v
 
 script:
-  - make test && make prepare-static static_url=https://jungle-bus.github.io/VapourTrail/web/tiles
+  - make test && make prepare-static static_url=https://jungle-bus.github.io/VapourTrail/
