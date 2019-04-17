@@ -116,7 +116,7 @@ map.on('load', function() {
                             </div>`;
                 }
 
-                html += create_osm_attribution_for_the_stop(stop_data.properties.osm_id, stop_data.properties.osm_type)
+                html += `<div class="osm_attribution">${create_osm_attribution_for_the_stop(stop_data.properties.osm_id, stop_data.properties.osm_type)}</div>`
 
                 popup.setLngLat(e.lngLat).setHTML(html).addTo(map);
 
@@ -143,7 +143,7 @@ function filter_on_one_route(route_id) {
     <div id="close_caisson_button"></div>
     <div id="route_info"></div>
     <div id="stop_list" class="stop_list"></div>
-    <div id="osm_attribution"></div>
+    <div class="osm_attribution" id="osm_attribution"></div>
     `
     caisson.add_content(caisson_content)
     var close_caisson_button = document.getElementById('close_caisson_button')
@@ -194,7 +194,7 @@ function create_osm_attribution_for_the_stop(osm_stop_id, osm_type) {
 }
 
 function create_osm_attribution(osm_object_id, osm_type, object_designation) {
-    var inner_html = `<small>Ces informations proviennent d'<a href='https://OpenStreetMap.org' target='_blank'>OpenStreetMap</a>, la carte libre et collaborative.
+    var inner_html = `<img src="img/osm.svg" alt="OpenStreetMap" width="55px" heigth="55px" style="float:left;"><small>Ces informations proviennent d'<a href='https://OpenStreetMap.org' target='_blank'>OpenStreetMap</a>, la carte libre et collaborative.
     Rejoignez la communauté pour compléter ou corriger le détail de <a href='https://OpenStreetMap.org/${osm_type}/${osm_object_id}' target='_blank'>${object_designation}</a> !</small>`;
     return inner_html
 }
