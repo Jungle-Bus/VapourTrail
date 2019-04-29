@@ -12,11 +12,11 @@ Vapour Trail is made of:
 
 ## How to run
 
-You will need [docker]() and [docker-compose]().
+You will need [docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/).
 
 * Grab some OSM data (in `.osm.pbf` format) and put the file into the `imposm/import/` directory
 * Start the services with `make run`
-* Import or update the OSM data with `make data-update`
+* Import or update the OSM data with `make update-data`
 
 You can then browse your interactive map at `http://localhost:8082/`
 
