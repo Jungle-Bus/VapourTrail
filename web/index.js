@@ -105,15 +105,15 @@ map.on('load', function() {
 
                 for (const route of stop_data.properties.routes_at_stop) {
                     const route_id = route['route_osm_id'];
-                    html += `<div class='bus_box_div'>
-                                <span class='bus_box' style='border-bottom-color: ${route['colour'] || "grey"};' >
-                                    [${route['network'] || '??'}]
-                                    <span>🚍</span>
-                                    <span>${route['ref'] || '??'}</span>
-                                </span>
-                              : ${route['destination'] || '??'}
-                              <a href='#' onclick='filter_on_one_route(${route_id});map.flyTo({center:[${stop_data.geometry.coordinates}]})'>Voir la ligne</a> </br>
-                            </div>`;
+                    html += `<transport-thumbnail
+                        data-transport-network="${route['network'] || '??'}"
+                        data-transport-mode="bus"
+                        data-transport-line-code="${route['ref'] || '??'}"
+                        data-transport-line-color="${route['colour'] || "grey"}"
+                        data-transport-destination="${route['destination'] || '??'}">
+                    </transport-thumbnail>
+                    <a href='#' onclick='filter_on_one_route(${route_id});map.flyTo({center:[${stop_data.geometry.coordinates}]})'>Voir la ligne</a> </br>
+                    `
                 }
 
                 html += `<div class="osm_attribution">${create_osm_attribution_for_the_stop(stop_data.properties.osm_id, stop_data.properties.osm_type)}</div>`
@@ -201,10 +201,11 @@ function create_osm_attribution(osm_object_id, osm_type, object_designation) {
 
 function create_route_medata(route_info) {
     var inner_html = `<div class='bus_box_div'>
-                <span class='bus_box' style='border-bottom-color: ${route_info['colour'] || "grey"};' >
-                    <span>🚍</span>
-                    <span>${route_info['ref'] || '??'}</span>
-                </span>
+                <transport-thumbnail
+                    data-transport-mode="bus"
+                    data-transport-line-code="${route_info['ref'] || '??'}"
+                    data-transport-line-color="${route_info['colour'] || "grey"}">
+                </transport-thumbnail>
                 &nbsp; ${route_info['name']}
             </div>`;
     inner_html += `De <b>${route_info['origin'] || '??'}</b> vers <b>${route_info['destination'] || '??'}</b>`;
@@ -237,12 +238,11 @@ function create_stop_list_for_a_route(stop_list, route_colour) {
           `
         for (const shield of stop['shields']) {
             inner_html += `
-                <div class='bus_box_inline_div'>
-                  <span class='bus_box' style='border-bottom-color: ${shield['colour'] || "grey"};' >
-                    <span>🚍</span>
-                  <span>${shield['ref'] || '??'}</span>
-                  </span>
-                </div>
+                <transport-thumbnail class="bus_box_inline_div"
+                    data-transport-mode="bus"
+                    data-transport-line-code="${shield['ref'] || '??'}"
+                    data-transport-line-color="${shield['colour'] || "grey"}">
+                </transport-thumbnail>
                 `
         }
         inner_html += `
