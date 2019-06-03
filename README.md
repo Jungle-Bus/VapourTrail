@@ -1,10 +1,11 @@
-# VapourTrail
+![logo VapourTrail](https://raw.githubusercontent.com/Jungle-Bus/resources/master/logo/Logo_Jungle_Bus-VapourTrail.png)
 
 VapourTrail is an interactive bus map made from OpenStreetMap data.
 
 ![demo](demo.gif)
 
 VapourTrail aims to be a large scale or local solution for visualizing bus lines from OpenStreetMap data.
+
 Vapour Trail is made of:
 * a tileset of map vector tiles
 * an API to query bus routes and stops
