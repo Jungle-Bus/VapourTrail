@@ -17,6 +17,9 @@ update-data:
 help:
 	@echo VapourTrail https://github.com/Jungle-Bus/VapourTrail
 
+sprite:
+	spritezero web/img/sprites map_icons/svgs
+
 imposm/import/monaco.osm.pbf:
 	wget http://download.geofabrik.de/europe/monaco-latest.osm.pbf --no-verbose -O $@
 
@@ -30,6 +33,6 @@ generate-tiles:
 	./t-rex/generate_all_tiles.sh
 
 prepare-static:
-	docker-compose run --rm --entrypoint '/mapping/dump_objects_list.sh' importer 
+	docker-compose run --rm --entrypoint '/mapping/dump_objects_list.sh' importer
 	./web/prepare_static.sh
 	./api/scrap_api_for_static.sh
