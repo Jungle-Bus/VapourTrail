@@ -55,7 +55,7 @@ While the t-rex tiles server is running you can upload `glstyle.json` to the onl
 
 ## License
 
-This project has been developed by the [Jungle Bus](http://junglebus.io/) team, a French non-profit organization dedicated to bus public transport in OpenStreetMap. Please reuse!
+This project has been developed by the [Jungle Bus](http://junglebus.io/) team. Please reuse!
 
 The code in this repository is under the MIT license.
 
@@ -64,7 +64,7 @@ This project relies on OpenStreetMap data so you need to credit the contributors
 
 If you value this work, show your support by donating to the [OSM French local chapter](http://openstreetmap.fr).
 
-## Name
+### Name
 
     🎼 There's a monkey in the jungle watching a vapour trail 🎶
 
